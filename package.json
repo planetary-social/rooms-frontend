@@ -8,7 +8,9 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.9",
     "@quasar/extras": "^1.0.0",
+    "@vue/apollo-composable": "^4.0.0-alpha.19",
     "pinia": "^2.0.21",
     "quasar": "^2.0.0",
     "vue": "^3.2.38",
