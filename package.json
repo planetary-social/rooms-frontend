@@ -11,6 +11,7 @@
     "@apollo/client": "^3.6.9",
     "@quasar/extras": "^1.0.0",
     "@vue/apollo-composable": "^4.0.0-alpha.19",
+    "generate-avatar": "^1.4.10",
     "pinia": "^2.0.21",
     "quasar": "^2.0.0",
     "vue": "^3.2.38",

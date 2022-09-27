@@ -15,6 +15,12 @@ const GET_PROFILE = gql`
         messages {
           id
           text
+          timestamp
+          author {
+            id
+            image
+            name
+          }
         }
       }
     }
