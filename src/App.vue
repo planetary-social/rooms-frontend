@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh LpR fFf">
 
-    <q-header class="bg-primary text-white">
+    <!-- <q-header class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title>
           <q-avatar>
@@ -10,7 +10,7 @@
           Planetary
         </q-toolbar-title>
       </q-toolbar>
-    </q-header>
+    </q-header> -->
 
     <q-page-container>
       <router-view />

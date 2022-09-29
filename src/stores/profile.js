@@ -43,7 +43,7 @@ export const useProfileStore = defineStore({
   }),
   getters: {
     /**
-     * @returns {Object{ id: string; name: string }>}
+     * @returns {Object<{ id: string; name: string }>}
      */
      getActiveProfile: (state) => state.activeProfile
   },
