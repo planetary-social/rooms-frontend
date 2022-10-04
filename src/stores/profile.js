@@ -27,11 +27,26 @@ const GET_PROFILE = gql`
   }
 `
 
+const GET_BLOB_URI = gql`
+  query ($blobId: String!) {
+    getBlobUri (blobId: $blobId)
+  }
+`
+
 async function getProfile (id) {
   return apolloClient.query({
     query: GET_PROFILE,
     variables: {
       id
+    }
+  })
+}
+
+async function getBlobUri (blobId) {
+  return apolloClient.query({
+    query: GET_BLOB_URI,
+    variables: {
+      blobId
     }
   })
 }
@@ -56,7 +71,10 @@ export const useProfileStore = defineStore({
       // this.currentProfile = profile
 
       const res = await getProfile(id)
-      if (res.errors) console.error(res.errors) // TODO
+      if (res.errors) {
+        console.error(res.errors) // TODO
+        return
+      }
 
       return res.data.getProfile
     },
@@ -68,6 +86,18 @@ export const useProfileStore = defineStore({
       if (profile) {
         this.activeProfile = profile
       }
+    },
+
+    async getBlobUri (blobId) {
+      if (!blobId) return
+
+      const res = await getBlobUri(blobId)
+      if (res.errors) {
+        console.error(res.errors)
+        return
+      }
+
+      return res.data.getBlobUri
     }
   }
 })

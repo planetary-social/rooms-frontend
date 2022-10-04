@@ -13,7 +13,6 @@ import './assets/main.css'
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
 
-
 // css
 import "quasar/dist/quasar.sass"
 
