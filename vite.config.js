@@ -1,31 +1,3 @@
-// import { fileURLToPath, URL } from 'node:url'
-// import { defineConfig } from 'vite'
-// import vue from '@vitejs/plugin-vue'
-
-// export default defineConfig({
-//   plugins: [vue()],
-//   resolve: {
-//     alias: {
-//       '@': fileURLToPath(new URL('./src', import.meta.url))
-//     }
-//   },
-//   // optimizeDeps: {
-//   //   esbuildOptions: {
-//   //     // Node.js global to browser globalThis
-//   //     define: {
-//   //       global: "globalThis",
-//   //     },
-//   //     // Enable esbuild polyfill plugins
-//   //     plugins: [
-//   //       GlobalsPolyfills({
-//   //         process: true,
-//   //         buffer: true,
-//   //       }),
-//   //     ],
-//   //   },
-//   // }
-// })
-
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'

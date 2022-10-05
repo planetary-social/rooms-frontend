@@ -1,7 +1,8 @@
 <template>
-  <q-card class="row thread-card q-ma-md" dark>
+  <q-card class="thread-card row q-ma-md" dark>
     <!-- the root message in the thread -->
     <comment :comment="rootComment" flat/>
+    
   
     <!-- comments on the thread -->
     <q-card-section>
@@ -15,6 +16,8 @@
 </template>
 <script>
   import Comment from '@/components/Comment.vue'
+  import { mapState } from 'pinia'
+  import { useProfileStore } from '@/stores/profile'
 
   export default {
     props: {
@@ -24,8 +27,16 @@
       Comment
     },
     computed: { 
+      ...mapState(useProfileStore, ['activeProfile']),
+      startedThread () {
+        return this.thread?.messages[0].author === this.activeProfile?.id
+      },
       rootComment () {
-        return this.thread?.messages[0]
+        if (this.startedThread) return this.thread?.messages[0]
+
+        return this.thread?.messages.find(comment => {
+            return comment?.author?.id === this.activeProfile?.id
+          })
       },
       // the are all of the messages in the thread, except for the first one
       comments () {
@@ -35,9 +46,12 @@
   }
   </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .thread-card {
-    background-color: #302a42;
+    /* Cell--dark */
+    background: linear-gradient(180deg, #3D2961 0%, #332251 60.72%);
+    /* Cell--dark */
+    box-shadow: 0px 4px 0px #2C1D45, 0px 4px 10px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
   }
 </style>
