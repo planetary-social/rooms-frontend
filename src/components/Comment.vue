@@ -1,75 +1,157 @@
 <template>
-  <q-card class="col-12 comment-card q-ma-md" dark>
-    <q-item>
+  <q-card class="col-12" :class="cardClasses" dark :flat="flat">
+    <q-item class="card-header">
       <q-item-section avatar>
-        <q-avatar>
+        <q-avatar v-if="isHiddenContent" icon="account_circle" size="30px" font-size="30px"/>
+        <q-avatar size="30px" class="avatar" v-else>
           <img :src="image" />
         </q-avatar>
       </q-item-section>
 
       <q-item-section>
-        <q-item-label class="text-white">{{ author?.name }}</q-item-label>
-        <q-item-label class="timestamp" caption>
+        <q-item-label class="card-header-text">{{ author?.name || 'User' }}</q-item-label>
+        <q-item-label class="light-text" caption>
           {{ timestamp }}
         </q-item-label>
       </q-item-section>
     </q-item>
 
-    <q-separator />
+    <q-separator class="top-divider" />
 
-    <q-card-section>
-      <q-card-section class="text-white">
-        {{ comment.text }}
+    <q-card-section v-if="isHiddenContent">
+      <q-card-section class="light-text text-center">
+        The contents of this message <br/>
+        are hidden from you
       </q-card-section>
+    </q-card-section>
+    <q-card-section v-else-if="comment?.text">
+      <q-card-section class="text">
+        <Markdown :text="comment.text"/>
+      </q-card-section>
+    </q-card-section>
+
+    <q-separator v-if="!flat" class="bottom-divider" />
+
+    <q-card-section v-if="!flat">
+      <!-- empty for now -->
     </q-card-section>
   </q-card>
 </template>
+
+
+
 <script>
-  // import { generateFromString } from 'generate-avatar'
-  // const PUB_URL = 'http://0.0.0.0:8888'
+import Markdown from './Markdown.vue';
 
   export default {
-    name: 'Comment',
+    name: "Comment",
+    components: {
+      Markdown
+    },
     props: {
-      comment: Object
+        comment: Object,
+        flat: Boolean
     },
     computed: {
-      author () {
-        return this.comment?.author
-      },
-      // TODO:
-      image () {
-        return `//i.pravatar.cc/150?u=${this.author?.id}`
-      },
-      // image () {
-      //   // TODO: how do i find out the PUB_URL
-      //   // TODO: may need to set the backend to serve blobs
-      //   if (!this.author?.image) {
-      //     return (
-      //       'data:image/svg+xml;utf8,' +
-      //       generateFromString(this.author?.id)
-      //     )
-      //   }
-
-      //   return (
-      //     PUB_URL +
-      //     '/blob/' +
-      //     encodeURIComponent(this.author.image)
-      //   )
-      // },
-      timestamp () {
-        return Date(this.comment?.timestamp).toString()
-      }
-    }
-  }
+        cardClasses () {
+          return {
+            'q-ma-md': !this.flat,
+            'comment-card': !this.flat,
+            'flat-comment-card': this.flat
+          }
+        },
+        isHiddenContent() {
+            return this.comment.id === null;
+        },
+        author() {
+            return this.comment?.author;
+        },
+        image() {
+            return this.author?.image || "https://cdn.quasar.dev/img/boy-avatar.png"; // TODO!
+        },
+        timestamp() {
+            return Date(this.comment?.timestamp).toString();
+        }
+    },
+    
+}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '../styles/quasar.variables.scss';
+
+  .light-text {
+    color: $lightText;
+  }
+
+  .text {
+    /* Post text */
+    // font-family: 'SF Pro Text';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    /* or 143% */
+    letter-spacing: -0.1px;
+
+    color: $pText;
+  }
+
+  .card-header {
+    height: 50px;
+
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.07) 100%);
+    background-blend-mode: overlay;
+  }
+
+  .card-header-text {
+    // position: absolute;
+    // width: 93px;
+    height: 16px;
+    left: -15px;
+
+    // font-family: 'SF Pro Text';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 120%;
+    /* identical to box height, or 16px */
+    letter-spacing: -0.1px;
+
+    color: #FFFFFF;
+  }
+
   .comment-card {
-    background-color: #332b45;
+    /* Cell--dark */
+    background: linear-gradient(180deg, #3D2961 0%, #332251 60.72%);
+    box-shadow: 0px 4px 0px #2C1D45, 0px 4px 10px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
   }
-  .timestamp {
-    color: #6C6085;
+
+  // background styling in parent component
+  .flat-comment-card {
+    background: none;
+  }
+
+
+
+  .top-divider {
+    height: 0px;
+
+    border: 1px solid #271A3D;
+    box-shadow: 0px 1px 0px #4A3275;
+  }
+
+  .bottom-divider {
+    height: 0px;
+
+    border: 1px solid #201633;
+    box-shadow: 0px 1px 0px #402B65;
+
+  }
+
+  .avatar {
+    left: -4px;
+    top: 3px;
   }
 </style>

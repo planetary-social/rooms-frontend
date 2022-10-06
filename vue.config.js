@@ -1,4 +1,6 @@
+const path = require(`path`);
 const { defineConfig } = require('@vue/cli-service')
+
 module.exports = defineConfig({
   pluginOptions: {
     quasar: {
@@ -6,5 +8,13 @@ module.exports = defineConfig({
       rtlSupport: false
     }
   },
-  transpileDependencies: ['quasar']
+  transpileDependencies: ['quasar'],
+  configureWebpack: {
+      resolve: {
+          symlinks: false,
+          alias: {
+              vue: path.resolve(`./node_modules/vue`)
+          }
+      }
+  }
 })
