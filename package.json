@@ -15,6 +15,7 @@
     "@quasar/extras": "^1.15.3",
     "@vue/apollo-composable": "^4.0.0-alpha.19",
     "generate-avatar": "^1.4.10",
+    "lodash.groupby": "^4.6.0",
     "pinia": "^2.0.21",
     "quasar": "^2.8.4",
     "rehype-sanitize": "^5.0.1",

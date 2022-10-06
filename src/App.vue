@@ -12,3 +12,9 @@ export default {
   name: "LayoutDefault"
 }
 </script>
+
+<style lang="scss">
+body {
+  background-color: #1A1229;
+}
+</style>
