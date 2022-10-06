@@ -2,8 +2,6 @@ import { defineStore } from 'pinia'
 import apolloClient from "@/plugins/apollo"
 import gql from 'graphql-tag'
 
-// const mixId = '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519'
-
 // TODO: extract these helpers into a lib
 const GET_PROFILE = gql`
   query ($id: ID!) {

@@ -5,7 +5,7 @@
     
   
     <!-- comments on the thread -->
-    <q-card-section>
+    <q-card-section class="col-12">
       <comment
         v-for="comment in viewableComments"
         :key="comment.id"
@@ -15,9 +15,9 @@
     </q-card-section>
     
     <!-- TODO: how to display hidden comments -->
-    <p class="q-px-xs">
+    <q-card-section v-if="hiddenComments.length"  class="light-text text-center col-12">
       {{ hiddenComments?.length }} hidden replies
-    </p>
+    </q-card-section>
   </q-card>
 </template>
 <script>
@@ -63,11 +63,17 @@
   </script>
 
 <style lang="scss" scoped>
+
+  @import '../styles/quasar.variables.scss';
   .thread-card {
     /* Cell--dark */
     background: linear-gradient(180deg, #3D2961 0%, #332251 60.72%);
     /* Cell--dark */
     box-shadow: 0px 4px 0px #2C1D45, 0px 4px 10px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
+  }
+
+  .light-text {
+    color: $lightText;
   }
 </style>

@@ -10,7 +10,7 @@
 
       <q-item-section class="q-py-none">
         <q-item-label class="card-header-text q-py-none">
-          {{ author?.name || 'User' }}
+          {{ author?.name || 'Hidden User' }}
           <span class="comment-action q-py-none">{{ action }}</span>
         </q-item-label>
         <!-- <q-item-label class="light-text" caption>
@@ -33,10 +33,10 @@
       <Markdown :text="comment.text"/>
     </q-card-section>
 
-    <q-separator v-if="!flat" class="bottom-divider" />
+    <q-separator v-if="!flat && reactions?.length" class="bottom-divider" />
 
-    <q-card-section v-if="comment?.votes?.length">
-      <Reactions :reactions="comment?.votes"/>
+    <q-card-section v-if="reactions?.length">
+      <Reactions :reactions="reactions"/>
     </q-card-section>
   </q-card>
 </template>
@@ -66,17 +66,23 @@ import Reactions from './Reactions.vue';
             'flat-comment-card': this.flat
           }
         },
+        reactions () {
+          return this.comment?.votes
+        },
         isHiddenContent() {
-            return this.comment.id === null;
+          return this.comment.id === null;
+        },
+        showBottomSection () {
+          return this.comment?.votes?.length
         },
         author() {
-            return this.comment?.author;
+          return this.comment?.author;
         },
         image() {
-            return this.author?.image || "https://cdn.quasar.dev/img/boy-avatar.png"; // TODO!
+          return this.author?.image || "https://cdn.quasar.dev/img/boy-avatar.png"; // TODO!
         },
         timestamp() {
-            return Date(this.comment?.timestamp).toString();
+          return Date(this.comment?.timestamp).toString();
         }
     },
     

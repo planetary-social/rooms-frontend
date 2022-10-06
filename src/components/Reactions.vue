@@ -12,6 +12,9 @@
 import groupBy from 'lodash.groupby'
 
 export default {
+  props: {
+    reactions: Array
+  },
   computed: {
     groupedReactions () {
       return Object.entries(
