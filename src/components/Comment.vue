@@ -8,32 +8,35 @@
         </q-avatar>
       </q-item-section>
 
-      <q-item-section>
-        <q-item-label class="card-header-text">{{ author?.name || 'User' }}</q-item-label>
-        <q-item-label class="light-text" caption>
-          {{ timestamp }}
+      <q-item-section class="q-py-none">
+        <q-item-label class="card-header-text q-py-none">
+          {{ author?.name || 'User' }}
+          <span class="comment-action q-py-none">{{ action }}</span>
         </q-item-label>
+        <!-- <q-item-label class="light-text" caption>
+          {{ timestamp }}
+        </q-item-label> -->
+      </q-item-section>
+
+      <q-item-section side class="comment-action">
+        <q-icon size="40px" name="more_horiz" />
       </q-item-section>
     </q-item>
 
     <q-separator class="top-divider" />
 
-    <q-card-section v-if="isHiddenContent">
-      <q-card-section class="light-text text-center">
-        The contents of this message <br/>
-        are hidden from you
-      </q-card-section>
+    <q-card-section v-if="isHiddenContent" class="light-text text-center">
+      The contents of this message <br/>
+      are hidden from you
     </q-card-section>
-    <q-card-section v-else-if="comment?.text">
-      <q-card-section class="text">
-        <Markdown :text="comment.text"/>
-      </q-card-section>
+    <q-card-section v-else-if="comment?.text" class="text q-py-none">
+      <Markdown :text="comment.text"/>
     </q-card-section>
 
     <q-separator v-if="!flat" class="bottom-divider" />
 
-    <q-card-section v-if="!flat">
-      <!-- empty for now -->
+    <q-card-section v-if="comment?.votes?.length">
+      <Reactions :reactions="comment?.votes"/>
     </q-card-section>
   </q-card>
 </template>
@@ -42,15 +45,18 @@
 
 <script>
 import Markdown from './Markdown.vue';
+import Reactions from './Reactions.vue';
 
   export default {
     name: "Comment",
     components: {
-      Markdown
+      Markdown,
+      Reactions
     },
     props: {
         comment: Object,
-        flat: Boolean
+        flat: Boolean,
+        action: String
     },
     computed: {
         cardClasses () {
@@ -98,7 +104,7 @@ import Markdown from './Markdown.vue';
   }
 
   .card-header {
-    height: 50px;
+    height: 70px;
 
     background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.07) 100%);
     background-blend-mode: overlay;
@@ -108,7 +114,7 @@ import Markdown from './Markdown.vue';
     // position: absolute;
     // width: 93px;
     height: 16px;
-    left: -15px;
+    left: -10px;
 
     // font-family: 'SF Pro Text';
     font-style: normal;
@@ -133,25 +139,29 @@ import Markdown from './Markdown.vue';
     background: none;
   }
 
+  .comment-action {
+    color: #8575A3;
+  }
+
 
 
   .top-divider {
     height: 0px;
 
     border: 1px solid #271A3D;
-    box-shadow: 0px 1px 0px #4A3275;
+    box-shadow: 0px 2px 0px #4A3275;
   }
 
   .bottom-divider {
     height: 0px;
 
     border: 1px solid #201633;
-    box-shadow: 0px 1px 0px #402B65;
+    box-shadow: 0px 2px 0px #402B65;
 
   }
 
   .avatar {
-    left: -4px;
+    left: 8px;
     top: 3px;
   }
 </style>

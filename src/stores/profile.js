@@ -21,6 +21,14 @@ const GET_PROFILE = gql`
             image
             name
           }
+          votes {
+            expression
+            author {
+              id
+              image
+              name
+            }
+          }
         }
       }
     }

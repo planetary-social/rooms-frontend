@@ -1,17 +1,23 @@
 <template>
   <q-card class="thread-card row q-ma-md" dark>
     <!-- the root message in the thread -->
-    <comment :comment="rootComment" flat/>
+    <comment :comment="rootMessage" flat action="posted" />
     
   
     <!-- comments on the thread -->
     <q-card-section>
       <comment
-        v-for="comment in comments"
+        v-for="comment in viewableComments"
         :key="comment.id"
         :comment="comment"
+        action="replied"
       />
     </q-card-section>
+    
+    <!-- TODO: how to display hidden comments -->
+    <p class="q-px-xs">
+      {{ hiddenComments?.length }} hidden replies
+    </p>
   </q-card>
 </template>
 <script>
@@ -28,19 +34,29 @@
     },
     computed: { 
       ...mapState(useProfileStore, ['activeProfile']),
-      startedThread () {
-        return this.thread?.messages[0].author === this.activeProfile?.id
+      rootMessage () {
+        return this.thread?.messages[0]
       },
-      rootComment () {
-        if (this.startedThread) return this.thread?.messages[0]
+      startedThread () {
+        return this.rootMessage.author
+      },
+      shownMessage () {
+        // if there is an author for the first message
+        // i.e. we can see it
+        if (this.rootMessage.author) return this.rootMessage
 
         return this.thread?.messages.find(comment => {
             return comment?.author?.id === this.activeProfile?.id
           })
       },
       // the are all of the messages in the thread, except for the first one
-      comments () {
+      viewableComments () {
         return this.thread?.messages?.slice(1)
+          .filter(comment => comment.author)
+      },
+      hiddenComments () {
+        return this.thread?.messages?.slice(1)
+          .filter(comment => !comment.author)
       }
     }
   }
