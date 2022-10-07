@@ -6,7 +6,7 @@
     "lint": "standard --fix",
     "dev": "vite",
     "preview": "vite preview --port 4173",
-    "staging": "NODE_ENV=staging npm run build && gh-pages -d dist"
+    "staging": "vite build --mode staging && gh-pages -d dist"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",
