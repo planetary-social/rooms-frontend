@@ -15,13 +15,11 @@ import rehypeSanitize from 'rehype-sanitize'
 import rehypeStringify from 'rehype-stringify'
 import withImages from 'remark-with-images'
 
-import { mapActions } from 'pinia'
-import { useProfileStore } from '../stores/profile'
-
 const linkifySsbSigilFeeds = linkifyRegex(ref.feedIdRegex, node => {
     return '/' + node
 })
 
+// TODO: open a thread or message
 const linkifySsbSigilMsgs = linkifyRegex(ref.msgIdRegex, node => {
     return '/' + encodeURIComponent(node)
 })
@@ -40,7 +38,6 @@ export default {
     this.rawMarkdownHtml = await this.getRawHtmlMarkdown()
   },
   methods: {
-    ...mapActions(useProfileStore, ['getBlobUri']),
     async getRawHtmlMarkdown () {
       return unified()
         .use(linkifySsbSigilFeeds)
@@ -53,12 +50,12 @@ export default {
         .process(this.text)
     },
     async replaceBlobIdWithUrl (blobId) {
-      // const uri = await this.getBlobUri(blobId)
-      // console.log(uri)
+      const { protocol, hostname } = window.location
 
-      return `http://localhost:26835` + `/get/` + encodeURIComponent(blobId)
+      // TODO: put the port in an environment var
+      const url = `${protocol}//${hostname}:26835` + `/get/` + encodeURIComponent(blobId)
 
-      // return uri
+      return url
     }
   },
 }

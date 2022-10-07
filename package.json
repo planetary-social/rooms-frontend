@@ -11,7 +11,7 @@
     "@apollo/client": "^3.6.9",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
-    "@planetary-ssb/remark-linkify-regex": "gitlab:staltz/remark-linkify-regex#master",
+    "@planetary-ssb/remark-linkify-regex": "github:planetary-social/remark-linkify-regex#1-uncaught-referenceerror-createurl-is-not-defined",
     "@quasar/extras": "^1.15.3",
     "@vue/apollo-composable": "^4.0.0-alpha.19",
     "generate-avatar": "^1.4.10",
