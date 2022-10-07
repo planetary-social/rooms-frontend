@@ -6,7 +6,7 @@ import {
 
 // TODO dont hardcode the port
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql'
+  uri: import.meta.env.VITE_GRAPHQL_API || 'http://localhost:4000/graphql'
 })
 
 const cache = new InMemoryCache()

@@ -8,7 +8,7 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 // You don't need to add this to deps, it's included by @esbuild-plugins/node-modules-polyfill
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
     plugins: [vue()],
     resolve: {
         alias: {
@@ -74,5 +74,6 @@ export default defineConfig({
                 rollupNodePolyFill()
             ]
         }
-    }
-})
+    },
+    base: mode === 'staging' ? '/rooms-frontend/' : '/'
+}))
