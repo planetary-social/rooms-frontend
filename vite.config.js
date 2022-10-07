@@ -74,5 +74,6 @@ export default defineConfig({
                 rollupNodePolyFill()
             ]
         }
-    }
+    },
+    base: process.env.NODE_ENV === 'staging' ? '/rooms-frontend/' : '/'
 })
