@@ -10,7 +10,7 @@
 
       <q-item-section class="q-py-none">
         <q-item-label class="card-header-text q-py-none">
-          {{ author?.name || 'Hidden User' }}
+          <span class="q-pr-xs" @click="goProfile">{{ author?.name || 'Hidden User' }}</span>
           <span class="comment-action q-py-none">{{ action }}</span>
         </q-item-label>
         <!-- <q-item-label class="light-text" caption>
@@ -44,8 +44,11 @@
 
 
 <script>
-import Markdown from './Markdown.vue';
-import Reactions from './Reactions.vue';
+import { mapState, mapActions } from 'pinia'
+
+import Markdown from './Markdown.vue'
+import Reactions from './Reactions.vue'
+import { useProfileStore } from '@/stores/profile'
 
   export default {
     name: "Comment",
@@ -59,6 +62,7 @@ import Reactions from './Reactions.vue';
         action: String
     },
     computed: {
+        ...mapState(useProfileStore, ['activeProfile']),
         cardClasses () {
           return {
             'q-ma-md': !this.flat,
@@ -85,6 +89,31 @@ import Reactions from './Reactions.vue';
           return Date(this.comment?.timestamp).toString();
         }
     },
+    methods: {
+      ...mapActions(useProfileStore, ['getMinimalProfile']),
+      async goProfile () {
+        if (!this.author?.id) return
+
+        // TODO: check feedId is a valid feedId
+
+        if (this.author?.id === this.activeProfile?.id) {
+          window.scrollTo(0, 0)
+          return
+        }
+        
+        // attempt to load the profile
+        const profile = await this.getMinimalProfile(this.author.id)
+
+        if (profile) {
+          useProfileStore().$reset()
+          this.$router.push({ name: 'profile', params: { feedId: this.author.id } })
+        }
+        else {
+          alert('This profile is not available')
+          // this.$router.push({ name: 'home' })
+        }
+      }
+    }
     
 }
 </script>

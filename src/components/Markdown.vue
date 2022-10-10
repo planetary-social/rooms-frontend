@@ -3,28 +3,9 @@
 </template>
 
 <script>
-import linkifyRegex from '@planetary-ssb/remark-linkify-regex'
-// import cidToUrl from 'remark-image-cid-to-url/browser'
-
 import ref from 'ssb-ref'
-
-import { unified } from 'unified'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import rehypeSanitize from 'rehype-sanitize'
-import rehypeStringify from 'rehype-stringify'
-import withImages from 'remark-with-images'
-
-import { mapActions } from 'pinia'
-import { useProfileStore } from '../stores/profile'
-
-const linkifySsbSigilFeeds = linkifyRegex(ref.feedIdRegex, node => {
-    return '/' + node
-})
-
-const linkifySsbSigilMsgs = linkifyRegex(ref.msgIdRegex, node => {
-    return '/' + encodeURIComponent(node)
-})
+import renderer from 'ssb-markdown'
+import querystring from 'querystring'
  
 export default {
   name: 'Markdown',
@@ -40,27 +21,69 @@ export default {
     this.rawMarkdownHtml = await this.getRawHtmlMarkdown()
   },
   methods: {
-    ...mapActions(useProfileStore, ['getBlobUri']),
     async getRawHtmlMarkdown () {
-      return unified()
-        .use(linkifySsbSigilFeeds)
-        .use(linkifySsbSigilMsgs)
-        .use(remarkParse, { commonmark: true })
-        .use(withImages, { replace: this.replaceBlobIdWithUrl })
-        .use(remarkRehype)
-        .use(rehypeSanitize)
-        .use(rehypeStringify)
-        .process(this.text)
+      // const mentions = {}
+      const typeLookup = {}
+      // const emojiMentions = {}
+
+      // function renderEmoji (emoji, url) {
+      //   if (!url) return ':' + emoji + ':'
+
+      //   return `
+      //     <img
+      //       src="${htmlEscape(url)}"
+      //       alt=":${htmlEscape(emoji)}:"
+      //       title=":${htmlEscape(emoji)}:"
+      //       class="emoji"
+      //     >
+      //   `
+      // }
+
+      return renderer.block(this.text, {
+        // emoji: (emoji) => emoji
+        //   if (emojiMentions[emoji]) {
+        //     return renderEmoji(emoji, api.blob.sync.url(emojiMentions[emoji]))
+        //   } else {
+        //     // https://github.com/omnidan/node-emoji/issues/76
+        //     const emojiCharacter = nodeEmoji.get(emoji).replace(/:/g, '')
+        //     return `<span class="Emoji">${emojiCharacter}</span>`
+        //   }
+        // },
+        toUrl: (id) => {
+          const link = ref.parseLink(id)
+          if (link && ref.isBlob(link.link)) {
+            return (
+              this.replaceBlobIdWithUrl(link.link)+
+              '?' +
+              this.getQueryString(link, typeLookup)
+            )
+          } else if (link && ref.isFeedId(link.link)) { // handle URL for mentions
+            return `/profile/${encodeURIComponent(link.link)}/`
+          } else if (link || id.startsWith('#') || id.startsWith('?')) {
+            // TODO: map to messages matching hashtag
+            return id
+          }
+
+          return false
+        },
+        imageLink: (id) => id
+      })
     },
-    async replaceBlobIdWithUrl (blobId) {
-      // const uri = await this.getBlobUri(blobId)
-      // console.log(uri)
+    replaceBlobIdWithUrl (blobId) {
+      const { protocol, hostname } = window.location
 
-      return `http://localhost:26835` + `/get/` + encodeURIComponent(blobId)
+      // TODO: put the port in an environment var
+      return  `${protocol}//${hostname}:26835` + `/get/` + encodeURIComponent(blobId)
+    },
+    getQueryString (link, typeLookup) {
+      const query = {}
 
-      // return uri
+      if (link.query && link.query.unbox) query.unbox = link.query.unbox
+      if (typeLookup[link.link]) query.contentType = typeLookup[link.link]
+
+      return querystring.stringify(query)
     }
-  },
+  }
 }
 </script>
 
@@ -98,6 +121,8 @@ export default {
         margin-bottom: 0.6em;
         text-align: left;
         color: $pText;
+        word-wrap: break-word;
+        overflow: hidden;
 
         img {
             margin: 1.5rem 0;

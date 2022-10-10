@@ -1,10 +1,8 @@
 <template>
-  <div class="row">
-    <!-- first post is the -->
-    <div v-for="thread in threads" :key="thread.id" class="col-12">
+  <div class="q-ma-md">
+    <div v-for="thread in threads" :key="thread.id">
       <thread :thread="thread"/>
     </div>
-    
   </div>
 </template>
 

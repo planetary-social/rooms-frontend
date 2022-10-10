@@ -1,11 +1,11 @@
 <template>
-  <q-card class="thread-card row q-ma-md" dark>
+  <q-card class="thread-card q-my-md" dark :style="cardStyle">
     <!-- the root message in the thread -->
     <comment :comment="rootMessage" flat action="posted" />
     
   
     <!-- comments on the thread -->
-    <q-card-section class="col-12">
+    <q-card-section class="q-px-none">
       <comment
         v-for="comment in viewableComments"
         :key="comment.id"
@@ -15,7 +15,7 @@
     </q-card-section>
     
     <!-- TODO: how to display hidden comments -->
-    <q-card-section v-if="hiddenComments.length"  class="light-text text-center col-12">
+    <q-card-section v-if="hiddenComments.length"  class="light-text text-center">
       {{ hiddenComments?.length }} hidden replies
     </q-card-section>
   </q-card>
@@ -34,6 +34,13 @@
     },
     computed: { 
       ...mapState(useProfileStore, ['activeProfile']),
+      cardStyle () {
+        return {
+          width: this.$q?.screen?.xs
+            ? `${this.$q?.screen.width-25}px`
+            : '500px'
+        }
+      },
       rootMessage () {
         return this.thread?.messages[0]
       },
