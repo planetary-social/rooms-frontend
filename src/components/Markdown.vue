@@ -95,6 +95,8 @@ export default {
         margin-bottom: 0.6em;
         text-align: left;
         color: $pText;
+        word-wrap: break-word;
+        overflow: hidden;
 
         img {
             margin: 1.5rem 0;

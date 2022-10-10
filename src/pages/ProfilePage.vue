@@ -1,19 +1,23 @@
 <template>
-  <q-page width="100%">
-    <div class="col-12">
-      <h2>Profile: {{ activeProfile?.name }}</h2>
-      <small>Id: {{ activeProfile?.id }}</small>
+  <q-page class="row items-center">
+    <div class="column items-center">
+      <div class="col-12">
+        <h3>{{ hasActiveProfile ? activeProfile?.name : 'Unavailable' }}</h3>
+      </div>
+      <div class="col-12">
+        <small>
+          {{ $route?.params?.feedId }}
+        </small>
+      </div>
+      <div class="col-12">
+        <threads :threads="activeProfile?.threads"/>
+      </div>    
     </div>
-
-    <div class="col-12">
-      <threads :threads="activeProfile?.threads"/>
-    </div>    
   </q-page>
 </template>
 
 <script>
-  // import { useRoute } from 'vue-router'
-  import { storeToRefs } from 'pinia'
+  import { mapState, mapActions } from 'pinia'
   import { useProfileStore } from '@/stores/profile'
 
   // components
@@ -23,20 +27,26 @@
     components: {
       Threads
     },
-    setup() {
-      const profile = useProfileStore()
-
-      const { activeProfile } = storeToRefs(profile)
-      const { loadProfile } = profile
-
-      // TODO
-      loadProfile('@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519')
-      // loadProfile('@Z9Su0CwHlLBmS3W6CIva67B/9oiz24MVJCpMJ4lcDmE=.ed25519')
-
-      return {
-        // profile
-        activeProfile
+    async mounted () {
+      let feedId = this.$route?.params?.feedId
+      if (feedId) feedId = decodeURIComponent(feedId)
+    
+      // if (!feedId) feedId = '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519'
+      await this.loadProfile(feedId)
+    },
+    computed: {
+      ...mapState(useProfileStore, ['activeProfile']),
+      // note: this could be false when its still loading,
+      // or the profile came back as null
+      hasActiveProfile () {
+        return this.activeProfile !== null
+      },
+      encodedFeedId () {
+        return encodeURIComponent(this.activeProfile?.id)
       }
+    },
+    methods: {
+      ...mapActions(useProfileStore, ['loadProfile'])
     }
   }
 </script>
