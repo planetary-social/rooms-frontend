@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import apolloClient from "@/plugins/apollo"
 import gql from 'graphql-tag'
 
@@ -101,6 +101,6 @@ export const useProfileStore = defineStore({
   }
 })
 
-// if (import.meta.hot) {
-//   import.meta.hot.accept(acceptHMRUpdate(useProfileStore, import.meta.hot))
-// }
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useProfileStore, import.meta.hot))
+}
