@@ -58,10 +58,12 @@
         immediate: true,
         deep: true,
         async handler (feedId) {
+          if (!feedId || feedId === '') return
           this.loading = true
+
           useProfileStore().$reset()
-          this.feedId = feedId
-          await this.loadProfile(this.$route.params.feedId)
+          this.feedId = decodeURIComponent(feedId)
+          await this.loadProfile(this.feedId)
           window.scrollTo(0, 0)
 
           this.loading = false
@@ -74,9 +76,6 @@
       // or the profile came back as null
       hasActiveProfile () {
         return this.activeProfile !== null
-      },
-      encodedFeedId () {
-        return encodeURIComponent(this.activeProfile?.id)
       },
       inputSize () {
         return {
@@ -101,7 +100,8 @@
         
         if (profile) {
           useProfileStore().$reset()
-          this.$router.push({ name: 'profile', params: { feedId: this.feedId } })
+          const encodedFeedId = encodeURIComponent(this.feedId)
+          this.$router.push({ name: 'profile', params: { feedId: encodedFeedId } })
         }
         else {
           alert('This profile is not available')
