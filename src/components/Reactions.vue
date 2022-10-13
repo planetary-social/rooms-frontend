@@ -23,7 +23,7 @@ export default {
         .map(([expression, reactions]) => {
           // TODO: fix this in the backend... why is the expression null?
           if (expression === null || expression === 'null') return null
-          if (expression === 'Like' && reactions.length > 1) expression = 'Likes'
+          if (expression === 'Like') expression = '💜'
 
           return {
             expression,
