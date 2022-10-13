@@ -6,7 +6,7 @@
 import ref from 'ssb-ref'
 import renderer from 'ssb-markdown'
 import querystring from 'querystring'
- 
+
 export default {
   name: 'Markdown',
   props: {
@@ -19,36 +19,14 @@ export default {
   },
   async mounted () {
     this.rawMarkdownHtml = await this.getRawHtmlMarkdown()
+
+    setTimeout(() => this.replaceAnchors())
   },
   methods: {
     async getRawHtmlMarkdown () {
-      // const mentions = {}
       const typeLookup = {}
-      // const emojiMentions = {}
-
-      // function renderEmoji (emoji, url) {
-      //   if (!url) return ':' + emoji + ':'
-
-      //   return `
-      //     <img
-      //       src="${htmlEscape(url)}"
-      //       alt=":${htmlEscape(emoji)}:"
-      //       title=":${htmlEscape(emoji)}:"
-      //       class="emoji"
-      //     >
-      //   `
-      // }
 
       return renderer.block(this.text, {
-        // emoji: (emoji) => emoji
-        //   if (emojiMentions[emoji]) {
-        //     return renderEmoji(emoji, api.blob.sync.url(emojiMentions[emoji]))
-        //   } else {
-        //     // https://github.com/omnidan/node-emoji/issues/76
-        //     const emojiCharacter = nodeEmoji.get(emoji).replace(/:/g, '')
-        //     return `<span class="Emoji">${emojiCharacter}</span>`
-        //   }
-        // },
         toUrl: (id) => {
           const link = ref.parseLink(id)
           if (link && ref.isBlob(link.link)) {
@@ -58,7 +36,7 @@ export default {
               this.getQueryString(link, typeLookup)
             )
           } else if (link && ref.isFeedId(link.link)) { // handle URL for mentions
-            return `/profile/${encodeURIComponent(link.link)}/`
+            return link.link
           } else if (link || id.startsWith('#') || id.startsWith('?')) {
             // TODO: map to messages matching hashtag
             return id
@@ -70,10 +48,7 @@ export default {
       })
     },
     replaceBlobIdWithUrl (blobId) {
-      const { protocol, hostname } = window.location
-
-      // TODO: put the port in an environment var
-      return  `${protocol}//${hostname}:26835` + `/get/` + encodeURIComponent(blobId)
+      return  import.meta.env.VITE_BLOB_URL + `/get/` + encodeURIComponent(blobId)
     },
     getQueryString (link, typeLookup) {
       const query = {}
@@ -82,6 +57,29 @@ export default {
       if (typeLookup[link.link]) query.contentType = typeLookup[link.link]
 
       return querystring.stringify(query)
+    },
+    replaceAnchors () {
+
+      // TODO: this is a hack to replace anchor hrefs to use
+      // vue-router
+
+      const anchors = this.$el.getElementsByTagName('a')
+      
+      Array.from(anchors).forEach(a => {
+        const href = a.attributes.href.value
+        if (href.startsWith('http')) return
+        if (href.startsWith('#')) return // TODO: ned to configure which route hashtags go to
+
+        // TODO: need to configure other types..?
+        if (!ref.isFeedId(href)) return
+  
+        a.addEventListener('click', (e) => {
+          e.preventDefault()
+
+          // TODO: might need encoding
+          this.$router.push({ name: 'profile', params: { feedId: a.attributes.href.value } })
+        })
+      })
     }
   }
 }
