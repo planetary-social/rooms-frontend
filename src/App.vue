@@ -1,5 +1,6 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpr fFf">
+    <Toolbar />
     <q-page-container>
       <router-view :key="$route.path"/>
     </q-page-container>
@@ -7,8 +8,12 @@
 </template>
 
 <script>
+import Toolbar from '@/components/Toolbar.vue'
 
 export default {
-  name: "LayoutDefault"
+  name: "LayoutDefault",
+  components: {
+    Toolbar
+  }
 }
 </script>
