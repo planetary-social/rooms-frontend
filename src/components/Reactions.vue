@@ -33,7 +33,6 @@ export default {
           }
         })
         .filter(Boolean)
-        // .map(([expression, reactions]) => { expression, reactions })
     }
   }
 }

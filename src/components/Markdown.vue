@@ -97,6 +97,7 @@ export default {
     h1, h2, h3, h4, h5, h6 {
         font-family: sans-serif;
         font-weight: 400;
+        line-height: 2rem;
     }
 
     a {
@@ -123,7 +124,7 @@ export default {
         overflow: hidden;
 
         img {
-            margin: 1.5rem 0;
+            margin: 0.5rem 0;
             border-radius: 0.6rem;
             width: 100%;
             display: block;
