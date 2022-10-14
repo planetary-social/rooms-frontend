@@ -1,37 +1,11 @@
 <template>
-  <q-page class="row justify-center items-center content-center" padding>
-    <div class="column items-center">
-      <div class="col-12">
-        <q-input
-          v-model="feedId"
-          dark
-          standout
-          input-class="text-center"
-          class="self-center q-px-md"
-          placeholder="Enter a @feedId"
-          :style="inputSize"
-        />
-      </div>
-      <div class="col-12 q-pa-sm">
-        <q-btn
-          class="justify-center"
-          color="primary"
-          @click="goProfile"
-          :loading="loading"
-          label="Load Profile"
-        />
-      </div>
-      <div class="col-12">
-        <h3>{{ activeProfile?.name }}</h3>
-      </div>
-      <div class="col-12">
-        <small>
-          {{ activeProfile?.id }}
-        </small>
-      </div>
-      <div class="col-12">
-        <threads :threads="activeProfile?.threads"/>
-      </div>    
+  <q-page class="full-width row justify-center" padding>
+    <!-- TOP SEARCH BAR TO BE REMOVED -->
+    <div class="col-6">
+      <ProfileOverview :profile="activeProfile" />
+    </div>
+    <div class="col-6">
+      <threads :threads="activeProfile?.threads"/>
     </div>
   </q-page>
 </template>
@@ -39,13 +13,15 @@
 <script>
   import { mapState, mapActions } from 'pinia'
   import { useProfileStore } from '@/stores/profile'
+  import ProfileOverview from '@/components/ProfileOverview.vue'
 
   // components
   import Threads from '@/components/Threads.vue'
   
   export default {
     components: {
-      Threads
+      Threads,
+      ProfileOverview
     },
     data () {
       return {

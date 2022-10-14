@@ -102,7 +102,7 @@ export default {
 
     a {
         text-decoration: none;
-        color: $highlight;
+        color: $accent;
 
         &:hover {
             text-decoration: underline;
@@ -132,7 +132,7 @@ export default {
 
         a {
             text-decoration: none;
-            color: $highlight;
+            color: $accent;
 
             &:hover {
                 text-decoration: underline;

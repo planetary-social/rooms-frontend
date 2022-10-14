@@ -11,13 +11,13 @@
       <q-btn disabled flat no-caps :ripple="false" class="label">Community</q-btn>
       <q-btn disabled flat no-caps :ripple="false" class="label">Our Rules</q-btn>
       <!-- TODO: link to app store download -->
-      <AppStoreBadge disabled/>
+      <AppStoreBtn />
     </q-toolbar>
   </q-header>
 </template>
 
 <script setup>
-import AppStoreBadge from '@/components/icon/AppStoreIcon.vue'
+import AppStoreBtn from '@/components/icon/AppStoreBtn.vue'
 import PlanetaryTextIcon from '@/components/icon/PlanetaryTextIcon.vue'
 import PlanetaryIcon from '@/components/icon/PlanetaryIcon.vue'
 
