@@ -38,7 +38,7 @@
         return {
           width: this.$q?.screen?.xs
             ? `${this.$q?.screen.width-25}px`
-            : '500px'
+            : '535.89px'
         }
       },
       rootMessage () {

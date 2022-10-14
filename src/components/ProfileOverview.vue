@@ -1,34 +1,34 @@
 <template>
   <q-card :style="cardStyle" dark flat class="card">
     <q-item>
-      <q-item-section avatar class="avatar q-pa-none q-mr-md">
+      <q-item-section avatar>
         <q-avatar size="120px">
-          <img :src="profile?.image" />
+          <q-img :src="profile?.image" placeholder="avatar" class="avatar" />
         </q-avatar>
       </q-item-section>
 
       <q-item-section>
         <q-item-label class="title">{{ profile?.name }}</q-item-label>
-        <q-item-label class="subtext" style="color: #FFFAF9" caption>
+        <q-item-label class="subtext" style="color: #FFFAF9;" caption>
           <!-- TODO -->
           <span>{{ profile?.name }}</span>
           <span style="color: #8575A3;">@todo.planetary</span>
         </q-item-label>
         <q-item class="q-px-none">
           <!-- TODO: outlined icon -->
-          <q-btn class="accent" icon="person_add" rounded no-caps label="Follow" />
+          <q-btn class="accent" icon="person_add" disabled rounded no-caps label="Follow" />
         </q-item>
       </q-item-section>
     </q-item>
     <q-item>
       <q-item-section>
         <q-item-label class="description-text">
-          {{ profile?.description }}
+          <Markdown :text="profile?.description"/>
         </q-item-label>
       </q-item-section>
     </q-item>
     <q-item>
-      Last Active: TODO
+      Last Active: N/A
     </q-item>
     <q-item>
       <q-item-section>
@@ -69,7 +69,7 @@
         Active On: TODO
       </div>
       <div>
-        <q-btn class="q-mx-sm q-my-xs gradient-button" v-for="i in 20" :key="i" flat>
+        <q-btn class="q-mx-sm q-my-xs gradient-button" disabled v-for="i in 20" :key="i" flat>
           <span class="gradient-text">{{ `#testing${i}` }}</span>
         </q-btn>
       </div>
@@ -82,18 +82,22 @@
 <script>
 // import { mapState, mapActions } from 'pinia'
 // import { useProfileStore } from '@/stores/profile'
+import Markdown from '@/components/Markdown.vue'
 
   export default {
     name: "ProfileOverview",
     props: {
-        profile: Object
+      profile: Object
+    },
+    components: {
+      Markdown
     },
     computed: {
       cardStyle () {
         return {
           width: this.$q?.screen?.xs
             ? `${this.$q?.screen.width-25}px`
-            : '500px'
+            : '535.89px'
         }
       }
     }
@@ -102,7 +106,7 @@
 
 <style scoped>
   .card {
-    /* background: none; */
+    background: none;
     /* Cell--dark */
     /* background: linear-gradient(180deg, #3D2961 0%, #332251 60.72%); */
     /* box-shadow: 0px 4px 0px #2C1D45, 0px 4px 10px rgba(0, 0, 0, 0.25); */
@@ -120,20 +124,19 @@
     /* identical to box height, or 30px */
 
     color: #FFFFFF;
-
-
   }
 
   .description-text {
     /* font-family: 'SF Pro Text'; */
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 120%;
     /* or 24px */
     letter-spacing: -0.174603px;
 
     color: #FFFFFF;
+    word-wrap: break-word;
   }
 
   .subtext {
@@ -187,13 +190,13 @@
   }
 
   .avatar {
-    /* background: url(IMG_2257.jpg); */
     border-radius: 139.358px;
     background: 
       linear-gradient(var(--color-background), var(--color-background)) padding-box,
       linear-gradient(to right, #F08508, #F43F75) border-box;
-    /* border-radius: 147.16px; */
     border: 5px solid transparent;
+    width: 120px;
+    height: 120px;
   }
 
 

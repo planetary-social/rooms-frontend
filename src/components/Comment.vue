@@ -1,21 +1,20 @@
 <template>
-  <q-card class="col-12" :class="cardClasses" dark :flat="flat">
+  <q-card :class="cardClasses" dark :flat="flat">
     <q-item class="card-header">
       <q-item-section avatar>
-        <q-avatar v-if="isHiddenContent" icon="account_circle" size="30px" font-size="30px"/>
-        <q-avatar size="30px" class="avatar" v-else>
-          <img :src="image" />
+        <q-avatar size="30px" class="avatar">
+          <q-img :src="image" no-spinner placeholder-src="/src/assets/logo.svg" fit="fill"/>
         </q-avatar>
       </q-item-section>
 
-      <q-item-section class="q-py-none">
-        <q-item-label class="card-header-text q-py-none">
+      <q-item-section no-wrap>
+        <q-item-label class="card-header-text">
           <span class="q-pr-xs" @click="goProfile">{{ author?.name || 'Hidden User' }}</span>
-          <span class="comment-action q-py-none">{{ action }}</span>
+          <span class="comment-action">{{ action }}</span>
         </q-item-label>
-        <!-- <q-item-label class="light-text" caption>
+        <q-item-label class="light-text" style="left: -10px;" caption>
           {{ timestamp }}
-        </q-item-label> -->
+        </q-item-label>
       </q-item-section>
 
       <q-item-section side class="comment-action">
@@ -74,19 +73,32 @@ import { useProfileStore } from '@/stores/profile'
           return this.comment?.votes
         },
         isHiddenContent() {
-          return this.comment.id === null;
+          return this.comment.id === null
         },
         showBottomSection () {
           return this.comment?.votes?.length
         },
-        author() {
-          return this.comment?.author;
+        author () {
+          return this.comment?.author
         },
-        image() {
-          return this.author?.image || "https://cdn.quasar.dev/img/boy-avatar.png"; // TODO!
+        image () {
+          return this.author?.image || 'fake'
         },
-        timestamp() {
-          return Date(this.comment?.timestamp).toString();
+        date () {
+          return new Date(this.comment?.timestamp)
+        },
+        dateMinutes () {
+          return 
+        },
+        timestamp () {
+          const d = new Date(this.comment?.timestamp)
+
+          const minutes = ('0'+ this.date.getUTCMinutes()).slice(-2)
+          const hours = d.getUTCHours()
+
+          const ampm = hours > 12 ? 'PM' : 'AM'
+
+          return `${d.toDateString()} ${hours}:${minutes} ${ampm}`
         }
     },
     methods: {
@@ -146,8 +158,6 @@ import { useProfileStore } from '@/stores/profile'
   }
 
   .card-header-text {
-    // position: absolute;
-    // width: 93px;
     height: 16px;
     left: -10px;
 
@@ -156,7 +166,6 @@ import { useProfileStore } from '@/stores/profile'
     font-weight: 400;
     font-size: 18px;
     line-height: 120%;
-    /* identical to box height, or 16px */
     letter-spacing: -0.1px;
 
     color: #FFFFFF;
@@ -196,7 +205,9 @@ import { useProfileStore } from '@/stores/profile'
   }
 
   .avatar {
-    left: 8px;
-    top: 3px;
+    // left: 8px;
+    // top: 3px;
+    width: 30px;
+    height: 30px;
   }
 </style>
