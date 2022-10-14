@@ -7,6 +7,8 @@ const GET_MINIMAL_PROFILE = gql`
     getProfile (id: $id) {
       id
       name
+      image
+      description
     }
   }
 `
@@ -17,6 +19,10 @@ const GET_PROFILE = gql`
     getProfile (id: $id) {
       id
       name
+      image
+      description
+      followersCount
+      followingCount
       threads {
         id
         messages {
