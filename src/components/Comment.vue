@@ -35,7 +35,7 @@
 
     <q-separator v-if="!flat && reactions?.length" class="bottom-divider" />
 
-    <q-card-section v-if="reactions?.length">
+    <q-card-section v-if="reactions?.length" :class="{ 'q-py-none': flat }">
       <Reactions :reactions="reactions"/>
     </q-card-section>
   </q-card>
