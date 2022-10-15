@@ -48,7 +48,7 @@ export default {
       })
     },
     replaceBlobIdWithUrl (blobId) {
-      return  import.meta.env.VITE_BLOB_URL + `/get/` + encodeURIComponent(blobId)
+      return  import.meta.env.VITE_BLOB_URL + '/' + encodeURIComponent(blobId)
     },
     getQueryString (link, typeLookup) {
       const query = {}

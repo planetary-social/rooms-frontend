@@ -3,7 +3,8 @@
     <q-item>
       <q-item-section avatar>
         <q-avatar size="120px">
-          <q-img :src="profile?.image" placeholder="avatar" class="avatar" />
+          <!-- TODO: placeholder-src will not work in production -->
+          <q-img :src="profile?.image" loading="eager" no-spinner placeholder-src="/src/assets/logo.svg" fit="scale-down" class="avatar"/>
         </q-avatar>
       </q-item-section>
 

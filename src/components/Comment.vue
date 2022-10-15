@@ -3,7 +3,7 @@
     <q-item class="card-header">
       <q-item-section avatar>
         <q-avatar size="30px" class="avatar">
-          <q-img :src="image" no-spinner placeholder-src="/src/assets/logo.svg" fit="fill"/>
+          <q-img :src="image" loading="eager" no-spinner placeholder-src="/src/assets/logo.svg" fit="fill"/>
         </q-avatar>
       </q-item-section>
 
