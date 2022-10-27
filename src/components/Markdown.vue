@@ -3,29 +3,10 @@
 </template>
 
 <script>
-import linkifyRegex from '@planetary-ssb/remark-linkify-regex'
-// import cidToUrl from 'remark-image-cid-to-url/browser'
-
 import ref from 'ssb-ref'
+import renderer from 'ssb-markdown'
+import querystring from 'querystring'
 
-import { unified } from 'unified'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import rehypeSanitize from 'rehype-sanitize'
-import rehypeStringify from 'rehype-stringify'
-import withImages from 'remark-with-images'
-
-import { mapActions } from 'pinia'
-import { useProfileStore } from '../stores/profile'
-
-const linkifySsbSigilFeeds = linkifyRegex(ref.feedIdRegex, node => {
-    return '/' + node
-})
-
-const linkifySsbSigilMsgs = linkifyRegex(ref.msgIdRegex, node => {
-    return '/' + encodeURIComponent(node)
-})
- 
 export default {
   name: 'Markdown',
   props: {
@@ -38,29 +19,69 @@ export default {
   },
   async mounted () {
     this.rawMarkdownHtml = await this.getRawHtmlMarkdown()
+
+    setTimeout(() => this.replaceAnchors())
   },
   methods: {
-    ...mapActions(useProfileStore, ['getBlobUri']),
     async getRawHtmlMarkdown () {
-      return unified()
-        .use(linkifySsbSigilFeeds)
-        .use(linkifySsbSigilMsgs)
-        .use(remarkParse, { commonmark: true })
-        .use(withImages, { replace: this.replaceBlobIdWithUrl })
-        .use(remarkRehype)
-        .use(rehypeSanitize)
-        .use(rehypeStringify)
-        .process(this.text)
+      const typeLookup = {}
+
+      return renderer.block(this.text, {
+        toUrl: (id) => {
+          const link = ref.parseLink(id)
+          if (link && ref.isBlob(link.link)) {
+            return (
+              this.replaceBlobIdWithUrl(link.link)+
+              '?' +
+              this.getQueryString(link, typeLookup)
+            )
+          } else if (link && ref.isFeedId(link.link)) { // handle URL for mentions
+            return link.link
+          } else if (link || id.startsWith('#') || id.startsWith('?')) {
+            // TODO: map to messages matching hashtag
+            return id
+          }
+
+          return false
+        },
+        imageLink: (id) => id
+      })
     },
-    async replaceBlobIdWithUrl (blobId) {
-      // const uri = await this.getBlobUri(blobId)
-      // console.log(uri)
+    replaceBlobIdWithUrl (blobId) {
+      return  import.meta.env.VITE_BLOB_URL + '/' + encodeURIComponent(blobId)
+    },
+    getQueryString (link, typeLookup) {
+      const query = {}
 
-      return `http://localhost:26835` + `/get/` + encodeURIComponent(blobId)
+      if (link.query && link.query.unbox) query.unbox = link.query.unbox
+      if (typeLookup[link.link]) query.contentType = typeLookup[link.link]
 
-      // return uri
+      return querystring.stringify(query)
+    },
+    replaceAnchors () {
+
+      // TODO: this is a hack to replace anchor hrefs to use
+      // vue-router
+
+      const anchors = this.$el.getElementsByTagName('a')
+      
+      Array.from(anchors).forEach(a => {
+        const href = a.attributes.href.value
+        if (href.startsWith('http')) return
+        if (href.startsWith('#')) return // TODO: ned to configure which route hashtags go to
+
+        // TODO: need to configure other types..?
+        if (!ref.isFeedId(href)) return
+  
+        a.addEventListener('click', (e) => {
+          e.preventDefault()
+
+          // TODO: might need encoding
+          this.$router.push({ name: 'profile', params: { feedId: a.attributes.href.value } })
+        })
+      })
     }
-  },
+  }
 }
 </script>
 
@@ -76,11 +97,12 @@ export default {
     h1, h2, h3, h4, h5, h6 {
         font-family: sans-serif;
         font-weight: 400;
+        line-height: 2rem;
     }
 
     a {
         text-decoration: none;
-        color: $highlight;
+        color: $accent;
 
         &:hover {
             text-decoration: underline;
@@ -98,9 +120,11 @@ export default {
         margin-bottom: 0.6em;
         text-align: left;
         color: $pText;
+        word-wrap: break-word;
+        overflow: hidden;
 
         img {
-            margin: 1.5rem 0;
+            // margin: 0.5rem 0;
             border-radius: 0.6rem;
             width: 100%;
             display: block;
@@ -108,7 +132,7 @@ export default {
 
         a {
             text-decoration: none;
-            color: $highlight;
+            color: $accent;
 
             &:hover {
                 text-decoration: underline;

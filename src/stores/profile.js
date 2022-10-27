@@ -1,6 +1,17 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import apolloClient from "@/plugins/apollo"
 import gql from 'graphql-tag'
+
+const GET_MINIMAL_PROFILE = gql`
+  query ($id: ID!) {
+    getProfile (id: $id) {
+      id
+      name
+      image
+      description
+    }
+  }
+`
 
 // TODO: extract these helpers into a lib
 const GET_PROFILE = gql`
@@ -8,6 +19,10 @@ const GET_PROFILE = gql`
     getProfile (id: $id) {
       id
       name
+      image
+      description
+      followersCount
+      followingCount
       threads {
         id
         messages {
@@ -33,30 +48,6 @@ const GET_PROFILE = gql`
   }
 `
 
-const GET_BLOB_URI = gql`
-  query ($blobId: String!) {
-    getBlobUri (blobId: $blobId)
-  }
-`
-
-async function getProfile (id) {
-  return apolloClient.query({
-    query: GET_PROFILE,
-    variables: {
-      id
-    }
-  })
-}
-
-async function getBlobUri (blobId) {
-  return apolloClient.query({
-    query: GET_BLOB_URI,
-    variables: {
-      blobId
-    }
-  })
-}
-
 export const useProfileStore = defineStore({
   id: 'profile',
   state: () => ({
@@ -76,9 +67,29 @@ export const useProfileStore = defineStore({
     async getProfile (id) {
       // this.currentProfile = profile
 
-      const res = await getProfile(id)
+      const res = await apolloClient.query({
+        query: GET_PROFILE,
+        variables: {
+          id
+        }
+      })
+  
       if (res.errors) {
         console.error(res.errors) // TODO
+        return
+      }
+
+      return res.data.getProfile
+    },
+
+    async getMinimalProfile (id) {
+      const res = await apolloClient.query({
+        query: GET_MINIMAL_PROFILE,
+        variables: { id }
+      })
+
+      if (res.errors) {
+        console.error(res.errors)
         return
       }
 
@@ -92,22 +103,10 @@ export const useProfileStore = defineStore({
       if (profile) {
         this.activeProfile = profile
       }
-    },
-
-    async getBlobUri (blobId) {
-      if (!blobId) return
-
-      const res = await getBlobUri(blobId)
-      if (res.errors) {
-        console.error(res.errors)
-        return
-      }
-
-      return res.data.getBlobUri
     }
   }
 })
 
-// if (import.meta.hot) {
-//   import.meta.hot.accept(acceptHMRUpdate(useProfileStore, import.meta.hot))
-// }
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useProfileStore, import.meta.hot))
+}

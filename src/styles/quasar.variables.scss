@@ -1,10 +1,14 @@
 // It's highly recommended to change the default colors
 // to match your app's branding.
 
+// $primary: linear-gradient(180deg, #3D2961 0%, #332251 60.72%);
+$primary: #3D2961;
 $appBackground: #1A1229;
 
 $lightText: #8276a0;
-$highlight: #ff6453;
+$accent: #ff6453;
+// $accent: #F43F75;
+// #F08508
 $pText: #FFFFFF;
 
 // @import '~quasar-variables-styl'

@@ -1,42 +1,39 @@
 <template>
-  <q-page width="100%">
-    <div class="col-12">
-      <h2>Profile: {{ activeProfile?.name }}</h2>
-      <small>Id: {{ activeProfile?.id }}</small>
+  <q-page class="full-width row justify-center" padding>
+    <!-- TOP SEARCH BAR TO BE REMOVED -->
+    <div v-if="activeProfile" class="column items-end" style="margin-top:26px;">
+      <ProfileOverview class="sticky" :profile="activeProfile" />
     </div>
-
-    <div class="col-12">
+    <div class="column items-start">
       <threads :threads="activeProfile?.threads"/>
-    </div>    
+    </div>
   </q-page>
 </template>
 
 <script>
-  // import { useRoute } from 'vue-router'
-  import { storeToRefs } from 'pinia'
+  import { mapState } from 'pinia'
   import { useProfileStore } from '@/stores/profile'
+  import ProfileOverview from '@/components/ProfileOverview.vue'
 
   // components
   import Threads from '@/components/Threads.vue'
   
   export default {
     components: {
-      Threads
+      Threads,
+      ProfileOverview
     },
-    setup() {
-      const profile = useProfileStore()
-
-      const { activeProfile } = storeToRefs(profile)
-      const { loadProfile } = profile
-
-      // TODO
-      loadProfile('@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519')
-      // loadProfile('@Z9Su0CwHlLBmS3W6CIva67B/9oiz24MVJCpMJ4lcDmE=.ed25519')
-
-      return {
-        // profile
-        activeProfile
-      }
+    computed: {
+      ...mapState(useProfileStore, ['activeProfile'])
     }
   }
 </script>
+
+<style scoped>
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 200px;
+  bottom: 0px;
+}
+</style>
