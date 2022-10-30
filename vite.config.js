@@ -11,10 +11,9 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
-
+    console.log(env)
     return {
         plugins: [vue()],
-        base: env.VITE_BASE_DIR,
         resolve: {
             alias: {
                 // '@': fileURLToPath(new URL('./src', import.meta.url)),

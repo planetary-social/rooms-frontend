@@ -3,8 +3,7 @@
     <q-item>
       <q-item-section avatar>
         <q-avatar size="120px">
-          <!-- TODO: placeholder-src will not work in production -->
-          <q-img :src="profile?.image" loading="eager" no-spinner placeholder-src="/src/assets/logo.svg" fit="scale-down" class="avatar"/>
+          <q-img :src="image" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="avatar"/>
         </q-avatar>
       </q-item-section>
 
@@ -84,11 +83,17 @@
 // import { mapState, mapActions } from 'pinia'
 // import { useProfileStore } from '@/stores/profile'
 import Markdown from '@/components/Markdown.vue'
+import logo from '@/assets/logo.svg'
 
   export default {
     name: "ProfileOverview",
     props: {
       profile: Object
+    },
+    data () {
+      return {
+        logo
+      }
     },
     components: {
       Markdown
@@ -100,6 +105,9 @@ import Markdown from '@/components/Markdown.vue'
             ? `${this.$q?.screen.width-25}px`
             : '535.89px'
         }
+      },
+      image () {
+        return this.profile?.image || this.logo
       }
     }
   }

@@ -3,7 +3,7 @@
     <q-item class="card-header">
       <q-item-section avatar>
         <q-avatar size="30px" class="avatar">
-          <q-img :src="image" loading="eager" no-spinner placeholder-src="/src/assets/logo.svg" fit="fill"/>
+          <q-img :src="image" loading="eager" no-spinner :placeholder-src="logo" fit="fill"/>
         </q-avatar>
       </q-item-section>
 
@@ -49,6 +49,8 @@ import Markdown from './Markdown.vue'
 import Reactions from './Reactions.vue'
 import { useProfileStore } from '@/stores/profile'
 
+import logo from '@/assets/logo.svg'
+
   export default {
     name: "Comment",
     components: {
@@ -59,6 +61,11 @@ import { useProfileStore } from '@/stores/profile'
         comment: Object,
         flat: Boolean,
         action: String
+    },
+    data () {
+      return {
+        logo
+      }
     },
     computed: {
         ...mapState(useProfileStore, ['activeProfile']),
@@ -82,7 +89,7 @@ import { useProfileStore } from '@/stores/profile'
           return this.comment?.author
         },
         image () {
-          return this.author?.image || 'fake'
+          return this.author?.image || this.logo
         },
         date () {
           return new Date(this.comment?.timestamp)

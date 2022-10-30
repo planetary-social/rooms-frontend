@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "vite build",
+    "build:staging": "vite build --mode staging --base=/",
     "lint": "standard --fix",
     "dev": "vite",
     "preview": "vite preview --port 4173",
