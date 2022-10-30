@@ -13,37 +13,6 @@
       <!-- TODO: link to app store download -->
       <AppStoreBtn />
     </q-toolbar>
-    <!-- TODO: temp ui to allow profile navigation -->
-    <q-toolbar class="toolbar-temp q-mx-auto">
-      <q-breadcrumbs active-color="white" style="font-size: 16px">
-        <q-breadcrumbs-el label="Home" icon="home" />
-        <q-breadcrumbs-el v-if="$route?.name === 'profile' && activeProfile" label="Profile" icon="person" />
-        <q-breadcrumbs-el v-if="$route?.name === 'profile'" :label="activeProfile?.name" />
-      </q-breadcrumbs>
-      <q-space/>
-      <q-input
-        v-model="feedId"
-        dark dense standout
-        input-class="text-center"
-        class="q-ml-md self-center"
-        placeholder="enter a @feedId"
-        :style="inputStyle"
-      >
-        <!-- <template v-slot:append> -->
-          <!-- <q-icon v-if="feedId === ''" name="search" /> -->
-          <!-- <q-icon v-else name="clear" class="cursor-pointer" @click="feedId = ''" /> -->
-        <!-- </template> -->
-      </q-input>
-      <q-btn
-        class="justify-center"
-        flat
-        outlined
-        color="accent"
-        @click="goProfile"
-        :loading="loading"
-        label="Go"
-      />
-    </q-toolbar>
   </q-header>
 </template>
 
@@ -124,25 +93,14 @@ export default {
 <style lang="scss"  scoped>
 @import '../styles/quasar.variables.scss';
 
-.toolbar-temp {
-  max-width:1138px;
-  background-color: $appBackground;
-  margin-bottom: 10px;
-}
-
 .toolbar {
-  height: 70px;
-
-  /* Cell--dark */
-  background: linear-gradient(180deg, #3D2961 0%, #332251 60.72%);
-  box-shadow: 0px 1.90476px 14.2857px rgba(24, 23, 35, 0.1), inset 0px -0.47619px 0px rgba(0, 0, 0, 0.45);
-  border-radius: 0px 0px 25px 25px;
+  height: 129px;
   max-width:1138px;
 }
 
 .header {
-  border-radius: 0px 0px 25px 25px;
-  background: none;
+  height: 129px;
+  background: linear-gradient(180deg, #211734 53.36%, rgba(33, 23, 52, 0) 100%);
 }
 
 .label {
