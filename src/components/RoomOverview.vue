@@ -15,7 +15,6 @@
           <span style="color: #8575A3;">@todo.planetary</span>
         </q-item-label>
         <q-item class="q-px-none">
-          <!-- TODO: outlined icon -->
           <q-btn class="accent q-pt-sm q-pb-sm" no-caps>
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
@@ -26,7 +25,8 @@
     <q-item>
       <q-item-section>
         <q-item-label class="description-text">
-          <Markdown :text="room?.description"/>
+          <Markdown v-if="room?.description" :text="room?.description"/>
+          This is not a real room, this is just hard coded
         </q-item-label>
       </q-item-section>
     </q-item>
@@ -82,10 +82,10 @@
     </q-item>
     <q-item class="content-start">
       <div>
-      <q-avatar size="50px" v-for="i in 25" :key="i" @click="goProfile">
-        <q-img :src="`https://i.pravatar.cc/50?img=${i}`" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="small-avatar"/>
-      </q-avatar>
-    </div>
+        <q-avatar size="50px" v-for="member in tempMembers" :key="member.id" @click="goProfile(member.id)" :text="member.name">
+          <q-img :src="member?.image" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="small-avatar"/>
+        </q-avatar>
+      </div>
     </q-item>
   </q-card>
 </template>
@@ -107,7 +107,8 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
     },
     data () {
       return {
-        logo
+        logo,
+        tempMembers: []
       }
     },
     components: {
@@ -126,17 +127,29 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
         return this.room?.image || this.logo
       }
     },
+    async mounted () {
+      await this.loadTempMembers()
+    },
     methods: {
       ...mapActions(useProfileStore, ['getMinimalProfile']),
-      // TODO: replace with real feedId
-      async goProfile () {
-        // TODO: check feedId is a valid feedId
-        const feedId = '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519'
+      async loadTempMembers () {
+        const feedIds = [
+          '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519', // Mix
+          '@4wXR/KiJrkz9D2LPXpZl5XOLw+gYCoJW6p6rwFlI5yA=.ed25519', // Matt
+          '@THUzexG1y6kWofwiN8Lix/jNH/P6roYdlCDgpAn2HSc=.ed25519' // Rabble
+        ]
 
-        if (feedId === this.activeProfile?.id) {
-          window.scrollTo(0, 0)
-          return
-        }
+        this.tempMembers = await Promise.all(
+          feedIds
+            .map(feedId => this.getMinimalProfile(feedId))
+            .filter(Boolean)
+        )
+      },
+      async goProfile (feedId) {
+        // if (feedId === this.activeProfile?.id) {
+        //   window.scrollTo(0, 0)
+        //   return
+        // }
         
         // attempt to load the profile
         const profile = await this.getMinimalProfile(feedId)
@@ -264,6 +277,7 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
   }
 
   .small-avatar {
+    cursor: pointer;
     border-radius: 139.358px;
     border: 5px solid transparent;
     width: 50px;

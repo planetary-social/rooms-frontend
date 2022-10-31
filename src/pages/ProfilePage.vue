@@ -5,7 +5,7 @@
     </div>
     <div class="justify-start items-start">
       <!-- TODO: move this to graphql -->
-      <threads :threads="activeProfile?.threads.filter(thread => thread.messages[0].id)"/>
+      <threads :threads="activeProfile?.threads"/>
     </div>
   </q-page>
 </template>

@@ -15,8 +15,10 @@
           <span style="color: #8575A3;">@todo.planetary</span>
         </q-item-label>
         <q-item class="q-px-none">
-          <!-- TODO: outlined icon -->
-          <q-btn class="accent" icon="person_add" disabled rounded no-caps label="Follow" />
+          <q-btn class="accent q-pt-sm q-pb-sm" no-caps>
+            <PersonAddIcon/>
+            <span class="button-text">Join in app</span>
+          </q-btn>
         </q-item>
       </q-item-section>
     </q-item>
@@ -84,6 +86,7 @@
 // import { useProfileStore } from '@/stores/profile'
 import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
+import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 
   export default {
     name: "ProfileOverview",
@@ -96,7 +99,8 @@ import logo from '@/assets/logo.svg'
       }
     },
     components: {
-      Markdown
+      Markdown,
+      PersonAddIcon
     },
     computed: {
       cardStyle () {
@@ -148,6 +152,20 @@ import logo from '@/assets/logo.svg'
     word-wrap: break-word;
   }
 
+  .button-text {
+    height: 23px;
+
+    /* font-family: 'SF Pro Text'; */
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19.3243px;
+    line-height: 23px;
+    /* identical to box height */
+
+    color: #FFFFFF;
+    padding-left: 10px;
+  }
+  
   .subtext {
     /* font-family: SF Pro Text; */
     font-size: 20px;
