@@ -8,6 +8,9 @@
         <small>
           Page not found
         </small>
+        <small>
+          {{ $router }}
+        </small>
       </div>   
     </div>
   </q-page>

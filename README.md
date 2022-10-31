@@ -19,13 +19,25 @@ npm run lint
 
 ### Production
 
-TODO
+```
+npm run build:production
+```
+
+- Creates a production build in `dist/`
+- To add to the `go-ssb-room` repo:
+  - Copy the `index.html` and all `assets` from the `dist/` folder to `go-ssb-room/web/assets`
 
 ### Staging
 
 ```sh
-npm run staging
+npm run build:staging
 ```
+
+- Creates a build in `dist/`
+- Deploys the app on github pages: `https://planetary-social.github.io/rooms-frontend`
+
+Known issues:
+- App reloading doesnt work on github pages.
 
 ---
 
