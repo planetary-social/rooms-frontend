@@ -2,14 +2,15 @@ const path = require(`path`);
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
-  publicPath: import.meta.env.VITE_BASE_DIR,
+  // publicPath: import.meta.env.VITE_BASE_DIR,
+  // publicPath: './',
   pluginOptions: {
     quasar: {
       importStrategy: 'kebab',
       rtlSupport: false
     }
   },
-  transpileDependencies: ['quasar'],
+  // transpileDependencies: ['quasar'],
   configureWebpack: {
       resolve: {
           symlinks: false,
@@ -17,5 +18,7 @@ module.exports = defineConfig({
               vue: path.resolve(`./node_modules/vue`)
           }
       }
-  }
+  },
+  transpileDependencies: true,
+  assetsDir: "static",
 })

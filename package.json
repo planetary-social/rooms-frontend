@@ -2,11 +2,12 @@
   "name": "planetary-rooms-frontend",
   "version": "0.0.0",
   "scripts": {
-    "build": "vite build",
+    "build:development": "vite build --mode development --base=/",
+    "build:staging": "vite build --mode staging --base=/rooms-frontend/ && gh-pages -d dist",
+    "build:production": "vite build --mode production --base=/",
     "lint": "standard --fix",
     "dev": "vite",
-    "preview": "vite preview --port 4173",
-    "staging": "vite build --mode staging && gh-pages -d dist"
+    "preview": "vite preview --port 4173"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",

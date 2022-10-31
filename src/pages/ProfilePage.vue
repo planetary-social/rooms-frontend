@@ -1,10 +1,10 @@
 <template>
-  <q-page class="full-width row justify-center" padding>
-    <!-- TOP SEARCH BAR TO BE REMOVED -->
-    <div v-if="activeProfile" class="column items-end" style="margin-top:26px;">
+  <q-page class="full-width row justify-center">
+    <div v-if="activeProfile" class="column">
       <ProfileOverview class="sticky" :profile="activeProfile" />
     </div>
-    <div class="column items-start">
+    <div class="justify-start items-start">
+      <!-- TODO: move this to graphql -->
       <threads :threads="activeProfile?.threads"/>
     </div>
   </q-page>
@@ -33,7 +33,7 @@
 .sticky {
   position: -webkit-sticky;
   position: sticky;
-  top: 200px;
+  top: 129px;
   bottom: 0px;
 }
 </style>

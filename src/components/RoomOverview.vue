@@ -8,10 +8,10 @@
       </q-item-section>
 
       <q-item-section>
-        <q-item-label class="title">{{ profile?.name }}</q-item-label>
+        <q-item-label class="title">{{ room?.name }}</q-item-label>
         <q-item-label class="subtext" style="color: #FFFAF9;" caption>
           <!-- TODO -->
-          <span>{{ profile?.name }}</span>
+          <span>{{ room?.name }}</span>
           <span style="color: #8575A3;">@todo.planetary</span>
         </q-item-label>
         <q-item class="q-px-none">
@@ -25,25 +25,26 @@
     <q-item>
       <q-item-section>
         <q-item-label class="description-text">
-          <Markdown :text="profile?.description"/>
+          <Markdown v-if="room?.description" :text="room?.description"/>
+          This is not a real room, this is just hard coded
         </q-item-label>
       </q-item-section>
     </q-item>
-    <q-item>
-      Last Active: N/A
+    <q-item class="subheader">
+      Room Stats
     </q-item>
     <q-item>
       <q-item-section>
         <q-item-label class="stats-header" caption>
-          {{ profile?.followersCount }}
+          N/A
         </q-item-label>
         <q-item-label class="stats" caption>
-          followers
+          members
         </q-item-label>
       </q-item-section>
       <q-item-section>
         <q-item-label class="stats-header" caption>
-          {{ profile?.followingCount }}
+          {{ room?.followingCount || 'N/A' }}
         </q-item-label>
         <q-item-label class="stats" caption>
           following
@@ -62,18 +63,28 @@
           N/A
         </q-item-label>
         <q-item-label class="stats" caption>
-          rooms
+          posts
         </q-item-label>
       </q-item-section>
     </q-item>
+    <q-item class="subheader">
+      Hot Topics
+    </q-item>
     <q-item class="column">
-      <div class="col-12">
-        Active On: TODO
-      </div>
       <div>
-        <q-btn class="q-mx-sm q-my-xs gradient-button" disabled v-for="i in 20" :key="i" flat>
+        <q-btn class="q-mx-sm q-my-xs gradient-button" disabled v-for="i in 10" :key="i" flat>
           <span class="gradient-text">{{ `#testing${i}` }}</span>
         </q-btn>
+      </div>
+    </q-item>
+    <q-item class="subheader">
+      Newest Public Members
+    </q-item>
+    <q-item class="content-start">
+      <div>
+        <q-avatar size="50px" v-for="member in tempMembers" :key="member.id" @click="goProfile(member.id)" :text="member.name">
+          <q-img :src="member?.image" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="small-avatar"/>
+        </q-avatar>
       </div>
     </q-item>
   </q-card>
@@ -82,26 +93,28 @@
 
 
 <script>
-// import { mapState, mapActions } from 'pinia'
-// import { useProfileStore } from '@/stores/profile'
+
 import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
-import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
+import { mapActions } from 'pinia'
+import { useProfileStore } from '../stores/profile'
+import PersonAddIcon from './icon/PersonAddIcon.vue'
 
   export default {
-    name: "ProfileOverview",
+    name: "RoomOverview",
     props: {
-      profile: Object
+      room: Object
     },
     data () {
       return {
-        logo
+        logo,
+        tempMembers: []
       }
     },
     components: {
-      Markdown,
-      PersonAddIcon
-    },
+    Markdown,
+    PersonAddIcon
+},
     computed: {
       cardStyle () {
         return {
@@ -111,7 +124,44 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
         }
       },
       image () {
-        return this.profile?.image || this.logo
+        return this.room?.image || this.logo
+      }
+    },
+    async mounted () {
+      await this.loadTempMembers()
+    },
+    methods: {
+      ...mapActions(useProfileStore, ['getMinimalProfile']),
+      async loadTempMembers () {
+        const feedIds = [
+          '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519', // Mix
+          '@4wXR/KiJrkz9D2LPXpZl5XOLw+gYCoJW6p6rwFlI5yA=.ed25519', // Matt
+          '@THUzexG1y6kWofwiN8Lix/jNH/P6roYdlCDgpAn2HSc=.ed25519' // Rabble
+        ]
+
+        this.tempMembers = await Promise.all(
+          feedIds
+            .map(feedId => this.getMinimalProfile(feedId))
+            .filter(Boolean)
+        )
+      },
+      async goProfile (feedId) {
+        // if (feedId === this.activeProfile?.id) {
+        //   window.scrollTo(0, 0)
+        //   return
+        // }
+        
+        // attempt to load the profile
+        const profile = await this.getMinimalProfile(feedId)
+
+        if (profile) {
+          useProfileStore().$reset()
+          this.$router.push({ name: 'profile', params: { feedId } })
+        }
+        else {
+          alert('This profile is not available')
+          this.$router.push({ name: 'home' })
+        }
       }
     }
   }
@@ -152,20 +202,6 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
     word-wrap: break-word;
   }
 
-  .button-text {
-    height: 23px;
-
-    /* font-family: 'SF Pro Text'; */
-    font-style: normal;
-    font-weight: 500;
-    font-size: 19.3243px;
-    line-height: 23px;
-    /* identical to box height */
-
-    color: #FFFFFF;
-    padding-left: 10px;
-  }
-  
   .subtext {
     /* font-family: SF Pro Text; */
     font-size: 20px;
@@ -201,6 +237,20 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
     border-radius: 25.2484px;
   }
 
+  .button-text {
+    height: 23px;
+
+    /* font-family: 'SF Pro Text'; */
+    font-style: normal;
+    font-weight: 500;
+    font-size: 19.3243px;
+    line-height: 23px;
+    /* identical to box height */
+
+    color: #FFFFFF;
+    padding-left: 10px;
+  }
+
   .gradient-button {
     background: 
       linear-gradient(var(--color-background), var(--color-background)) padding-box,
@@ -224,6 +274,30 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
     border: 5px solid transparent;
     width: 120px;
     height: 120px;
+  }
+
+  .small-avatar {
+    cursor: pointer;
+    border-radius: 139.358px;
+    border: 5px solid transparent;
+    width: 50px;
+    height: 50px;
+  }
+
+  .subheader {
+    /* Following */
+
+    height: 24px;
+
+    /* font-family: 'SF Pro Text'; */
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 120%;
+    /* identical to box height, or 24px */
+    letter-spacing: -0.174603px;
+
+    color: #FFFFFF;
   }
 
 
