@@ -7,6 +7,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_DIR),
   routes: [
     { path: '', redirect: '/home' },
+    { path: '/', redirect: '/home' },
     { path: '/home/:roomName?', name: 'home', component: HomePage },
     {
       path: '/profile/:feedId?',

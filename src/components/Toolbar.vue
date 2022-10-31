@@ -90,18 +90,21 @@ export default {
 
 </script>
 
-<style lang="scss"  scoped>
+<style lang="scss" scoped>
 @import '../styles/quasar.variables.scss';
-
-.toolbar {
-  height: 129px;
-  max-width:1138px;
-}
 
 .header {
   height: 129px;
   background: linear-gradient(180deg, #211734 53.36%, rgba(33, 23, 52, 0) 100%);
 }
+
+.toolbar {
+  height: 129px;
+  max-width:1138px;
+  padding-bottom: 50px;
+}
+
+
 
 .label {
   /* font-family: 'SF Pro Text'; */
