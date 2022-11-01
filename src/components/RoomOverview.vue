@@ -15,10 +15,10 @@
           <span style="color: #8575A3;">@todo.planetary</span>
         </q-item-label>
         <q-item class="q-px-none">
-          <q-btn class="accent q-pt-sm q-pb-sm" no-caps>
+          <a class="accent q-pa-sm q-px-md" :href="ssbURI">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
-          </q-btn>
+          </a>
         </q-item>
       </q-item-section>
     </q-item>
@@ -93,7 +93,7 @@
 
 
 <script>
-
+import axios from 'axios'
 import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
 import { mapActions } from 'pinia'
@@ -108,7 +108,8 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
     data () {
       return {
         logo,
-        tempMembers: []
+        tempMembers: [],
+        ssbURI: null
       }
     },
     components: {
@@ -129,6 +130,9 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
     },
     async mounted () {
       await this.loadTempMembers()
+
+      // TODO: get invite for the room here?
+      // this.ssbURI = await this.getLinkByAlias('cherese')
     },
     methods: {
       ...mapActions(useProfileStore, ['getMinimalProfile']),
@@ -234,6 +238,7 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
   .accent  {
     background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
     border: 2.97297px solid #231837;
+    text-decoration: none;
     border-radius: 25.2484px;
   }
 

@@ -15,10 +15,10 @@
           <span style="color: #8575A3;">@todo.planetary</span>
         </q-item-label>
         <q-item class="q-px-none">
-          <q-btn class="accent q-pt-sm q-pb-sm" no-caps>
+          <a class="accent q-pa-sm q-px-md" :href="ssbURI ? ssbURI : null">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
-          </q-btn>
+          </a>
         </q-item>
       </q-item-section>
     </q-item>
@@ -87,6 +87,8 @@
 import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
+import { mapActions } from 'pinia'
+import { useProfileStore } from '../stores/profile'
 
   export default {
     name: "ProfileOverview",
@@ -95,12 +97,18 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
     },
     data () {
       return {
-        logo
+        logo,
+        ssbURI: null
       }
     },
     components: {
       Markdown,
       PersonAddIcon
+    },
+    async mounted () {
+      // TODO: update to get alias from ssb
+      // and getLinkByAlias to multiserver address...?
+      this.ssbURI = await this.getLinkByAlias('cherese')
     },
     computed: {
       cardStyle () {
@@ -113,6 +121,9 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
       image () {
         return this.profile?.image || this.logo
       }
+    },
+    methods: {
+      ...mapActions(useProfileStore, ['getLinkByAlias'])
     }
   }
 </script>
@@ -198,6 +209,7 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
   .accent  {
     background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
     border: 2.97297px solid #231837;
+    text-decoration: none;
     border-radius: 25.2484px;
   }
 

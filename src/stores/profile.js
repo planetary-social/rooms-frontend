@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import apolloClient from "@/plugins/apollo"
 import gql from 'graphql-tag'
@@ -103,7 +104,28 @@ export const useProfileStore = defineStore({
       if (profile) {
         this.activeProfile = profile
       }
+    },
+
+    // TODO: plug in graphql to find an alias by feedId
+    async getLinkByAlias (alias) {
+      // TODO: move server url into env
+      const res = await axios(`http://localhost:3000/allias/${alias}?encoding=json`)
+
+      const data = res.data
+
+      const url = new URL('ssb:experimental')
+      const searchParams = url.searchParams
+    
+      searchParams.set('action', 'consume-alias')
+      searchParams.set('roomId', data.roomId)
+      searchParams.set('alias', data.alias)
+      searchParams.set('userId', data.userId)
+      searchParams.set('signature', data.signature)
+      searchParams.set('multiserverAddress', data.multiserverAddress)
+
+      return url.href
     }
+    
   }
 })
 
