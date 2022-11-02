@@ -4,7 +4,7 @@
       <q-avatar>
         <PlanetaryIcon/>
       </q-avatar>
-      <PlanetaryTextIcon/>
+      <PlanetaryTextIcon />
       <q-space/>
   
       <q-btn disabled flat no-caps :ripple="false" class="label">Planetary.social</q-btn>
@@ -36,23 +36,23 @@ export default {
       loading: false
     }
   },
-  watch: {
-    '$route.params.feedId': {
-      immediate: true,
-      deep: true,
-      async handler (feedId) {
-        if (!feedId || feedId === '') return
-        this.loading = true
+  // watch: {
+  //   '$route.params.feedId': {
+  //     immediate: true,
+  //     deep: true,
+  //     async handler (feedId) {
+  //       if (!feedId || feedId === '') return
+  //       this.loading = true
 
-        useProfileStore().$reset()
-        this.feedId = decodeURIComponent(feedId)
-        await this.loadProfile(this.feedId)
-        window.scrollTo(0, 0)
+  //       useProfileStore().$reset()
+  //       this.feedId = decodeURIComponent(feedId)
+  //       await this.loadProfile(this.feedId)
+  //       window.scrollTo(0, 0)
 
-        this.loading = false
-      }
-    }
-  },
+  //       this.loading = false
+  //     }
+  //   }
+  // },
   computed: {
     ...mapState(useProfileStore, ['activeProfile']),
     inputStyle () {

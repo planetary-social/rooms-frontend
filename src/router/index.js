@@ -6,15 +6,22 @@ import NotFoundPage from '@/pages/NotFoundPage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_DIR),
   routes: [
-    { path: '', redirect: '/home' },
-    { path: '/', redirect: '/home' },
-    { path: '/home/:roomName?', name: 'home', component: HomePage },
+    { path: '/', component: HomePage },
     {
       path: '/profile/:feedId?',
       name: 'profile',
       component: ProfilePage
     },
-    { path: '/profile/:feedId(.*)', component: ProfilePage },
+    {
+      path: '/alias/:alias',
+      name: 'alias',
+      component: ProfilePage
+    },
+    // {
+    //   path: '/profile/:feedId(.*)',
+    //   component: ProfilePage,
+    //   alias: ['/alias', '/alias/:alias']
+    // },
     { path: '/:catchAll(.*)', component: NotFoundPage }
   ]
 })

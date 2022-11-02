@@ -14,12 +14,12 @@
           <span>{{ room?.name }}</span>
           <span style="color: #8575A3;">@todo.planetary</span>
         </q-item-label>
-        <q-item class="q-px-none">
-          <a class="accent q-pa-sm q-px-md" :href="ssbURI">
+        <!-- <q-item class="q-px-none">
+          <a class="accent q-pa-sm q-px-md" :href="">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
           </a>
-        </q-item>
+        </q-item> -->
       </q-item-section>
     </q-item>
     <q-item>
@@ -93,7 +93,6 @@
 
 
 <script>
-import axios from 'axios'
 import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
 import { mapActions } from 'pinia'
@@ -108,14 +107,16 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
     data () {
       return {
         logo,
-        tempMembers: [],
-        ssbURI: null
+        tempMembers: []
       }
     },
     components: {
-    Markdown,
+      Markdown,
     PersonAddIcon
-},
+    },
+    async mounted () {  
+      await this.loadTempMembers()
+    },
     computed: {
       cardStyle () {
         return {
@@ -128,19 +129,15 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
         return this.room?.image || this.logo
       }
     },
-    async mounted () {
-      await this.loadTempMembers()
 
-      // TODO: get invite for the room here?
-      // this.ssbURI = await this.getLinkByAlias('cherese')
-    },
     methods: {
-      ...mapActions(useProfileStore, ['getMinimalProfile']),
+      ...mapActions(useProfileStore, ['loadMinimalProfile', 'getMinimalProfile']),
       async loadTempMembers () {
         const feedIds = [
           '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519', // Mix
           '@4wXR/KiJrkz9D2LPXpZl5XOLw+gYCoJW6p6rwFlI5yA=.ed25519', // Matt
-          '@THUzexG1y6kWofwiN8Lix/jNH/P6roYdlCDgpAn2HSc=.ed25519' // Rabble
+          '@THUzexG1y6kWofwiN8Lix/jNH/P6roYdlCDgpAn2HSc=.ed25519', // Rabble
+          '@UsApPEhMpZaoRzoT6PfWcBct5vOaHXntpndwAbTw3po=.ed25519' // Cherese
         ]
 
         this.tempMembers = await Promise.all(
@@ -156,10 +153,11 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
         // }
         
         // attempt to load the profile
-        const profile = await this.getMinimalProfile(feedId)
+        const profile = await this.loadMinimalProfile(feedId)
 
         if (profile) {
-          useProfileStore().$reset()
+          // useProfileStore().$reset()
+          // set the active profile to this minimal one
           this.$router.push({ name: 'profile', params: { feedId } })
         }
         else {

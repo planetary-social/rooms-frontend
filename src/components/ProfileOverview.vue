@@ -9,16 +9,12 @@
 
       <q-item-section>
         <q-item-label class="title">{{ profile?.name }}</q-item-label>
-        <q-item-label class="subtext" style="color: #FFFAF9;" caption>
-          <!-- TODO -->
-          <span>{{ profile?.name }}</span>
-          <span style="color: #8575A3;">@todo.planetary</span>
-        </q-item-label>
         <q-item class="q-px-none">
-          <a class="accent q-pa-sm q-px-md" :href="ssbURI ? ssbURI : null">
+          <a v-if="profile.ssbURI" class="accent q-pa-sm q-px-md" :href="profile.ssbURI">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
           </a>
+          <!-- TODO: display something here when there are no aliases / ssbUri -->
         </q-item>
       </q-item-section>
     </q-item>
@@ -82,13 +78,9 @@
 
 
 <script>
-// import { mapState, mapActions } from 'pinia'
-// import { useProfileStore } from '@/stores/profile'
 import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
-import { mapActions } from 'pinia'
-import { useProfileStore } from '../stores/profile'
 
   export default {
     name: "ProfileOverview",
@@ -97,18 +89,12 @@ import { useProfileStore } from '../stores/profile'
     },
     data () {
       return {
-        logo,
-        ssbURI: null
+        logo
       }
     },
     components: {
       Markdown,
       PersonAddIcon
-    },
-    async mounted () {
-      // TODO: update to get alias from ssb
-      // and getLinkByAlias to multiserver address...?
-      this.ssbURI = await this.getLinkByAlias('cherese')
     },
     computed: {
       cardStyle () {
@@ -121,9 +107,6 @@ import { useProfileStore } from '../stores/profile'
       image () {
         return this.profile?.image || this.logo
       }
-    },
-    methods: {
-      ...mapActions(useProfileStore, ['getLinkByAlias'])
     }
   }
 </script>

@@ -1,11 +1,13 @@
-import axios from 'axios'
+// import axios from 'axios'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import apolloClient from "@/plugins/apollo"
 import gql from 'graphql-tag'
 
+// TODO: extract these helpers into a lib
+// TODO: create a minimal profile fragment
 const GET_MINIMAL_PROFILE = gql`
   query ($id: ID!) {
-    getProfile (id: $id) {
+    profile: getProfile (id: $id) {
       id
       name
       image
@@ -14,10 +16,21 @@ const GET_MINIMAL_PROFILE = gql`
   }
 `
 
-// TODO: extract these helpers into a lib
+const GET_MINIMAL_PROFILE_BY_ALIAS = gql`
+  query ($alias: String!) {
+    profile: getProfileByAlias (alias: $alias) {
+      id
+      name
+      image
+      description
+      ssbURI
+    }
+  }
+`
+
 const GET_PROFILE = gql`
   query ($id: ID!) {
-    getProfile (id: $id) {
+    profile: getProfile (id: $id) {
       id
       name
       image
@@ -49,6 +62,14 @@ const GET_PROFILE = gql`
   }
 `
 
+async function getProfileQuery (query, variables) {
+  const res = await apolloClient.query({ query, variables })
+
+  if (res.errors) throw res.errors
+
+  return res.data.profile
+}
+
 export const useProfileStore = defineStore({
   id: 'profile',
   state: () => ({
@@ -61,71 +82,54 @@ export const useProfileStore = defineStore({
      getActiveProfile: (state) => state.activeProfile
   },
   actions: {
-    /**
-     * Fetches a profile
-     * @param {string} id
-     */
-    async getProfile (id) {
-      // this.currentProfile = profile
+    // helpers for mutating state
+    async setActiveProfile (profile) {
+      if (!profile) return
 
-      const res = await apolloClient.query({
-        query: GET_PROFILE,
-        variables: {
-          id
-        }
-      })
+      // TODO: this is temp until we plug the backend piece to get aliases by feedId
+      // preserve the ssbURI. Because it can only be loaded from loadMinimalProfileByAlias, which will always set the
+      // profile before loadProfile sets it
+      if (this.activeProfile?.id === profile.id && this.activeProfile.ssbURI) profile.ssbURI = this.activeProfile.ssbURI
+      
+      this.activeProfile = profile
+    },
   
-      if (res.errors) {
-        console.error(res.errors) // TODO
-        return
-      }
-
-      return res.data.getProfile
-    },
-
+    // helpers for getting profiles from graphql
     async getMinimalProfile (id) {
-      const res = await apolloClient.query({
-        query: GET_MINIMAL_PROFILE,
-        variables: { id }
-      })
-
-      if (res.errors) {
-        console.error(res.errors)
-        return
-      }
-
-      return res.data.getProfile
+      return getProfileQuery(GET_MINIMAL_PROFILE, { id })
+    },
+    async getMinimalProfileByAlias (alias) {
+      return getProfileQuery(GET_MINIMAL_PROFILE_BY_ALIAS, { alias })
+    },
+    async getProfile (id) {
+      return getProfileQuery(GET_PROFILE, { id })
     },
 
+    // helpers getting profiles from graphql AND loading them into the state
+    async loadMinimalProfile (id) {
+      if (!id) return
+  
+      const profile = await this.getMinimalProfile(id)
+      this.setActiveProfile(profile)
+
+      return profile
+    },
+    async loadMinimalProfileByAlias (alias) {
+      if (!alias) return
+
+      const profile = await this.getMinimalProfileByAlias(alias)
+      this.setActiveProfile(profile)
+
+      return profile
+    },
     async loadProfile (id) {
       if (!id) return
 
       const profile = await this.getProfile(id)
-      if (profile) {
-        this.activeProfile = profile
-      }
-    },
+      this.setActiveProfile(profile)
 
-    // TODO: plug in graphql to find an alias by feedId
-    async getLinkByAlias (alias) {
-      // TODO: move server url into env
-      const res = await axios(`http://localhost:3000/allias/${alias}?encoding=json`)
-
-      const data = res.data
-
-      const url = new URL('ssb:experimental')
-      const searchParams = url.searchParams
-    
-      searchParams.set('action', 'consume-alias')
-      searchParams.set('roomId', data.roomId)
-      searchParams.set('alias', data.alias)
-      searchParams.set('userId', data.userId)
-      searchParams.set('signature', data.signature)
-      searchParams.set('multiserverAddress', data.multiserverAddress)
-
-      return url.href
+      return profile
     }
-    
   }
 })
 
