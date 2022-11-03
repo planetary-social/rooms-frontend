@@ -3,7 +3,7 @@
     <q-item>
       <q-item-section avatar>
         <q-avatar size="120px">
-          <q-img :src="image" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="avatar"/>
+          <q-img :src="image" loading="eager" no-spinner :placeholder-src="logo" fit="" class="avatar"/>
         </q-avatar>
       </q-item-section>
 
@@ -26,7 +26,6 @@
       <q-item-section>
         <q-item-label class="description-text">
           <Markdown v-if="room?.description" :text="room?.description"/>
-          This is not a real room, this is just hard coded
         </q-item-label>
       </q-item-section>
     </q-item>
@@ -36,7 +35,7 @@
     <q-item>
       <q-item-section>
         <q-item-label class="stats-header" caption>
-          N/A
+          {{ room.members?.length || 'N/A' }}
         </q-item-label>
         <q-item-label class="stats" caption>
           members
@@ -82,7 +81,7 @@
     </q-item>
     <q-item class="content-start">
       <div>
-        <q-avatar size="50px" v-for="member in tempMembers.filter(Boolean)" :key="member.id" @click="goProfile(member.id)" :text="member.name">
+        <q-avatar size="50px" v-for="member in room.members" :key="member.id" @click="goProfile(member.id)" :text="member.name">
           <q-img :src="member?.image" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="small-avatar"/>
         </q-avatar>
       </div>
@@ -97,7 +96,6 @@ import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
 import { mapActions } from 'pinia'
 import { useProfileStore } from '../stores/profile'
-import { useRoomStore } from '../stores/room'
 import PersonAddIcon from './icon/PersonAddIcon.vue'
 
   export default {
@@ -115,9 +113,6 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
       Markdown,
     PersonAddIcon
     },
-    async mounted () {  
-      await this.loadTempMembers()
-    },
     computed: {
       cardStyle () {
         return {
@@ -132,21 +127,7 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
     },
 
     methods: {
-      ...mapActions(useRoomStore, ['loadRoom']),
-      ...mapActions(useProfileStore, ['loadMinimalProfile', 'getMinimalProfile']),
-      async loadTempMembers () {
-        const feedIds = [
-          '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519', // Mix
-          '@4wXR/KiJrkz9D2LPXpZl5XOLw+gYCoJW6p6rwFlI5yA=.ed25519', // Matt
-          '@THUzexG1y6kWofwiN8Lix/jNH/P6roYdlCDgpAn2HSc=.ed25519', // Rabble
-          '@UsApPEhMpZaoRzoT6PfWcBct5vOaHXntpndwAbTw3po=.ed25519', // Cherese mobile
-          '@xuw3I0S9frG8selUqbPx712E7QM8LwX5rFpRIzgHqx4=.ed25519' // Cherese iPad
-        ]
-
-        this.tempMembers = await Promise.all(
-          feedIds.map(feedId => this.getMinimalProfile(feedId))
-        )
-      },
+      ...mapActions(useProfileStore, ['loadMinimalProfile']),
       async goProfile (feedId) {
         // if (feedId === this.activeProfile?.id) {
         //   window.scrollTo(0, 0)
@@ -276,8 +257,6 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
       linear-gradient(var(--color-background), var(--color-background)) padding-box,
       linear-gradient(to right, #F08508, #F43F75) border-box;
     border: 5px solid transparent;
-    width: 120px;
-    height: 120px;
   }
 
   .small-avatar {
