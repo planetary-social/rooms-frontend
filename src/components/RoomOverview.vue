@@ -11,8 +11,8 @@
         <q-item-label class="title">{{ room?.name }}</q-item-label>
         <q-item-label class="subtext" style="color: #FFFAF9;" caption>
           <!-- TODO -->
-          <span>{{ room?.name }}</span>
-          <span style="color: #8575A3;">@todo.planetary</span>
+          <span>dev</span>
+          <span style="color: #8575A3;">@{{ room?.name }}</span>
         </q-item-label>
         <!-- <q-item class="q-px-none">
           <a class="accent q-pa-sm q-px-md" :href="">
@@ -82,7 +82,7 @@
     </q-item>
     <q-item class="content-start">
       <div>
-        <q-avatar size="50px" v-for="member in tempMembers" :key="member.id" @click="goProfile(member.id)" :text="member.name">
+        <q-avatar size="50px" v-for="member in tempMembers.filter(Boolean)" :key="member.id" @click="goProfile(member.id)" :text="member.name">
           <q-img :src="member?.image" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="small-avatar"/>
         </q-avatar>
       </div>
@@ -97,6 +97,7 @@ import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
 import { mapActions } from 'pinia'
 import { useProfileStore } from '../stores/profile'
+import { useRoomStore } from '../stores/room'
 import PersonAddIcon from './icon/PersonAddIcon.vue'
 
   export default {
@@ -131,19 +132,19 @@ import PersonAddIcon from './icon/PersonAddIcon.vue'
     },
 
     methods: {
+      ...mapActions(useRoomStore, ['loadRoom']),
       ...mapActions(useProfileStore, ['loadMinimalProfile', 'getMinimalProfile']),
       async loadTempMembers () {
         const feedIds = [
           '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519', // Mix
           '@4wXR/KiJrkz9D2LPXpZl5XOLw+gYCoJW6p6rwFlI5yA=.ed25519', // Matt
           '@THUzexG1y6kWofwiN8Lix/jNH/P6roYdlCDgpAn2HSc=.ed25519', // Rabble
-          '@UsApPEhMpZaoRzoT6PfWcBct5vOaHXntpndwAbTw3po=.ed25519' // Cherese
+          '@UsApPEhMpZaoRzoT6PfWcBct5vOaHXntpndwAbTw3po=.ed25519', // Cherese mobile
+          '@xuw3I0S9frG8selUqbPx712E7QM8LwX5rFpRIzgHqx4=.ed25519' // Cherese iPad
         ]
 
         this.tempMembers = await Promise.all(
-          feedIds
-            .map(feedId => this.getMinimalProfile(feedId))
-            .filter(Boolean)
+          feedIds.map(feedId => this.getMinimalProfile(feedId))
         )
       },
       async goProfile (feedId) {

@@ -15,61 +15,23 @@
 
   // components
   import Threads from '@/components/Threads.vue'
+import { mapState, mapActions } from 'pinia'
+import { useRoomStore } from '@/stores/room'
   
   export default {
     components: {
       Threads,
       RoomOverview
     },
-    data () {
-      return {
-        activeRoom: {
-          name: 'Example Room',
-          threads: [
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            },
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            },
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            },
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            },
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            },
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            },
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            },
-            {
-              messages: [
-                { text: '## This is a dummy thread' },
-              ]
-            }
-          ]
-        }
-      }
+    async mounted () {
+      await this.loadRoom()
     },
+    computed: {
+      ...mapState(useRoomStore, ['activeRoom'])
+    },
+    methods: {
+      ...mapActions(useRoomStore, ['loadRoom'])
+    }
   }
 </script>
 
