@@ -1,6 +1,13 @@
 # planetary-rooms-frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+The rooms frontend app is a vue app meant to be run with go-ssb-rooms and planetary-graphql. The three apps together let users find connections, build community, present their scuttlebutt (planetary) profile to the web, and accept inbound connections. 
+
+Here are some screenshots of the app in development:
+![Fgc9NvdVQAE7Xpn](https://user-images.githubusercontent.com/76/200228414-28113ac8-6fea-4f4d-8387-bcc0b9944ffa.jpeg)
+![Fgc9NvgUAAAKu29](https://user-images.githubusercontent.com/76/200228424-12b7ef06-0cdd-4cf3-b860-598dfa747379.jpeg)
+![Fgc9NvkVQAAFIyD](https://user-images.githubusercontent.com/76/200228429-9249d07e-2b08-4d8e-b05b-4aecd8decd09.jpeg)
+
+
 
 ## Development
 
