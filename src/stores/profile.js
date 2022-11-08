@@ -86,11 +86,14 @@ export const useProfileStore = defineStore({
     async setActiveProfile (profile) {
       if (!profile) return
 
-      // TODO: this is temp until we plug the backend piece to get aliases by feedId
-      // preserve the ssbURI. Because it can only be loaded from loadMinimalProfileByAlias, which will always set the
-      // profile before loadProfile sets it
-      if (this.activeProfile?.id === profile.id && this.activeProfile.ssbURI) profile.ssbURI = this.activeProfile.ssbURI
-      
+      // // TODO: this is temp until we plug the backend piece to get aliases by feedId
+      // // preserve the ssbURI. Because it can only be loaded from loadMinimalProfileByAlias, which will always set the
+      // // profile before loadProfile sets it
+
+      if (profile.id === this.activeProfile?.id && this.activeProfile?.ssbURI) {
+        profile = Object.assign({}, profile, { ssbURI: this.activeProfile.ssbURI })
+      }
+
       this.activeProfile = profile
     },
   

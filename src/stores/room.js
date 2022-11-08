@@ -1,36 +1,49 @@
+import gql from 'graphql-tag'
+import apolloClient from "@/plugins/apollo"
 import { defineStore, acceptHMRUpdate } from 'pinia'
+
+const GET_MY_ROOM = gql`
+  query {
+    room: getMyRoom {
+      name
+      multiaddress
+
+      members {
+        id
+        name
+        image
+      }
+
+      # TODO
+      # description
+    }
+  }
+`
 
 export const useRoomStore = defineStore({
   id: 'room',
   state: () => ({
+    activeRoom: null
   }),
   getters: {
   },
   actions: {
     /**
-     * Fetches a profile
+     * Fetches the room from the graphql server
      * @param {string} id
      */
-    // async getProfile (id) {
-    //   // this.currentProfile = profile
+    async loadRoom () {
+      const res = await apolloClient.query({ query: GET_MY_ROOM })
 
-    //   const res = await apolloClient.query({
-    //     query: GET_PROFILE,
-    //     variables: {
-    //       id
-    //     }
-    //   })
-  
-    //   if (res.errors) {
-    //     console.error(res.errors) // TODO
-    //     return
-    //   }
+      if (res.errors) throw res.errors
 
-    //   return res.data.getProfile
-    // }
+      this.activeRoom = res.data.room
+
+      return this.currentRoom
+    }
   }
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useProfileStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useRoomStore, import.meta.hot))
 }
