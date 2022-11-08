@@ -1,6 +1,5 @@
 <template>
   <q-page class="full-width row justify-center" :style="columnStyle">
-    <!-- TOP SEARCH BAR TO BE REMOVED -->
     <div v-if="activeRoom" class="justify-end">
       <RoomOverview class="sticky" :room="tempRoom" />
     </div>
@@ -31,10 +30,8 @@
   \n
   To register an alias, in the app, navigate to Settings -> Aliases (beta) -> Register a new alias -> choose ${name}, enter your alias name and click Register.\n
   \n
-  Known issues: \n
-  - Sign in with SSB is not supported yet in Planetary, so you will not be able to sign into the room on the web.\n
-  - Opening a room alias page on macOS will prompt you to open "Electron" which is not a valid SSB app.\n
-  - Opening a room alias on an iOS device with Manyverse installed will not give you the option to open the profile in Planetary.\n
+
+  NOTE: this is a hard coded description
   `
   
   
@@ -45,14 +42,11 @@
     },
     data () {
       return {
-        tempMembers: [],
         tempThreads: []
       }
     },
     async mounted () {
       await this.loadRoom()
-      await this.loadTempMembers()
-      // await this.loadTempThreads()
     },
     
     computed: {
@@ -68,36 +62,33 @@
         return {
           image: roomIcon,
           ...(this.activeRoom || {}),
-          members: this.tempMembers || [],
           threads: this.tempThreads || [],
           description: TEMP_DESCRIPTION(this.activeRoom?.name || 'civic.love')
         }
-      },
-      tempThreads () {
-        return (this.tempMembers || [])
-          .reduce((acc, member) => [...acc, ...(member.threads || [])], [])
-          .sort((a, b) => b.messages[0].timestamp - a.messages[0].timestamp)
       }
     },
     methods: {
       ...mapActions(useProfileStore, ['getProfile']),
-      ...mapActions(useRoomStore, ['loadRoom']),
-      async loadTempMembers () {
-        const feedIds = [
-          '@DIoOBMaI1f0mJg+5tUzZ7vgzCeeHh8+zGta4pOjc+k0=.ed25519', // Mix
-          '@4wXR/KiJrkz9D2LPXpZl5XOLw+gYCoJW6p6rwFlI5yA=.ed25519', // Matt
-          '@THUzexG1y6kWofwiN8Lix/jNH/P6roYdlCDgpAn2HSc=.ed25519', // Rabble
-          '@UsApPEhMpZaoRzoT6PfWcBct5vOaHXntpndwAbTw3po=.ed25519', // Cherese mobile
-          '@xuw3I0S9frG8selUqbPx712E7QM8LwX5rFpRIzgHqx4=.ed25519' // Cherese iPad
-        ]
+      ...mapActions(useRoomStore, ['loadRoom'])
+    },
+    watch: {
+      // NOTE: this is a temp solution to show threads by all members
+      // until the backend piece is written.
+      // I have done it here so it doesnt prevent members from showing up.
+      // because loading members and threads in the getMyRoom query
+      // may take a while
+      'activeRoom.members': {
+        async handler (members) {
+          if (!members || !members.length) return
 
-        this.tempMembers = await Promise.all(
-          feedIds.map(feedId => this.getProfile(feedId)) // gets their full profile, including threads
-        )
+          // load the members full profile which includes threads
+          const memberThreads = await Promise.all(members.map(async member => this.getProfile(member.id)))
 
-        this.tempMembers = this.tempMembers.filter(Boolean)
-      },
-
+          this.tempThreads = memberThreads
+            .reduce((acc, member) => [...acc, ...(member.threads || [])], [])
+            .sort((a, b) => b.messages[0].timestamp - a.messages[0].timestamp)
+        }
+      }
     }
   }
 </script>

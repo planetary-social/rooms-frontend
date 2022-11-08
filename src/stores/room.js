@@ -8,9 +8,14 @@ const GET_MY_ROOM = gql`
       name
       multiaddress
 
+      members {
+        id
+        name
+        image
+      }
+
       # TODO
       # description
-      # members
     }
   }
 `
