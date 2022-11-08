@@ -9,16 +9,12 @@
 
       <q-item-section>
         <q-item-label class="title">{{ profile?.name }}</q-item-label>
-        <q-item-label class="subtext" style="color: #FFFAF9;" caption>
-          <!-- TODO -->
-          <span>{{ profile?.name }}</span>
-          <span style="color: #8575A3;">@todo.planetary</span>
-        </q-item-label>
         <q-item class="q-px-none">
-          <q-btn class="accent q-pt-sm q-pb-sm" no-caps>
+          <a v-if="profile.ssbURI" class="accent q-pa-sm q-px-md" :href="profile.ssbURI">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
-          </q-btn>
+          </a>
+          <!-- TODO: display something here when there are no aliases / ssbUri -->
         </q-item>
       </q-item-section>
     </q-item>
@@ -82,8 +78,6 @@
 
 
 <script>
-// import { mapState, mapActions } from 'pinia'
-// import { useProfileStore } from '@/stores/profile'
 import Markdown from '@/components/Markdown.vue'
 import logo from '@/assets/logo.svg'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
@@ -198,6 +192,7 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
   .accent  {
     background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
     border: 2.97297px solid #231837;
+    text-decoration: none;
     border-radius: 25.2484px;
   }
 
