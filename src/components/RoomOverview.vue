@@ -106,8 +106,7 @@ import roomIcon from '@/assets/room.svg'
     },
     data () {
       return {
-        logo,
-        tempMembers: []
+        logo
       }
     },
     components: {
@@ -137,10 +136,7 @@ import roomIcon from '@/assets/room.svg'
         return member?.image || logo
       },
       async goProfile (feedId) {
-        // if (feedId === this.activeProfile?.id) {
-        //   window.scrollTo(0, 0)
-        //   return
-        // }
+        window.scrollTo(0, 0)
         
         // attempt to load the profile
         const profile = await this.loadMinimalProfile(feedId)
@@ -150,10 +146,8 @@ import roomIcon from '@/assets/room.svg'
           // set the active profile to this minimal one
           this.$router.push({ name: 'profile', params: { feedId } })
         }
-        else {
-          // alert('This profile is not available')
-          // this.$router.push({ name: 'home' })
-        }
+
+        // TODO: handle no profile
       }
     }
   }
