@@ -17,23 +17,6 @@
   // components
   import Threads from '@/components/Threads.vue'
   import RoomOverview from '@/components/RoomOverview.vue'
-  import roomIcon from '@/assets/room.svg'
-  
-  const TEMP_DESCRIPTION = (name) => `
-  Welcome to the ${name} SSB room server.\n
-  \n
-  🚧🛠 This server is a development server and is currently under construction 🛠🚧\n
-  \n
-  You can join this server by downloading [Planetary](https://apps.apple.com/us/app/planetary-app/id1481617318).\n
-  \n
-  In the app, navigate to Settings -> Manage Rooms (beta) -> where you will be able to paste an invite which you can generate on this rooms home page.\n
-  \n
-  To register an alias, in the app, navigate to Settings -> Aliases (beta) -> Register a new alias -> choose ${name}, enter your alias name and click Register.\n
-  \n
-
-  NOTE: this is a hard coded description
-  `
-  
   
   export default {
     components: {
@@ -60,10 +43,8 @@
       },
       tempRoom () {
         return {
-          image: roomIcon,
           ...(this.activeRoom || {}),
-          threads: this.tempThreads || [],
-          description: TEMP_DESCRIPTION(this.activeRoom?.name || 'civic.love')
+          threads: this.tempThreads || []
         }
       }
     },

@@ -96,18 +96,12 @@ import Markdown from '@/components/Markdown.vue'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 
-import logo from '@/assets/logo.svg'
 import defaultRoomAvatar from '@/assets/room.svg'
 
   export default {
     name: "RoomOverview",
     props: {
       room: Object
-    },
-    data () {
-      return {
-        logo
-      }
     },
     components: {
       Markdown,
@@ -132,9 +126,6 @@ import defaultRoomAvatar from '@/assets/room.svg'
 
     methods: {
       ...mapActions(useProfileStore, ['loadMinimalProfile']),
-      getMemberImage (member) {
-        return member?.image || logo
-      },
       async goProfile (feedId) {
         window.scrollTo(0, 0)
         

@@ -6,6 +6,7 @@ const GET_MY_ROOM = gql`
   query {
     room: getMyRoom {
       name
+      description
       multiaddress
 
       members {
@@ -13,9 +14,6 @@ const GET_MY_ROOM = gql`
         name
         image
       }
-
-      # TODO
-      # description
     }
   }
 `
