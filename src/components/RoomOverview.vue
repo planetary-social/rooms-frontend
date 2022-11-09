@@ -3,7 +3,7 @@
     <q-item>
       <q-item-section avatar>
         <q-avatar size="120px">
-          <q-img :src="image" loading="eager" no-spinner :placeholder-src="defaultImage" class="avatar"/>
+          <q-img :src="image" loading="eager" no-spinner :placeholder-src="defaultRoomAvatar" class="avatar"/>
         </q-avatar>
       </q-item-section>
 
@@ -97,7 +97,7 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 
 import logo from '@/assets/logo.svg'
-import roomIcon from '@/assets/room.svg'
+import defaultRoomAvatar from '@/assets/room.svg'
 
   export default {
     name: "RoomOverview",
@@ -122,11 +122,11 @@ import roomIcon from '@/assets/room.svg'
             : '535.89px'
         }
       },
-      defaultImage () {
-        return roomIcon
+      defaultRoomAvatar () {
+        return defaultRoomAvatar
       },
       image () {
-        return this.room?.image || this.defaultImage
+        return this.room?.image || this.defaultRoomAvatar
       }
     },
 

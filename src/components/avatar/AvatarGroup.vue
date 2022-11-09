@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-avatar size="60px" v-for="profile in group" :key="profile?.id" @click="$emit('click', profile)" :text="profile?.name" style="margin-right:15px;">
-      <q-img :src="profile?.image" :placeholder-src="defaultImage" :class="classes"/>
+      <q-img :src="profile?.image" :placeholder-src="defaultAvatar" :class="classes"/>
       <q-tooltip
           transition-show="scale"
           transition-hide="scale"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import profileIcon from '@/assets/logo.svg'
+  import defaultAvatar from '@/assets/avatar.png'
 
   export default {
     name: 'AvatarGroup',
@@ -25,16 +25,16 @@
       classes () {
         return {
           overlapping: this.overlapping,
-          'small-avatar': true
+          avatar: true
         }
       },
-      defaultImage () {
-        return profileIcon
+      defaultAvatar () {
+        return defaultAvatar
       }
     },
     methods: {
       getImage (profile) {
-        return profile?.image || this.defaultImage
+        return profile?.image || this.defaultAvatar
       }
     }
   }
@@ -46,7 +46,7 @@
   position: absolute;
 }
 
-.small-avatar {
+.avatar {
   cursor: pointer;
   border-radius: 139.358px;
   border: 5px solid transparent;
