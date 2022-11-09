@@ -9,11 +9,19 @@
 
 <script>
 import Toolbar from '@/components/Toolbar.vue'
+import { mapActions } from 'pinia'
+import { useRoomStore } from './stores/room'
 
 export default {
   name: "LayoutDefault",
   components: {
     Toolbar
+  },
+  async mounted () {
+    await this.loadRoom()
+  },
+  methods: {
+    ...mapActions(useRoomStore, ['loadRoom'])
   }
 }
 </script>
