@@ -13,15 +13,10 @@ const router = createRouter({
       component: ProfilePage
     },
     {
-      path: '/alias/:alias',
+      path: '/profile/alias/:alias',
       name: 'alias',
       component: ProfilePage
     },
-    // {
-    //   path: '/profile/:feedId(.*)',
-    //   component: ProfilePage,
-    //   alias: ['/alias', '/alias/:alias']
-    // },
     { path: '/:catchAll(.*)', component: NotFoundPage }
   ]
 })

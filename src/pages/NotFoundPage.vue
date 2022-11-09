@@ -8,13 +8,9 @@
         <small>
           Page not found
         </small>
-        <small>
-          {{ $router }}
-        </small>
       </div>   
     </div>
   </q-page>
 </template>
 
-<script setup>
-</script>
+<script setup/>
