@@ -4,7 +4,6 @@
       <ProfileOverview class="sticky" :profile="activeProfile" />
     </div>
     <div v-else>
-      {{ errorMsg }}
       <q-btn to="/" flat rounded no-caps>
         {{ '< Back' }}
       </q-btn>
