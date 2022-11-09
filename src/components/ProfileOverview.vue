@@ -3,7 +3,7 @@
     <q-item>
       <q-item-section avatar>
         <q-avatar size="120px">
-          <q-img :src="image" loading="eager" no-spinner :placeholder-src="logo" fit="scale-down" class="avatar"/>
+          <q-img :src="image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain class="avatar"/>
         </q-avatar>
       </q-item-section>
 
@@ -79,18 +79,13 @@
 
 <script>
 import Markdown from '@/components/Markdown.vue'
-import logo from '@/assets/logo.svg'
+import defaultAvatar from '@/assets/avatar.png'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 
   export default {
     name: "ProfileOverview",
     props: {
       profile: Object
-    },
-    data () {
-      return {
-        logo
-      }
     },
     components: {
       Markdown,
@@ -104,8 +99,11 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
             : '535.89px'
         }
       },
+      defaultAvatar () {
+        return defaultAvatar
+      },
       image () {
-        return this.profile?.image || this.logo
+        return this.profile?.image || this.defaultAvatar
       }
     }
   }
