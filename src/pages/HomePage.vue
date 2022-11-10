@@ -28,9 +28,6 @@
         tempThreads: []
       }
     },
-    async mounted () {
-      await this.loadRoom()
-    },
     
     computed: {
       ...mapState(useRoomStore, ['activeRoom']),
@@ -49,8 +46,7 @@
       }
     },
     methods: {
-      ...mapActions(useProfileStore, ['getProfile']),
-      ...mapActions(useRoomStore, ['loadRoom'])
+      ...mapActions(useProfileStore, ['getProfile'])
     },
     watch: {
       // NOTE: this is a temp solution to show threads by all members

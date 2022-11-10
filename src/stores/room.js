@@ -37,7 +37,7 @@ export const useRoomStore = defineStore({
 
       this.activeRoom = res.data.room
 
-      return this.currentRoom
+      return this.activeRoom
     }
   }
 })
