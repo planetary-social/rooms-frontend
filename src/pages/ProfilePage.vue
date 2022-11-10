@@ -3,11 +3,6 @@
     <div class="column" v-if="activeProfile" :style="columnStyle">
       <ProfileOverview class="sticky" :profile="activeProfile" />
     </div>
-    <div v-else>
-      <q-btn to="/" flat rounded no-caps>
-        {{ '< Back' }}
-      </q-btn>
-    </div>
     <div class="justify-start items-start" :style="columnStyle">
       <threads :threads="activeProfile?.threads || []"/>
     </div>
@@ -53,8 +48,7 @@
         }
 
         if (!this.activeProfile) {
-          alert('failed to load a profile.... uh oh')
-          // TODO: route back
+          this.$router.push('/')
           return
         }
 

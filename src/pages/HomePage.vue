@@ -55,6 +55,7 @@
       // because loading members and threads in the getMyRoom query
       // may take a while
       'activeRoom.members': {
+        immediate: true,
         async handler (members) {
           if (!members || !members.length) return
 
