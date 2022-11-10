@@ -12,6 +12,7 @@ const GET_MINIMAL_PROFILE = gql`
       name
       image
       description
+      ssbURI
     }
   }
 `
@@ -35,6 +36,8 @@ const GET_PROFILE = gql`
       name
       image
       description
+      ssbURI
+      aliases
       followersCount
       followingCount
       threads {
@@ -85,14 +88,6 @@ export const useProfileStore = defineStore({
     // helpers for mutating state
     async setActiveProfile (profile) {
       if (!profile) return
-
-      // // TODO: this is temp until we plug the backend piece to get aliases by feedId
-      // // preserve the ssbURI. Because it can only be loaded from loadMinimalProfileByAlias, which will always set the
-      // // profile before loadProfile sets it
-
-      if (profile.id === this.activeProfile?.id && this.activeProfile?.ssbURI) {
-        profile = Object.assign({}, profile, { ssbURI: this.activeProfile.ssbURI })
-      }
 
       this.activeProfile = profile
     },

@@ -9,6 +9,10 @@
 
       <q-item-section>
         <q-item-label class="title">{{ profile?.name }}</q-item-label>
+        <q-item-label v-if="profile?.aliases?.length" class="subtext" style="color: #FFFAF9;" caption>
+          <span>{{ profile.aliases[0] }}</span>
+          <span style="color: #8575A3;">@{{ activeRoom?.name }}</span>
+        </q-item-label>
         <q-item class="q-px-none">
           <a v-if="profile.ssbURI" class="accent q-pa-sm q-px-md" :href="profile.ssbURI">
             <PersonAddIcon/>
@@ -81,6 +85,8 @@
 import Markdown from '@/components/Markdown.vue'
 import defaultAvatar from '@/assets/avatar.png'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
+import { mapState } from 'pinia'
+import { useRoomStore } from '../stores/room'
 
   export default {
     name: "ProfileOverview",
@@ -92,6 +98,7 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
       PersonAddIcon
     },
     computed: {
+      ...mapState(useRoomStore, ['activeRoom']),
       cardStyle () {
         return {
           width: this.$q?.screen?.xs
