@@ -32,41 +32,41 @@
     <q-item class="subheader">
       Room Stats
     </q-item>
-    <q-item>
-      <q-item-section>
+    <div class="row justify-start q-pb-lg">
+      <div class="q-pl-lg">
         <q-item-label class="stats-header" caption>
           {{ room.members?.length || 'N/A' }}
         </q-item-label>
         <q-item-label class="stats" caption>
           members
         </q-item-label>
-      </q-item-section>
-      <q-item-section>
+      </div>
+      <!-- <q-item-section>
         <q-item-label class="stats-header" caption>
           {{ room?.followingCount || 'N/A' }}
         </q-item-label>
         <q-item-label class="stats" caption>
           following
         </q-item-label>
-      </q-item-section>
-      <q-item-section>
+      </q-item-section> -->
+      <!-- <q-item-section>
         <q-item-label class="stats-header" caption>
           N/A
         </q-item-label>
         <q-item-label class="stats" caption>
           ignored by
         </q-item-label>
-      </q-item-section>
-      <q-item-section>
+      </q-item-section> -->
+      <!-- <q-item-section>
         <q-item-label class="stats-header" caption>
           N/A
         </q-item-label>
         <q-item-label class="stats" caption>
           posts
         </q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-item class="subheader">
+      </q-item-section> -->
+    </div>
+    <!-- <q-item class="subheader">
       Hot Topics
     </q-item>
     <q-item class="column">
@@ -75,7 +75,7 @@
           <span class="gradient-text">{{ `#testing${i}` }}</span>
         </q-btn>
       </div>
-    </q-item>
+    </q-item> -->
     <q-item class="subheader">
       Newest Public Members
     </q-item>

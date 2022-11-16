@@ -29,44 +29,44 @@
         </q-item-label>
       </q-item-section>
     </q-item>
-    <q-item>
+    <!-- <q-item>
       Last Active: N/A
-    </q-item>
-    <q-item>
-      <q-item-section>
+    </q-item> -->
+    <div class="row justify-start q-pb-lg">
+      <div class="q-pl-lg">
         <q-item-label class="stats-header" caption>
           {{ profile?.followersCount }}
         </q-item-label>
         <q-item-label class="stats" caption>
           followers
         </q-item-label>
-      </q-item-section>
-      <q-item-section>
+      </div>
+      <div class="q-ml-lg">
         <q-item-label class="stats-header" caption>
           {{ profile?.followingCount }}
         </q-item-label>
         <q-item-label class="stats" caption>
           following
         </q-item-label>
-      </q-item-section>
-      <q-item-section>
+      </div>
+      <!-- <q-item-section>
         <q-item-label class="stats-header" caption>
           N/A
         </q-item-label>
         <q-item-label class="stats" caption>
           ignored by
         </q-item-label>
-      </q-item-section>
-      <q-item-section>
+      </q-item-section> -->
+      <!-- <q-item-section>
         <q-item-label class="stats-header" caption>
           N/A
         </q-item-label>
         <q-item-label class="stats" caption>
           rooms
         </q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-item class="column">
+      </q-item-section> -->
+    </div>
+    <!-- <q-item class="column">
       <div class="col-12">
         Active On: TODO
       </div>
@@ -75,7 +75,7 @@
           <span class="gradient-text">{{ `#testing${i}` }}</span>
         </q-btn>
       </div>
-    </q-item>
+    </q-item> -->
   </q-card>
 </template>
 
@@ -180,7 +180,7 @@ import { useRoomStore } from '../stores/room'
     font-weight: 400;
     line-height: 62px;
     letter-spacing: -0.14864864945411682px;
-    text-align: center;
+    text-align: center !important;
     color: #FFFFFF;
   }
 

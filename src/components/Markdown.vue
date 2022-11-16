@@ -160,7 +160,6 @@ export default {
 
         li {
             margin: 1rem 0;
-            color: #c0bdc5;
 
             strong {color: $pText;}
         }
