@@ -67,12 +67,16 @@ export default {
       
       Array.from(anchors).forEach(a => {
         const href = a.attributes.href.value
+        
         if (href.startsWith('http')) return
-        if (href.startsWith('#')) return // TODO: ned to configure which route hashtags go to
+        if (href.startsWith('#')) {
+          // TODO: this disables hashtags for now, remove this when they are added in
+          a.setAttribute('href', 'javascript:void(0)')
+          return
+        }
 
-        // TODO: need to configure other types..?
         if (!ref.isFeedId(href)) return
-  
+
         a.addEventListener('click', (e) => {
           e.preventDefault()
 
