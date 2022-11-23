@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-avatar size="60px" v-for="profile in group" :key="profile?.id" @click="$emit('click', profile)" :text="profile?.name" style="margin-right:15px;">
+    <q-avatar size="60px" v-for="profile in group" :key="profile?.id" @click.stop="$emit('click', profile)" :text="profile?.name" style="margin-right:15px;">
       <q-img :src="profile?.image" :placeholder-src="defaultAvatar" :class="classes"/>
       <q-tooltip
           transition-show="scale"
