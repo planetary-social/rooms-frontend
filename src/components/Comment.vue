@@ -107,28 +107,22 @@ import defaultAvatar from '@/assets/avatar.png'
         }
     },
     methods: {
-      ...mapActions(useProfileStore, ['getMinimalProfile']),
-      async goProfile () {
+      ...mapActions(useProfileStore, ['setActiveProfile']),
+      goProfile () {
         if (!this.author?.id) return
+        window.scrollTo(0, 0)
 
-        // TODO: check feedId is a valid feedId
-
+        // if we are already on this persons profile, then just scroll to the top
         if (this.author?.id === this.activeProfile?.id) {
           window.scrollTo(0, 0)
           return
         }
+    
+        // set the active profile as the authors
+        this.setActiveProfile(this.author)
         
-        // attempt to load the profile
-        const profile = await this.getMinimalProfile(this.author.id)
-
-        if (profile) {
-          useProfileStore().$reset()
-          this.$router.push({ name: 'profile', params: { feedId: this.author.id } })
-        }
-        else {
-          alert('This profile is not available')
-          // this.$router.push({ name: 'home' })
-        }
+        // go to their profile
+        this.$router.push({ name: 'profile', params: { feedId: this.author.id }})
       }
     }
     

@@ -86,9 +86,7 @@ export const useProfileStore = defineStore({
   },
   actions: {
     // helpers for mutating state
-    async setActiveProfile (profile) {
-      if (!profile) return
-
+    setActiveProfile (profile) {
       this.activeProfile = profile
     },
   
@@ -106,7 +104,7 @@ export const useProfileStore = defineStore({
     // helpers getting profiles from graphql AND loading them into the state
     async loadMinimalProfile (id) {
       if (!id) return
-  
+        
       const profile = await this.getMinimalProfile(id)
       this.setActiveProfile(profile)
 

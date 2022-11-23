@@ -80,7 +80,7 @@
       Newest Public Members
     </q-item>
     <q-item class="content-start">
-      <AvatarGroup :group="room.members" @click="goProfile($event.id)" />
+      <AvatarGroup :group="room.members" @click="goProfile" />
     </q-item>
   </q-card>
 </template>
@@ -125,20 +125,11 @@ import defaultRoomAvatar from '@/assets/room.svg'
     },
 
     methods: {
-      ...mapActions(useProfileStore, ['loadMinimalProfile']),
-      async goProfile (feedId) {
+      ...mapActions(useProfileStore, ['setActiveProfile']),
+      goProfile (member) {
         window.scrollTo(0, 0)
-        
-        // attempt to load the profile
-        const profile = await this.loadMinimalProfile(feedId)
-
-        if (profile) {
-          // useProfileStore().$reset()
-          // set the active profile to this minimal one
-          this.$router.push({ name: 'profile', params: { feedId } })
-        }
-
-        // TODO: handle no profile
+        this.setActiveProfile(member)
+        this.$router.push({ name: 'profile', params: { feedId: member.id } })
       }
     }
   }

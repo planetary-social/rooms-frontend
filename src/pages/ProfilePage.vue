@@ -10,6 +10,7 @@
 </template>
 
 <script>
+  import isEmpty from 'lodash.isempty'
   import { mapActions, mapState } from 'pinia'
   import { useProfileStore } from '@/stores/profile'
 
@@ -41,6 +42,12 @@
       async loadProfileForPage () {
         var { alias, feedId } = this.$route.params
 
+        if (isEmpty(alias) && isEmpty(feedId)) {
+          alert('No alias or feedId found to load the profile')
+          this.$router.push('/')
+          return
+        }
+
         // firstly load the minimal profile by either the feedId or alias (depending on the route)
         if (feedId) await this.loadMinimalProfile(feedId)
         else if (alias && !feedId) {
@@ -48,6 +55,7 @@
         }
 
         if (!this.activeProfile) {
+          alert('Couldnt find the profile')
           this.$router.push('/')
           return
         }

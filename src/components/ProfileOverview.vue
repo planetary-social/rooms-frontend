@@ -22,10 +22,10 @@
         </q-item>
       </q-item-section>
     </q-item>
-    <q-item>
+    <q-item v-if="profile?.description">
       <q-item-section>
         <q-item-label class="description-text">
-          <Markdown :text="profile?.description"/>
+          <Markdown :text="profile.description"/>
         </q-item-label>
       </q-item-section>
     </q-item>

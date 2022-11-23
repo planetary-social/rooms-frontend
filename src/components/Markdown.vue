@@ -6,6 +6,8 @@
 import ref from 'ssb-ref'
 import renderer from 'ssb-markdown'
 import querystring from 'querystring'
+import { mapActions } from 'pinia'
+import { useProfileStore } from '../stores/profile'
 
 export default {
   name: 'Markdown',
@@ -23,6 +25,7 @@ export default {
     setTimeout(() => this.replaceAnchors())
   },
   methods: {
+    ...mapActions(useProfileStore, ['getMinimalProfile']),
     async getRawHtmlMarkdown () {
       const typeLookup = {}
 
@@ -69,19 +72,29 @@ export default {
         const href = a.attributes.href.value
         
         if (href.startsWith('http')) return
-        if (href.startsWith('#')) {
-          // TODO: this disables hashtags for now, remove this when they are added in
+
+        if (href.startsWith('#') || href.startsWith('%')) {
+          // TODO: this disables hashtags and message links for now, remove this when they are added in
           a.setAttribute('href', 'javascript:void(0)')
+          a.className = 'disabled-ref'
           return
         }
 
         if (!ref.isFeedId(href)) return
 
-        a.addEventListener('click', (e) => {
+        a.addEventListener('click', async (e) => {
           e.preventDefault()
 
+          const feedId = a.attributes.href.value
+          // check their is a profile before attempting to load it
+          const profile = await this.getMinimalProfile(feedId)
+          if (!profile) {
+            alert('Couldnt find the profile mentioned')
+            return
+          }
+
           // TODO: might need encoding
-          this.$router.push({ name: 'profile', params: { feedId: a.attributes.href.value } })
+          this.$router.push({ name: 'profile', params: { feedId } })
         })
       })
     }
@@ -92,6 +105,13 @@ export default {
 <style lang="scss">
 
 @import '../styles/quasar.variables.scss';
+
+.disabled-ref {
+  text-decoration: none;
+  cursor: none;
+  pointer-events: none;
+}
+
 
 .markup {
     align-self: stretch;
