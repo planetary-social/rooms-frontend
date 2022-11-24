@@ -13,12 +13,11 @@
           <span>{{ profile.aliases[0] }}</span>
           <span style="color: #8575A3;">@{{ activeRoom?.name }}</span>
         </q-item-label>
-        <q-item class="q-px-none">
-          <a v-if="profile.ssbURI" class="accent q-pa-sm q-px-md" :href="profile.ssbURI">
+        <q-item v-if="profile.ssbURI" class="q-px-none">
+          <a class="accent q-pa-sm q-px-md" @click.prevent="openFollowModal">
             <PersonAddIcon/>
-            <span class="button-text">Join in app</span>
+            <span class="button-text">Follow</span>
           </a>
-          <!-- TODO: display something here when there are no aliases / ssbUri -->
         </q-item>
       </q-item-section>
     </q-item>
@@ -76,17 +75,21 @@
         </q-btn>
       </div>
     </q-item> -->
+    <FollowPersonModal v-if="isFollowModalOpen" :open="isFollowModalOpen" @close="closeModal" title="Scan to follow this user" :uri="profile.ssbURI" />
   </q-card>
 </template>
 
 
 
 <script>
+import FollowPersonModal from '@/components/modal/FollowModal.vue'
 import Markdown from '@/components/Markdown.vue'
 import defaultAvatar from '@/assets/avatar.png'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import { mapState } from 'pinia'
 import { useRoomStore } from '../stores/room'
+
+const FOLLOW = 'follow'
 
   export default {
     name: "ProfileOverview",
@@ -94,11 +97,20 @@ import { useRoomStore } from '../stores/room'
       profile: Object
     },
     components: {
+      FollowPersonModal,
       Markdown,
       PersonAddIcon
     },
+    data () {
+      return {
+        modal: null
+      }
+    },
     computed: {
       ...mapState(useRoomStore, ['activeRoom']),
+      isFollowModalOpen () {
+        return this.modal === FOLLOW
+      },
       cardStyle () {
         return {
           width: this.$q?.screen?.xs
@@ -111,6 +123,14 @@ import { useRoomStore } from '../stores/room'
       },
       image () {
         return this.profile?.image || this.defaultAvatar
+      }
+    },
+    methods: {
+      openFollowModal () {
+        this.modal = FOLLOW
+      },
+      closeModal () {
+        this.modal = null
       }
     }
   }
@@ -195,6 +215,7 @@ import { useRoomStore } from '../stores/room'
   }
 
   .accent  {
+    cursor: pointer;
     background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
     border: 2.97297px solid #231837;
     text-decoration: none;
