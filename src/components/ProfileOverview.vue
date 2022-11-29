@@ -196,9 +196,9 @@ import { useRoomStore } from '../stores/room'
 
   .accent  {
     background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
-    border: 2.97297px solid #231837;
     text-decoration: none;
     border-radius: 25.2484px;
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
   }
 
   .gradient-button {

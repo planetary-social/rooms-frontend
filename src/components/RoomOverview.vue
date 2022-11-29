@@ -34,6 +34,9 @@
     </q-item>
     <div class="row justify-start q-pb-lg">
       <div class="q-pl-lg">
+        <q-item-section class="q-ml-sm" style="cursor: pointer;">
+          <AvatarGroup :group="twoRoomMembers" overlapping :size="30" @click="openMembersModal"/>
+        </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ room.members?.length || 'N/A' }}
         </q-item-label>
@@ -82,6 +85,7 @@
     <q-item class="content-start">
       <AvatarGroup :group="room.members" @click="goProfile" />
     </q-item>
+    <ProfileListModal v-if="modal === 'members'" title="members" :open="modal === 'members'" :profiles="room.members" @close="closeModal"/>
   </q-card>
 </template>
 
@@ -92,6 +96,7 @@ import { mapActions } from 'pinia'
 
 import { useProfileStore } from '@/stores/profile'
 
+import ProfileListModal from '@/components/modal/ProfileListModal.vue'
 import Markdown from '@/components/Markdown.vue'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
@@ -106,7 +111,13 @@ import defaultRoomAvatar from '@/assets/room.svg'
     components: {
       Markdown,
       PersonAddIcon,
-      AvatarGroup
+      AvatarGroup,
+      ProfileListModal
+    },
+    data () {
+      return {
+        modal: null
+      }
     },
     computed: {
       cardStyle () {
@@ -121,6 +132,9 @@ import defaultRoomAvatar from '@/assets/room.svg'
       },
       image () {
         return this.room?.image || this.defaultRoomAvatar
+      },
+      twoRoomMembers () {
+        return this.room?.members?.slice(0, 2)
       }
     },
 
@@ -130,6 +144,12 @@ import defaultRoomAvatar from '@/assets/room.svg'
         window.scrollTo(0, 0)
         this.setActiveProfile(member)
         this.$router.push({ name: 'profile', params: { feedId: member.id } })
+      },
+      openMembersModal () {
+        this.modal = 'members'
+      },
+      closeModal () {
+        this.modal = null
       }
     }
   }
