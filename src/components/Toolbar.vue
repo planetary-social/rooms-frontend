@@ -10,8 +10,8 @@
       <q-btn disabled flat no-caps :ripple="false" class="label">Planetary.social</q-btn>
       <q-btn disabled flat no-caps :ripple="false" class="label">Community</q-btn>
       <q-btn disabled flat no-caps :ripple="false" class="label">Our Rules</q-btn>
-      <!-- TODO: link to app store download -->
-      <AppStoreBtn />
+
+      <AppStoreBtn href="https://apps.apple.com/us/app/planetary-app/id1481617318"/>
     </q-toolbar>
   </q-header>
 </template>

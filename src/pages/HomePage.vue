@@ -46,7 +46,10 @@
       }
     },
     methods: {
-      ...mapActions(useProfileStore, ['getProfile'])
+      ...mapActions(useProfileStore, ['getProfile']),
+      closeModal () {
+        alert('closing...g')
+      }
     },
     watch: {
       // NOTE: this is a temp solution to show threads by all members

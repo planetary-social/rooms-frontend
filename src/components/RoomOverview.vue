@@ -14,12 +14,12 @@
           <!-- <span>dev</span>
           <span style="color: #8575A3;">@{{ room?.name }}</span>
         </q-item-label> -->
-        <!-- <q-item class="q-px-none">
-          <a class="accent q-pa-sm q-px-md" :href="">
+        <q-item class="q-px-none">
+          <a class="accent q-pa-sm q-px-md" @click.prevent="openJoinModal">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
           </a>
-        </q-item> -->
+        </q-item>
       </q-item-section>
     </q-item>
     <q-item>
@@ -82,6 +82,7 @@
     <q-item class="content-start">
       <AvatarGroup :group="room.members" @click="goProfile" />
     </q-item>
+  <JoinRoomModal :open="modal" @close="closeJoinModal" title="Scan to join this room" />
   </q-card>
 </template>
 
@@ -97,6 +98,7 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 
 import defaultRoomAvatar from '@/assets/room.svg'
+import JoinRoomModal from '@/components/modal/FollowModal.vue'
 
   export default {
     name: "RoomOverview",
@@ -106,7 +108,13 @@ import defaultRoomAvatar from '@/assets/room.svg'
     components: {
       Markdown,
       PersonAddIcon,
-      AvatarGroup
+      AvatarGroup,
+      JoinRoomModal
+    },
+    data () {
+      return {
+        modal: false
+      }
     },
     computed: {
       cardStyle () {
@@ -130,6 +138,12 @@ import defaultRoomAvatar from '@/assets/room.svg'
         window.scrollTo(0, 0)
         this.setActiveProfile(member)
         this.$router.push({ name: 'profile', params: { feedId: member.id } })
+      },
+      openJoinModal () {
+        this.modal = true
+      },
+      closeJoinModal () {
+        this.modal = false
       }
     }
   }
