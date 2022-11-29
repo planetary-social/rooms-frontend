@@ -75,7 +75,7 @@
         </q-btn>
       </div>
     </q-item> -->
-    <FollowPersonModal v-if="isFollowModalOpen" :open="isFollowModalOpen" @close="closeModal" title="Scan to follow this user" :uri="profile.ssbURI" />
+    <FollowPersonModal v-if="isFollowModalOpen" :open="isFollowModalOpen" @close="closeModal" title="Scan to follow this user" :uri="profile?.ssbURI" :image="profile?.image" />
   </q-card>
 </template>
 
