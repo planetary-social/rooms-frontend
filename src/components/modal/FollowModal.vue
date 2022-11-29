@@ -17,7 +17,7 @@
       <div class="col-4">
         <q-avatar square size="150px">
           <!-- TODO: QR CODE -->
-          <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <!-- <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
           <rect width="150" height="150" rx="15" fill="url(#pattern1231123)"/>
           <defs>
           <pattern id="pattern1231123" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -25,7 +25,9 @@
           </pattern>
           <image id="image0_3494_37960" width="300" height="300" xlink:href="data:image/png;base64,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"/>
           </defs>
-          </svg>
+          </svg> -->
+
+          <QRCode v-if="uri" :uri="uri"/>
         </q-avatar>
       </div>
       <div class="col-8 q-pt-sm">
@@ -138,6 +140,7 @@ import { mapState } from 'pinia'
 import { useRoomStore } from '@/stores/room'
 
 import ModalContainer from '@/components/modal/ModalContainer.vue'
+import QRCode from '@/components/QRCode.vue'
 
 import PlanetaryIcon from '@/components/icon/PlanetaryIconWithBackground.vue'
 import ManyverseIcon from '@/components/icon/ManyverseIcon.vue'
@@ -159,7 +162,9 @@ export default {
     PlanetaryIcon,
     ManyverseIcon,
     AppStoreBtn,
-    GooglePlayBtn
+    GooglePlayBtn,
+    QRCode
+    
   },
   data () {
     return {
