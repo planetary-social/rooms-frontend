@@ -31,10 +31,10 @@
     <!-- <q-item>
       Last Active: N/A
     </q-item> -->
-    <div class="row justify-start q-pb-lg">
+    <div v-if="profile?.followers?.length" class="row justify-start q-pb-lg" style="cursor: pointer;" @click="openFollowers">
       <div class="q-pl-lg">
         <q-item-section class="q-ml-sm" style="cursor: pointer;">
-          <AvatarGroup :group="profile?.followers" :limit="2" overlapping :size="30" @click="openFollowers"/>
+          <AvatarGroup :group="profile?.followers" :limit="2" overlapping :size="30" @click="openFollowers" />
         </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ profile?.followersCount }}
@@ -44,9 +44,9 @@
         </q-item-label>
         
       </div>
-      <div class="q-ml-lg">
-        <q-item-section class="q-ml-sm" style="cursor: pointer;">
-          <AvatarGroup :group="profile?.following" :limit="2" overlapping :size="30" @click="openFollowing"/>
+      <div v-if="profile?.following?.length" class="q-ml-lg" style="cursor: pointer;" @click="openFollowing">
+        <q-item-section class="q-ml-sm">
+          <AvatarGroup :group="profile?.following" :limit="2" overlapping :size="30" @click="openFollowing" />
         </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ profile?.followingCount }}

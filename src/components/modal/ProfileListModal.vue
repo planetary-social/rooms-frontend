@@ -1,45 +1,58 @@
 <template>
-  <ModalContainer :open="open" @close="$emit('close')">
+  <ModalContainer :open="open" @close="$emit('close')" max-height="896px">
     <div class="header q-ma-lg">
       <span class="count-header">{{ profiles.length }}</span> <span>{{ title }}</span>
     </div>
     <q-separator spaced class="divider" />
     <q-list>
       <div v-for="(profile, i) in profiles" :key="profile.id">
-      <q-item class="q-pa-md">
-        <q-item-section avatar @click="goProfile(profile)" style="cursor: pointer;">
-          <q-avatar size="90px">
-            <q-img :src="profile.image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain class="avatar"/>
-          </q-avatar>
-        </q-item-section>
+        <q-item class="q-pa-md">
+          <q-item-section avatar @click="goProfile(profile)" style="cursor: pointer;">
+            <q-avatar size="90px">
+              <q-img :src="profile.image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain class="avatar"/>
+            </q-avatar>
+          </q-item-section>
 
-        <q-item-section top>
-          <q-item-label lines="1" class="profile-header" @click="goProfile(profile)" style="cursor: pointer;">{{ profile.name }}</q-item-label>
-          <q-item-label lines="2" class="profile-description">{{ profile.description }}</q-item-label>
-        </q-item-section>
+          <q-item-section top>
+            <q-item-label lines="1" class="profile-header" @click="goProfile(profile)" style="cursor: pointer;">{{ profile.name }}</q-item-label>
+            <q-item-label lines="2" class="profile-description">{{ profile.description }}</q-item-label>
+          </q-item-section>
 
-        <q-item-section side top>
-          <a class="accent q-pa-sm q-px-md">
-            <PersonAddIcon/>
-            <span class="button-text">Follow</span>
-          </a>
-        </q-item-section>
-      </q-item>
-      <q-separator v-if="!isLastItem(i)" class="divider"/>
+          <q-item-section side top>
+            <a class="accent q-pa-sm q-px-md" @click.prevent="openFollowModal(profile)">
+              <PersonAddIcon/>
+              <span class="button-text">Follow</span>
+            </a>
+          </q-item-section>
+        </q-item>
+        <q-separator v-if="!isLastItem(i)" class="divider"/>
       </div>
-      
     </q-list>
+    <FollowPersonModal
+      v-if="isFollowModalOpen"
+      
+      :open="isFollowModalOpen"
+      title="Scan to follow this user"
+      :uri="profile?.ssbURI" 
+      :image="profile?.image" 
+      
+      @close="closeModal"
+    />
   </ModalContainer>
 </template>
 
 <script>
 import { mapActions } from 'pinia'
 
+import FollowPersonModal from '@/components/modal/FollowModal.vue'
+
 import ModalContainer from '@/components/modal/ModalContainer.vue'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import defaultAvatar from '@/assets/avatar.png'
 
 import { useProfileStore } from '@/stores/profile'
+
+const FOLLOW = 'follow'
 
 export default {
   name: 'ProfileListModal',
@@ -50,11 +63,21 @@ export default {
   },
   components: {
     ModalContainer,
-    PersonAddIcon
+    PersonAddIcon,
+    FollowPersonModal
+  },
+  data () {
+    return {
+      modal: null,
+      profile: null
+    }
   },
   computed: {
     defaultAvatar () {
       return defaultAvatar
+    },
+    isFollowModalOpen () {
+      return this.modal === FOLLOW && this.profile != null
     }
   },
   methods: {
@@ -77,6 +100,14 @@ export default {
       
       // go to their profile
       this.$router.push({ name: 'profile', params: { feedId: profile.id }})
+    },
+    openFollowModal (profile) {
+      this.profile = profile
+      this.modal = FOLLOW
+    },
+    closeModal () {
+      this.profile = null
+      this.modal = null
     }
   }
 }

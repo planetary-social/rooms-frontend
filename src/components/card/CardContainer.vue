@@ -12,13 +12,15 @@ export default {
     flat: Boolean,
     action: String,
     width: String,
-    height: String
+    height: String,
+    maxHeight: String
   },
   computed: {
     cardStyle () {
       return {
         width: this.width,
-        height: this.height
+        height: this.height,
+        maxHeight: this.maxHeight
       }
     },
     cardClasses () {

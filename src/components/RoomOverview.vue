@@ -14,7 +14,7 @@
           <!-- <span>dev</span>
           <span style="color: #8575A3;">@{{ room?.name }}</span>
         </q-item-label> -->
-        <q-item class="q-px-none">
+        <q-item class="q-px-none" v-if="false">
           <a class="accent q-pa-sm q-px-md" @click.prevent="openJoinModal">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
@@ -33,8 +33,8 @@
       Room Stats
     </q-item>
     <div class="row justify-start q-pb-lg">
-      <div class="q-pl-lg">
-        <q-item-section class="q-ml-sm" style="cursor: pointer;">
+      <div class="q-pl-lg" @click="openMembersModal" style="cursor: pointer;">
+        <q-item-section class="q-ml-sm" >
           <AvatarGroup :group="room?.members" :limit="2" overlapping :size="30" @click="openMembersModal"/>
         </q-item-section>
         <q-item-label class="stats-header" caption>
