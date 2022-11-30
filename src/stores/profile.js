@@ -40,6 +40,20 @@ const GET_PROFILE = gql`
       aliases
       followersCount
       followingCount
+      followers {
+        id
+        name
+        image
+        description
+        ssbURI
+      }
+      following {
+        id
+        name
+        image
+        description
+        ssbURI
+      }
       threads {
         id
         messages {

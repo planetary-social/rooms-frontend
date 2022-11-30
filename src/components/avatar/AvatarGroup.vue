@@ -1,14 +1,14 @@
 <template>
   <div :class="overlapping ? 'container' : ''" :style="`width: ${overlapping ? '57px' : ''}`">
     <q-avatar
-      v-for="(profile, i) in group" :key="profile?.id" 
+      v-for="(profile, i) in profiles" :key="profile?.id" 
       @click.stop="$emit('click', profile)"
       :text="profile?.name"
       :size="size + 'px'"
       :style="`margin-right:${isLastItem(i) ? '' : overlap};`"
       contain
     >
-      <q-img :src="profile?.image" :placeholder-src="defaultAvatar" :style="avatarSize"/>
+      <q-img :src="profile?.image" :placeholder-src="defaultAvatar" no-spinner :style="avatarSize"/>
     </q-avatar>
   </div>
 </template>
@@ -24,13 +24,20 @@
       size: {
         type: Number,
         default: 60
-      }
+      },
+      limit: Number
     },
     computed: {
+      profiles () {
+        if (!this.limit) return this.group
+
+        return this.group?.slice(0, this.limit)
+      },
       avatarSize () {
         return {
           width: this.size + 'px',
-          height: this.size + 'px'
+          height: this.size + 'px',
+          cursor: this.overlapping ? '' : 'pointer'
         }
       },
       overlap () {

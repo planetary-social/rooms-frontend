@@ -1,5 +1,5 @@
 <template>
-  <q-card :class="cardClasses" :style="cardStyle" dark :flat="flat">
+  <q-card :class="cardClasses" :style="cardStyle" dark :flat="flat" >
     <slot />
   </q-card>
 </template>
@@ -39,6 +39,8 @@ export default {
     background: linear-gradient(180deg, #3D2961 0%, #332251 100%);
     box-shadow: 0px 6.21326px 0px #2C1D45, 0px 30px 20px rgba(0, 0, 0, 0.15);
     border-radius: 31.0663px;
+
+    padding: 0;
   }
 
   // background styling in parent component

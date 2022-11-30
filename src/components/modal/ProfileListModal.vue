@@ -1,19 +1,20 @@
 <template>
   <ModalContainer :open="open" @close="$emit('close')">
-    <div class="header">
+    <div class="header q-ma-lg">
       <span class="count-header">{{ profiles.length }}</span> <span>{{ title }}</span>
     </div>
-    <q-separator spaced />
+    <q-separator spaced class="divider" />
     <q-list>
-      <q-item v-for="profile in profiles" :key="profile.id">
-        <q-item-section avatar>
+      <div v-for="(profile, i) in profiles" :key="profile.id">
+      <q-item class="q-pa-md">
+        <q-item-section avatar @click="goProfile(profile)" style="cursor: pointer;">
           <q-avatar size="90px">
             <q-img :src="profile.image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain class="avatar"/>
           </q-avatar>
         </q-item-section>
 
         <q-item-section top>
-          <q-item-label lines="1" class="profile-header">{{ profile.name }}</q-item-label>
+          <q-item-label lines="1" class="profile-header" @click="goProfile(profile)" style="cursor: pointer;">{{ profile.name }}</q-item-label>
           <q-item-label lines="2" class="profile-description">{{ profile.description }}</q-item-label>
         </q-item-section>
 
@@ -24,16 +25,21 @@
           </a>
         </q-item-section>
       </q-item>
-      <q-separator spaced />
+      <q-separator v-if="!isLastItem(i)" class="divider"/>
+      </div>
       
     </q-list>
   </ModalContainer>
 </template>
 
 <script>
+import { mapActions } from 'pinia'
+
 import ModalContainer from '@/components/modal/ModalContainer.vue'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import defaultAvatar from '@/assets/avatar.png'
+
+import { useProfileStore } from '@/stores/profile'
 
 export default {
   name: 'ProfileListModal',
@@ -49,6 +55,28 @@ export default {
   computed: {
     defaultAvatar () {
       return defaultAvatar
+    }
+  },
+  methods: {
+    ...mapActions(useProfileStore, ['setActiveProfile']),
+    isLastItem (i) {
+      return i === (this.profiles?.length - 1)
+    },
+    goProfile (profile) {
+      if (!profile.id) return
+      window.scrollTo(0, 0)
+
+      // if we are already on this persons profile, then just scroll to the top and close the modal
+      if (profile.id === this.activeProfile?.id) {
+        this.$emit('close')
+        return
+      }
+
+      // set the active profile as the authors
+      this.setActiveProfile(profile)
+      
+      // go to their profile
+      this.$router.push({ name: 'profile', params: { feedId: profile.id }})
     }
   }
 }
@@ -86,6 +114,7 @@ export default {
   text-decoration: none;
   border-radius: 25.2484px;
   filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
+  cursor: pointer;
 }
 
 .button-text {
@@ -117,5 +146,11 @@ export default {
 
   /* Filter bar text --dark */
   text-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.divider {
+  height: 0px;
+  border: 0.5px solid #271A3D;
+  box-shadow: 0px 1.55331px 0px #4A3275;
 }
 </style>

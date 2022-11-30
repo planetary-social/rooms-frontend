@@ -13,12 +13,11 @@
           <span>{{ profile.aliases[0] }}</span>
           <span style="color: #8575A3;">@{{ activeRoom?.name }}</span>
         </q-item-label>
-        <q-item class="q-px-none">
-          <a v-if="profile.ssbURI" class="accent q-pa-sm q-px-md" :href="profile.ssbURI">
+        <q-item v-if="profile.ssbURI" class="q-px-none">
+          <a class="accent q-pa-sm q-px-md" @click.prevent="openFollowModal">
             <PersonAddIcon/>
-            <span class="button-text">Join in app</span>
+            <span class="button-text">Follow</span>
           </a>
-          <!-- TODO: display something here when there are no aliases / ssbUri -->
         </q-item>
       </q-item-section>
     </q-item>
@@ -34,14 +33,21 @@
     </q-item> -->
     <div class="row justify-start q-pb-lg">
       <div class="q-pl-lg">
+        <q-item-section class="q-ml-sm" style="cursor: pointer;">
+          <AvatarGroup :group="profile?.followers" :limit="2" overlapping :size="30" @click="openFollowers"/>
+        </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ profile?.followersCount }}
         </q-item-label>
         <q-item-label class="stats" caption>
           followers
         </q-item-label>
+        
       </div>
       <div class="q-ml-lg">
+        <q-item-section class="q-ml-sm" style="cursor: pointer;">
+          <AvatarGroup :group="profile?.following" :limit="2" overlapping :size="30" @click="openFollowing"/>
+        </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ profile?.followingCount }}
         </q-item-label>
@@ -76,17 +82,45 @@
         </q-btn>
       </div>
     </q-item> -->
+    <ProfileListModal
+      v-if="isListModal"
+    
+      :open="isListModal"
+      :profiles="listModalProfiles"
+      :title="listModalTitle"
+      
+      @close="closeModal"
+    />
+    <FollowPersonModal
+      v-if="isFollowModalOpen"
+      
+      :open="isFollowModalOpen"
+      title="Scan to follow this user"
+      :uri="profile?.ssbURI" 
+      :image="profile?.image" 
+      
+      @close="closeModal"
+    />
+    
   </q-card>
 </template>
 
 
 
 <script>
+import FollowPersonModal from '@/components/modal/FollowModal.vue'
+import ProfileListModal from '@/components/modal/ProfileListModal.vue'
+
+import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 import Markdown from '@/components/Markdown.vue'
 import defaultAvatar from '@/assets/avatar.png'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import { mapState } from 'pinia'
 import { useRoomStore } from '../stores/room'
+
+const FOLLOW = 'follow'
+const FOLLOWERS = 'followers'
+const FOLLOWING = 'following'
 
   export default {
     name: "ProfileOverview",
@@ -94,11 +128,39 @@ import { useRoomStore } from '../stores/room'
       profile: Object
     },
     components: {
+      FollowPersonModal,
+      ProfileListModal,
       Markdown,
-      PersonAddIcon
+      PersonAddIcon,
+      AvatarGroup
+    },
+    data () {
+      return {
+        modal: null
+      }
     },
     computed: {
       ...mapState(useRoomStore, ['activeRoom']),
+      isFollowModalOpen () {
+        return this.modal === FOLLOW
+      },
+      isListModal () {
+        return this.modal === FOLLOWERS || this.modal === FOLLOWING
+      },
+      listModalTitle () {
+        if (!this.isListModal) return
+        
+        return this.modal === FOLLOWERS
+          ? FOLLOWERS
+          : FOLLOWING
+      },
+      listModalProfiles () {
+        if (!this.isListModal) return []
+
+        return this.modal === FOLLOWERS
+          ? this.profile?.followers || []
+          : this.profile?.following || []
+      },
       cardStyle () {
         return {
           width: this.$q?.screen?.xs
@@ -111,6 +173,20 @@ import { useRoomStore } from '../stores/room'
       },
       image () {
         return this.profile?.image || this.defaultAvatar
+      }
+    },
+    methods: {
+      openFollowModal () {
+        this.modal = FOLLOW
+      },
+      closeModal () {
+        this.modal = null
+      },
+      openFollowers () {
+        this.modal = FOLLOWERS
+      },
+      openFollowing () {
+        this.modal = FOLLOWING
       }
     }
   }
@@ -195,6 +271,7 @@ import { useRoomStore } from '../stores/room'
   }
 
   .accent  {
+    cursor: pointer;
     background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
     text-decoration: none;
     border-radius: 25.2484px;

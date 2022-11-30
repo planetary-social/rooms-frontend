@@ -14,12 +14,12 @@
           <!-- <span>dev</span>
           <span style="color: #8575A3;">@{{ room?.name }}</span>
         </q-item-label> -->
-        <!-- <q-item class="q-px-none">
-          <a class="accent q-pa-sm q-px-md" :href="">
+        <q-item class="q-px-none">
+          <a class="accent q-pa-sm q-px-md" @click.prevent="openJoinModal">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
           </a>
-        </q-item> -->
+        </q-item>
       </q-item-section>
     </q-item>
     <q-item>
@@ -35,7 +35,7 @@
     <div class="row justify-start q-pb-lg">
       <div class="q-pl-lg">
         <q-item-section class="q-ml-sm" style="cursor: pointer;">
-          <AvatarGroup :group="twoRoomMembers" overlapping :size="30" @click="openMembersModal"/>
+          <AvatarGroup :group="room?.members" :limit="2" overlapping :size="30" @click="openMembersModal"/>
         </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ room.members?.length || 'N/A' }}
@@ -85,7 +85,22 @@
     <q-item class="content-start">
       <AvatarGroup :group="room.members" @click="goProfile" />
     </q-item>
-    <ProfileListModal v-if="modal === 'members'" title="members" :open="modal === 'members'" :profiles="room.members" @close="closeModal"/>
+    <ProfileListModal
+      v-if="isMembersModal"
+    
+      :open="isMembersModal"
+      :profiles="room.members"
+      title="members"
+      
+      @close="closeModal"
+    />
+    <JoinRoomModal
+      v-if="isJoinModal"
+      
+      :open="isJoinModal"
+      title="Scan to join this room"
+      @close="closeJoinModal"
+    />
   </q-card>
 </template>
 
@@ -102,6 +117,10 @@ import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 
 import defaultRoomAvatar from '@/assets/room.svg'
+import JoinRoomModal from '@/components/modal/FollowModal.vue'
+
+const JOIN = 'join'
+const MEMBERS = 'members'
 
   export default {
     name: "RoomOverview",
@@ -112,6 +131,7 @@ import defaultRoomAvatar from '@/assets/room.svg'
       Markdown,
       PersonAddIcon,
       AvatarGroup,
+      JoinRoomModal,
       ProfileListModal
     },
     data () {
@@ -133,8 +153,11 @@ import defaultRoomAvatar from '@/assets/room.svg'
       image () {
         return this.room?.image || this.defaultRoomAvatar
       },
-      twoRoomMembers () {
-        return this.room?.members?.slice(0, 2)
+      isJoinModal () {
+        return this.modal === JOIN
+      },
+      isMembersModal () {
+        return this.modal === MEMBERS
       }
     },
 
@@ -146,10 +169,13 @@ import defaultRoomAvatar from '@/assets/room.svg'
         this.$router.push({ name: 'profile', params: { feedId: member.id } })
       },
       openMembersModal () {
-        this.modal = 'members'
+        this.modal = MEMBERS
       },
       closeModal () {
         this.modal = null
+      },
+      openJoinModal () {
+        this.modal = JOIN
       }
     }
   }
@@ -224,6 +250,7 @@ import defaultRoomAvatar from '@/assets/room.svg'
     border: 2.97297px solid #231837;
     text-decoration: none;
     border-radius: 25.2484px;
+    cursor: pointer;
   }
 
   .button-text {
