@@ -1,9 +1,9 @@
 <template>
   <q-dialog v-model="open" @hide="close">
-      <CardContainer :width="width" :height="height" class="q-pa-md q-pt-lg q-px-lg q-pa-none-sm q-ma-none-sm">
-        <slot/>
-      </CardContainer>
-    </q-dialog>
+    <CardContainer :width="width" :height="height" :max-height="maxHeight" class="q-pa-md q-pt-lg q-px-lg q-pa-none-sm q-ma-none-sm">
+      <slot/>
+    </CardContainer>
+  </q-dialog>
 </template>
 
 <script>
@@ -14,7 +14,8 @@ export default {
   props: {
     open: Boolean,
     width: String,
-    height: String
+    height: String,
+    maxHeight: String
   },
   components: {
     CardContainer

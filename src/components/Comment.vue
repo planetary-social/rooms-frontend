@@ -1,7 +1,7 @@
 <template>
   <q-card :class="cardClasses" dark :flat="flat">
     <q-item class="card-header">
-      <q-item-section avatar>
+      <q-item-section avatar @click="goProfile" style="cursor: pointer;">
         <q-avatar size="30px" class="avatar">
           <q-img :src="image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain width="30px" height="30px" />
         </q-avatar>
@@ -9,7 +9,7 @@
 
       <q-item-section no-wrap>
         <q-item-label class="card-header-text">
-          <span class="q-pr-xs" @click="goProfile">{{ author?.name || 'Hidden User' }}</span>
+          <span class="q-pr-xs" style="cursor: pointer;" @click="goProfile">{{ author?.name || 'Hidden User' }}</span>
           <span class="comment-action">{{ action }}</span>
         </q-item-label>
         <q-item-label class="light-text" style="left: -10px;" caption>
@@ -191,14 +191,14 @@ import defaultAvatar from '@/assets/avatar.png'
   .top-divider {
     height: 0px;
 
-    border: 1px solid #271A3D;
+    border: 0.5px solid #271A3D;
     box-shadow: 0px 2px 0px #4A3275;
   }
 
   .bottom-divider {
     height: 0px;
 
-    border: 1px solid #201633;
+    border: 0.5px solid #201633;
     box-shadow: 0px 2px 0px #402B65;
 
   }

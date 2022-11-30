@@ -13,6 +13,8 @@ const GET_MY_ROOM = gql`
         id
         name
         image
+        description
+        ssbURI
       }
     }
   }

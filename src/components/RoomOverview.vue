@@ -14,7 +14,7 @@
           <!-- <span>dev</span>
           <span style="color: #8575A3;">@{{ room?.name }}</span>
         </q-item-label> -->
-        <q-item class="q-px-none">
+        <q-item class="q-px-none" v-if="false">
           <a class="accent q-pa-sm q-px-md" @click.prevent="openJoinModal">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
@@ -33,7 +33,10 @@
       Room Stats
     </q-item>
     <div class="row justify-start q-pb-lg">
-      <div class="q-pl-lg">
+      <div class="q-pl-lg" @click="openMembersModal" style="cursor: pointer;">
+        <q-item-section class="q-ml-sm" >
+          <AvatarGroup :group="room?.members" :limit="2" overlapping :size="30" @click="openMembersModal"/>
+        </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ room.members?.length || 'N/A' }}
         </q-item-label>
@@ -82,7 +85,22 @@
     <q-item class="content-start">
       <AvatarGroup :group="room.members" @click="goProfile" />
     </q-item>
-  <JoinRoomModal :open="modal" @close="closeJoinModal" title="Scan to join this room" />
+    <ProfileListModal
+      v-if="isMembersModal"
+    
+      :open="isMembersModal"
+      :profiles="room.members"
+      title="members"
+      
+      @close="closeModal"
+    />
+    <JoinRoomModal
+      v-if="isJoinModal"
+      
+      :open="isJoinModal"
+      title="Scan to join this room"
+      @close="closeJoinModal"
+    />
   </q-card>
 </template>
 
@@ -93,12 +111,16 @@ import { mapActions } from 'pinia'
 
 import { useProfileStore } from '@/stores/profile'
 
+import ProfileListModal from '@/components/modal/ProfileListModal.vue'
 import Markdown from '@/components/Markdown.vue'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 
 import defaultRoomAvatar from '@/assets/room.svg'
 import JoinRoomModal from '@/components/modal/FollowModal.vue'
+
+const JOIN = 'join'
+const MEMBERS = 'members'
 
   export default {
     name: "RoomOverview",
@@ -109,11 +131,12 @@ import JoinRoomModal from '@/components/modal/FollowModal.vue'
       Markdown,
       PersonAddIcon,
       AvatarGroup,
-      JoinRoomModal
+      JoinRoomModal,
+      ProfileListModal
     },
     data () {
       return {
-        modal: false
+        modal: null
       }
     },
     computed: {
@@ -129,6 +152,12 @@ import JoinRoomModal from '@/components/modal/FollowModal.vue'
       },
       image () {
         return this.room?.image || this.defaultRoomAvatar
+      },
+      isJoinModal () {
+        return this.modal === JOIN
+      },
+      isMembersModal () {
+        return this.modal === MEMBERS
       }
     },
 
@@ -139,11 +168,14 @@ import JoinRoomModal from '@/components/modal/FollowModal.vue'
         this.setActiveProfile(member)
         this.$router.push({ name: 'profile', params: { feedId: member.id } })
       },
-      openJoinModal () {
-        this.modal = true
+      openMembersModal () {
+        this.modal = MEMBERS
       },
-      closeJoinModal () {
-        this.modal = false
+      closeModal () {
+        this.modal = null
+      },
+      openJoinModal () {
+        this.modal = JOIN
       }
     }
   }
@@ -218,6 +250,7 @@ import JoinRoomModal from '@/components/modal/FollowModal.vue'
     border: 2.97297px solid #231837;
     text-decoration: none;
     border-radius: 25.2484px;
+    cursor: pointer;
   }
 
   .button-text {

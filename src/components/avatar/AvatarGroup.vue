@@ -1,13 +1,14 @@
 <template>
-  <div>
-    <q-avatar size="60px" v-for="profile in group" :key="profile?.id" @click.stop="$emit('click', profile)" :text="profile?.name" style="margin-right:15px;">
-      <q-img :src="profile?.image" :placeholder-src="defaultAvatar" :class="classes"/>
-      <q-tooltip
-          transition-show="scale"
-          transition-hide="scale"
-        >
-        {{ profile?.name }}
-      </q-tooltip>
+  <div :class="overlapping ? 'container' : ''" :style="`width: ${overlapping ? '57px' : ''}`">
+    <q-avatar
+      v-for="(profile, i) in profiles" :key="profile?.id" 
+      @click.stop="$emit('click', profile)"
+      :text="profile?.name"
+      :size="size + 'px'"
+      :style="`margin-right:${isLastItem(i) ? '' : overlap};`"
+      contain
+    >
+      <q-img :src="profile?.image" :placeholder-src="defaultAvatar" no-spinner :style="avatarSize"/>
     </q-avatar>
   </div>
 </template>
@@ -19,14 +20,31 @@
     name: 'AvatarGroup',
     props: {
       group: Array,
-      overlapping: Boolean
+      overlapping: Boolean,
+      size: {
+        type: Number,
+        default: 60
+      },
+      limit: Number
     },
     computed: {
-      classes () {
+      profiles () {
+        if (!this.limit) return this.group
+
+        return this.group?.slice(0, this.limit)
+      },
+      avatarSize () {
         return {
-          overlapping: this.overlapping,
-          avatar: true
+          width: this.size + 'px',
+          height: this.size + 'px',
+          cursor: this.overlapping ? '' : 'pointer'
         }
+      },
+      overlap () {
+        if (!this.overlapping) return '15px'
+        
+
+        return -(this.size/4) + 'px'
       },
       defaultAvatar () {
         return defaultAvatar
@@ -35,22 +53,25 @@
     methods: {
       getImage (profile) {
         return profile?.image || this.defaultAvatar
+      },
+      isLastItem (i) {
+        return i === (this.group.length - 1)
       }
     }
   }
 </script>
 
 <style scoped>
-.overlapping {
-  border: 2px solid white;
-  position: absolute;
-}
 
 .avatar {
   cursor: pointer;
   border-radius: 139.358px;
-  border: 5px solid transparent;
-  width: 60px;
-  height: 60px;
+  /* border: 5px solid transparent; */
+}
+
+.container {
+  background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
+  border-radius: 139.358px;
+  padding: 2px;
 }
 </style>

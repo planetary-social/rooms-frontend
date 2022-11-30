@@ -31,16 +31,23 @@
     <!-- <q-item>
       Last Active: N/A
     </q-item> -->
-    <div class="row justify-start q-pb-lg">
+    <div v-if="profile?.followers?.length" class="row justify-start q-pb-lg" style="cursor: pointer;" @click="openFollowers">
       <div class="q-pl-lg">
+        <q-item-section class="q-ml-sm" style="cursor: pointer;">
+          <AvatarGroup :group="profile?.followers" :limit="2" overlapping :size="30" @click="openFollowers" />
+        </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ profile?.followersCount }}
         </q-item-label>
         <q-item-label class="stats" caption>
           followers
         </q-item-label>
+        
       </div>
-      <div class="q-ml-lg">
+      <div v-if="profile?.following?.length" class="q-ml-lg" style="cursor: pointer;" @click="openFollowing">
+        <q-item-section class="q-ml-sm">
+          <AvatarGroup :group="profile?.following" :limit="2" overlapping :size="30" @click="openFollowing" />
+        </q-item-section>
         <q-item-label class="stats-header" caption>
           {{ profile?.followingCount }}
         </q-item-label>
@@ -75,7 +82,26 @@
         </q-btn>
       </div>
     </q-item> -->
-    <FollowPersonModal v-if="isFollowModalOpen" :open="isFollowModalOpen" @close="closeModal" title="Scan to follow this user" :uri="profile?.ssbURI" :image="profile?.image" />
+    <ProfileListModal
+      v-if="isListModal"
+    
+      :open="isListModal"
+      :profiles="listModalProfiles"
+      :title="listModalTitle"
+      
+      @close="closeModal"
+    />
+    <FollowPersonModal
+      v-if="isFollowModalOpen"
+      
+      :open="isFollowModalOpen"
+      title="Scan to follow this user"
+      :uri="profile?.ssbURI" 
+      :image="profile?.image" 
+      
+      @close="closeModal"
+    />
+    
   </q-card>
 </template>
 
@@ -83,6 +109,9 @@
 
 <script>
 import FollowPersonModal from '@/components/modal/FollowModal.vue'
+import ProfileListModal from '@/components/modal/ProfileListModal.vue'
+
+import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 import Markdown from '@/components/Markdown.vue'
 import defaultAvatar from '@/assets/avatar.png'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
@@ -90,6 +119,8 @@ import { mapState } from 'pinia'
 import { useRoomStore } from '../stores/room'
 
 const FOLLOW = 'follow'
+const FOLLOWERS = 'followers'
+const FOLLOWING = 'following'
 
   export default {
     name: "ProfileOverview",
@@ -98,8 +129,10 @@ const FOLLOW = 'follow'
     },
     components: {
       FollowPersonModal,
+      ProfileListModal,
       Markdown,
-      PersonAddIcon
+      PersonAddIcon,
+      AvatarGroup
     },
     data () {
       return {
@@ -110,6 +143,23 @@ const FOLLOW = 'follow'
       ...mapState(useRoomStore, ['activeRoom']),
       isFollowModalOpen () {
         return this.modal === FOLLOW
+      },
+      isListModal () {
+        return this.modal === FOLLOWERS || this.modal === FOLLOWING
+      },
+      listModalTitle () {
+        if (!this.isListModal) return
+        
+        return this.modal === FOLLOWERS
+          ? FOLLOWERS
+          : FOLLOWING
+      },
+      listModalProfiles () {
+        if (!this.isListModal) return []
+
+        return this.modal === FOLLOWERS
+          ? this.profile?.followers || []
+          : this.profile?.following || []
       },
       cardStyle () {
         return {
@@ -131,6 +181,12 @@ const FOLLOW = 'follow'
       },
       closeModal () {
         this.modal = null
+      },
+      openFollowers () {
+        this.modal = FOLLOWERS
+      },
+      openFollowing () {
+        this.modal = FOLLOWING
       }
     }
   }
@@ -217,9 +273,9 @@ const FOLLOW = 'follow'
   .accent  {
     cursor: pointer;
     background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
-    border: 2.97297px solid #231837;
     text-decoration: none;
     border-radius: 25.2484px;
+    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.1));
   }
 
   .gradient-button {

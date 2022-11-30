@@ -1,120 +1,122 @@
 <template>
   <ModalContainer :open="open" @close="close" width="594px" height="896px">
-    <q-item class="q-pt-md">
-      <q-item-label class="heading">
-        Follow in the app 📲
-      </q-item-label>
+    <div class="q-ma-md">
+      <q-item class="q-pt-md q-mx-md">
+        <q-item-label class="heading">
+          Follow in the app 📲
+        </q-item-label>
 
-    </q-item>
-    <q-item>
-      <q-item-label class="sub-heading">
-        @{{ activeRoom?.name }} requires a SSB client to set up your alias, interact with users and make friends!
-      </q-item-label>
-    </q-item>
+      </q-item>
+      <q-item>
+        <q-item-label class="sub-heading">
+          @{{ activeRoom?.name }} requires a SSB client to set up your alias, interact with users and make friends!
+        </q-item-label>
+      </q-item>
 
-  <div class="q-ma-sm q-pa-sm">
-    <div class="row">
-      <div class="col-4">
-        <q-avatar square size="150px">
-          <QRCode v-if="uri" :uri="uri" :image="image"/>
-        </q-avatar>
+    <div class="q-ma-sm q-pa-sm">
+      <div class="row">
+        <div class="col-4">
+          <q-avatar square size="150px">
+            <QRCode v-if="uri" :uri="uri" :image="image"/>
+          </q-avatar>
+        </div>
+        <div class="col-8 q-pt-sm">
+          <div class="row">
+            <div class="col-12 q-pl-sm">
+              <div class="row">
+              <div class="col-12 heading-2">
+                {{ title }}
+              </div>
+              <div class="col-12 sub-heading-2 q-my-sm">
+                This will open in your preferred SSB app, where you'll set up your alias like sarah@{{ activeRoom?.name }}
+              </div>
+              <a class="accent-text q-my-sm" href="https://scuttlebutt.nz">
+                What's an SSB app?
+              </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-8 q-pt-sm">
+    </div>
+
+    <q-item class="section-background q-ma-md q-pa-md">
+      <q-item-section avatar>
+        <a class="accent" @click.prevent="copy">
+          {{ copied ? 'COPIED' : 'COPY URL' }}
+          <q-icon v-if="copied" size="12px" name="done" />
+        </a>
+      </q-item-section>
+      <q-item-section>
+        <q-item-label class="sub-heading-2 text-overflow">{{ uri }}</q-item-label>
+      </q-item-section>
+      <!-- <q-item-se -->
+    </q-item>
+
+    <q-item class="q-ma-sm q-pa-sm">
+      <q-item-label class="heading-2">
+        Not on SSB yet? Download an app!
+      </q-item-label>
+    </q-item>
+      <!-- TODO:  copy URL-->
+
+      <div class="section-background q-ma-md q-pa-md">
         <div class="row">
-          <div class="col-12 q-pl-sm">
+          <div class="col-2">
+            <q-avatar square size="60px">
+              <PlanetaryIcon/>
+            </q-avatar>
+          </div>
+          <div class="col-10">
             <div class="row">
-            <div class="col-12 heading-2">
-              {{ title }}
+              <div class="col-12 q-pl-sm">
+                <div class="row">
+                <div class="col-12 heading-3 q-pt-sm">
+                  Planetary <span style="color: #8575A3;">(iOS, macOS)</span>
+                </div>
+                <div class="col-12 text q-py-sm">
+                  The peer-to-peer social network where you own your data.
+                </div>
+                </div>
+              </div>
             </div>
-            <div class="col-12 sub-heading-2 q-my-sm">
-              This will open in your preferred SSB app, where you'll set up your alias like sarah@{{ activeRoom?.name }}
-            </div>
-            <a class="accent-text q-my-sm" href="https://scuttlebutt.nz">
-              What's an SSB app?
-            </a>
+            <div class="row">
+              <div class="col-12">
+                <AppStoreBtn href="https://apps.apple.com/us/app/planetary-app/id1481617318"/>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <q-item class="section-background q-ma-md q-pa-md">
-    <q-item-section avatar>
-      <a class="accent" @click.prevent="copy">
-        {{ copied ? 'COPIED' : 'COPY URL' }}
-        <q-icon v-if="copied" size="12px" name="done" />
-      </a>
-    </q-item-section>
-    <q-item-section>
-      <q-item-label class="sub-heading-2 text-overflow">{{ uri }}</q-item-label>
-    </q-item-section>
-    <!-- <q-item-se -->
-  </q-item>
 
-  <q-item class="q-ma-sm q-pa-sm">
-    <q-item-label class="heading-2">
-      Not on SSB yet? Download an app!
-    </q-item-label>
-  </q-item>
-    <!-- TODO:  copy URL-->
-
-    <div class="section-background q-ma-md q-pa-md">
-      <div class="row">
-        <div class="col-2">
-          <q-avatar square size="60px">
-            <PlanetaryIcon/>
-          </q-avatar>
-        </div>
-        <div class="col-10">
-          <div class="row">
-            <div class="col-12 q-pl-sm">
-              <div class="row">
-              <div class="col-12 heading-3 q-pt-sm">
-                Planetary <span style="color: #8575A3;">(iOS, macOS)</span>
-              </div>
-              <div class="col-12 text q-py-sm">
-                The peer-to-peer social network where you own your data.
-              </div>
-              </div>
-            </div>
+      <div class="section-background q-ma-md q-pa-md q-mt-lg q-pa-none-sm q-ma-none-sm">
+        <div class="row">
+          <div class="col-2">
+            <q-avatar square size="60px">
+              <ManyverseIcon/>
+            </q-avatar>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <AppStoreBtn href="https://apps.apple.com/us/app/planetary-app/id1481617318"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="section-background q-ma-md q-pa-md q-mt-lg q-pa-none-sm q-ma-none-sm">
-      <div class="row">
-        <div class="col-2">
-          <q-avatar square size="60px">
-            <ManyverseIcon/>
-          </q-avatar>
-        </div>
-        <div class="col-10">
-          <div class="row">
-            <div class="col-12 q-pl-sm">
-              <div class="row">
-              <div class="col-12 heading-3 q-pt-sm">
-                Manyverse <span style="color: #8575A3;">(Android, iOS, macOS)</span>
-              </div>
-              <div class="col-12 text q-py-sm">
-                Post and share with friends nearby or over the internet.
-              </div>
+          <div class="col-10">
+            <div class="row">
+              <div class="col-12 q-pl-sm">
+                <div class="row">
+                <div class="col-12 heading-3 q-pt-sm">
+                  Manyverse <span style="color: #8575A3;">(Android, iOS, macOS)</span>
+                </div>
+                <div class="col-12 text q-py-sm">
+                  Post and share with friends nearby or over the internet.
+                </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-auto">
-              <AppStoreBtn href="https://apps.apple.com/app/manyverse/id1492321617"/>
-            </div>
-            <div class="col-auto q-mt-sm">
-              <GooglePlayBtn href="https://play.google.com/store/apps/details?id=se.manyver" />
+            <div class="row">
+              <div class="col-auto">
+                <AppStoreBtn href="https://apps.apple.com/app/manyverse/id1492321617"/>
+              </div>
+              <div class="col-auto q-mt-sm">
+                <GooglePlayBtn href="https://play.google.com/store/apps/details?id=se.manyver" />
+              </div>
             </div>
           </div>
         </div>
