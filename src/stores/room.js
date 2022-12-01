@@ -8,6 +8,7 @@ const GET_MY_ROOM = gql`
       name
       description
       multiaddress
+      inviteCode
 
       members {
         id

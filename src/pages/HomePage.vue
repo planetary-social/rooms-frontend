@@ -45,12 +45,6 @@
         }
       }
     },
-    methods: {
-      ...mapActions(useProfileStore, ['getProfile']),
-      closeModal () {
-        alert('closing...g')
-      }
-    },
     watch: {
       // NOTE: this is a temp solution to show threads by all members
       // until the backend piece is written.
@@ -70,6 +64,9 @@
             .sort((a, b) => b.messages[0].timestamp - a.messages[0].timestamp)
         }
       }
+    },
+    methods: {
+      ...mapActions(useProfileStore, ['getProfile'])
     }
   }
 </script>
