@@ -14,7 +14,7 @@
           <!-- <span>dev</span>
           <span style="color: #8575A3;">@{{ room?.name }}</span>
         </q-item-label> -->
-        <q-item class="q-px-none" v-if="false">
+        <q-item class="q-px-none" v-if="room?.inviteCode">
           <a class="accent q-pa-sm q-px-md" @click.prevent="openJoinModal">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
@@ -97,9 +97,10 @@
     <JoinRoomModal
       v-if="isJoinModal"
       
+      :uri="room?.inviteCode" 
       :open="isJoinModal"
       title="Scan to join this room"
-      @close="closeJoinModal"
+      @close="closeModal"
     />
   </q-card>
 </template>
