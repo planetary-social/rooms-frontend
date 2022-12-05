@@ -15,7 +15,7 @@
 
 
       <q-btn-group v-else class="accent q-pr-md">
-        <AppStoreBtn class="app-store-btn" href="https://apps.apple.com/us/app/planetary-app/id1481617318"/>
+        <AppStoreBtn class="app-store-btn" href="https://apps.apple.com/us/app/planetary-app/id1481617318" customStyle="display: block; margin: auto;"/>
 
 
         <q-btn-dropdown auto-close :ripple="false" dropdown-icon="menu" size="23px" content-style="background: none; width: 210px;">

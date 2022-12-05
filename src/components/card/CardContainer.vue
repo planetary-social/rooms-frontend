@@ -1,5 +1,5 @@
 <template>
-  <q-card :class="cardClasses" :style="cardStyle" dark :flat="flat" >
+  <q-card class="comment-card" :style="cardStyle" dark>
     <slot />
   </q-card>
 </template>
@@ -9,7 +9,6 @@ export default {
   name: "CardContainer",
   props: {
     comment: Object,
-    flat: Boolean,
     action: String,
     width: String,
     height: String,
@@ -21,13 +20,6 @@ export default {
         width: this.width,
         height: this.height,
         maxHeight: this.maxHeight
-      }
-    },
-    cardClasses () {
-      return {
-        'q-ma-md': !this.flat,
-        'comment-card': !this.flat,
-        'flat-comment-card': this.flat
       }
     }
   }
@@ -43,10 +35,5 @@ export default {
     border-radius: 31.0663px;
 
     padding: 0;
-  }
-
-  // background styling in parent component
-  .flat-comment-card {
-    background: none;
   }
 </style>

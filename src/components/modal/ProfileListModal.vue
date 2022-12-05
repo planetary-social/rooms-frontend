@@ -1,8 +1,14 @@
 <template>
-  <ModalContainer :open="open" @close="$emit('close')" max-height="896px">
-    <div class="header q-ma-lg">
-      <span class="count-header">{{ profiles.length }}</span> <span>{{ title }}</span>
-    </div>
+  <ModalContainer :open="open" @close="$emit('close')" :max-height="mobile ? '100%' : '896px'">
+    <q-item>
+      <q-item-label class="header q-mt-lg">
+        <span class="count-header">{{ profiles.length }}</span> <span>{{ title }}</span>
+      </q-item-label>
+      <q-space v-if="mobile"/>
+      <q-item-section v-if="mobile" side top right class="q-pa-none q-mt-sm">
+        <q-btn right class="q-pa-none" dense flat icon="close" v-close-popup></q-btn>
+      </q-item-section>
+    </q-item>
     <q-separator spaced class="divider" />
     <q-list>
       <div v-for="(profile, i) in profiles" :key="profile.id">
@@ -32,7 +38,7 @@
       v-if="isFollowModalOpen"
       
       :open="isFollowModalOpen"
-      title="Scan to follow this user"
+      title="follow this user"
       :uri="profile?.ssbURI" 
       :image="profile?.image" 
       
@@ -78,6 +84,9 @@ export default {
     },
     isFollowModalOpen () {
       return this.modal === FOLLOW && this.profile != null
+    },
+    mobile () {
+      return this.$q.screen.xs || this.$q.screen.sm
     }
   },
   methods: {

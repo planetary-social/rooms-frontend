@@ -99,7 +99,7 @@
       
       :uri="room?.inviteCode" 
       :open="isJoinModal"
-      title="Scan to join this room"
+      title="join this room"
       @close="closeModal"
     />
   </q-card>

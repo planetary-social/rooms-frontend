@@ -95,7 +95,7 @@
       v-if="isFollowModalOpen"
       
       :open="isFollowModalOpen"
-      title="Scan to follow this user"
+      title="follow this user"
       :uri="profile?.ssbURI" 
       :image="profile?.image" 
       
