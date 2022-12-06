@@ -23,70 +23,70 @@
       </q-item-section>
     </q-item>
     <q-scroll-area :style="scrollStyle" content-style="height: 0px;">
-    <q-item>
-      <q-item-section>
-        <q-item-label class="description-text">
-          <Markdown v-if="room?.description" :text="room?.description"/>
-        </q-item-label>
-      </q-item-section>
-    </q-item>
-    <q-item class="subheader">
-      Room Stats
-    </q-item>
-    <div class="row justify-start q-pb-lg">
-      <div class="q-pl-lg" @click="openMembersModal" style="cursor: pointer;">
-        <q-item-section class="q-ml-sm" >
-          <AvatarGroup :group="room?.members" :limit="2" overlapping :size="30" @click="openMembersModal"/>
+      <q-item>
+        <q-item-section>
+          <q-item-label class="description-text">
+            <Markdown v-if="room?.description" :text="room?.description"/>
+          </q-item-label>
         </q-item-section>
-        <q-item-label class="stats-header" caption>
-          {{ room.members?.length || 'N/A' }}
-        </q-item-label>
-        <q-item-label class="stats" caption>
-          members
-        </q-item-label>
+      </q-item>
+      <q-item class="subheader">
+        Room Stats
+      </q-item>
+      <div class="row justify-start q-pb-lg">
+        <div class="q-pl-lg" @click="openMembersModal" style="cursor: pointer;">
+          <q-item-section class="q-ml-sm" >
+            <AvatarGroup :group="room?.members" :limit="2" overlapping :size="30" @click="openMembersModal"/>
+          </q-item-section>
+          <q-item-label class="stats-header" caption>
+            {{ room.members?.length || 'N/A' }}
+          </q-item-label>
+          <q-item-label class="stats" caption>
+            members
+          </q-item-label>
+        </div>
+        <!-- <q-item-section>
+          <q-item-label class="stats-header" caption>
+            {{ room?.followingCount || 'N/A' }}
+          </q-item-label>
+          <q-item-label class="stats" caption>
+            following
+          </q-item-label>
+        </q-item-section> -->
+        <!-- <q-item-section>
+          <q-item-label class="stats-header" caption>
+            N/A
+          </q-item-label>
+          <q-item-label class="stats" caption>
+            ignored by
+          </q-item-label>
+        </q-item-section> -->
+        <!-- <q-item-section>
+          <q-item-label class="stats-header" caption>
+            N/A
+          </q-item-label>
+          <q-item-label class="stats" caption>
+            posts
+          </q-item-label>
+        </q-item-section> -->
       </div>
-      <!-- <q-item-section>
-        <q-item-label class="stats-header" caption>
-          {{ room?.followingCount || 'N/A' }}
-        </q-item-label>
-        <q-item-label class="stats" caption>
-          following
-        </q-item-label>
-      </q-item-section> -->
-      <!-- <q-item-section>
-        <q-item-label class="stats-header" caption>
-          N/A
-        </q-item-label>
-        <q-item-label class="stats" caption>
-          ignored by
-        </q-item-label>
-      </q-item-section> -->
-      <!-- <q-item-section>
-        <q-item-label class="stats-header" caption>
-          N/A
-        </q-item-label>
-        <q-item-label class="stats" caption>
-          posts
-        </q-item-label>
-      </q-item-section> -->
-    </div>
-    <!-- <q-item class="subheader">
-      Hot Topics
-    </q-item>
-    <q-item class="column">
-      <div>
-        <q-btn class="q-mx-sm q-my-xs gradient-button" disabled v-for="i in 4" :key="i" flat>
-          <span class="gradient-text">{{ `#testing${i}` }}</span>
-        </q-btn>
-      </div>
-    </q-item> -->
-    <q-item class="subheader">
-      Newest Public Members
-    </q-item>
-    <q-item class="content-start">
-      <AvatarGroup :group="room.members" @click="goProfile" />
-    </q-item>
-  </q-scroll-area>
+      <!-- <q-item class="subheader">
+        Hot Topics
+      </q-item>
+      <q-item class="column">
+        <div>
+          <q-btn class="q-mx-sm q-my-xs gradient-button" disabled v-for="i in 4" :key="i" flat>
+            <span class="gradient-text">{{ `#testing${i}` }}</span>
+          </q-btn>
+        </div>
+      </q-item> -->
+      <q-item class="subheader">
+        Newest Public Members
+      </q-item>
+      <q-item class="content-start">
+        <AvatarGroup :group="room.members" @click="goProfile" />
+      </q-item>
+    </q-scroll-area>
     <ProfileListModal
       v-if="isMembersModal"
     
@@ -150,8 +150,7 @@ const MEMBERS = 'members'
         return {
           width: this.mobile
             ? `${this.$q?.screen.width-25}px`
-            : '535.89px',
-          // 'padding-top': '129px'
+            : '535.89px'
         }
       },
       scrollStyle () {
