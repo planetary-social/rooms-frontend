@@ -26,7 +26,7 @@
       <q-item v-if="profile?.description">
         <q-item-section>
           <q-item-label class="description-text">
-            <Markdown :text="description"/>
+            <Markdown :text="profile?.description"/>
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -139,18 +139,7 @@ const FOLLOWING = 'following'
     },
     data () {
       return {
-        modal: null,
-        description: `
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices dignissim enim, a varius mi elementum vel. Suspendisse tempor fermentum lacus. Ut velit dui, posuere quis viverra fringilla, consectetur vitae ante. Nulla ut lacus lacus. Pellentesque vel nibh eu ipsum vehicula iaculis. In vitae augue sed lacus tempus congue ac at augue. Curabitur a faucibus lacus. Vivamus vitae sem diam. Nam erat quam, fringilla a neque in, maximus aliquet massa. Mauris malesuada dolor in metus ullamcorper dapibus. In hac habitasse platea dictumst. Curabitur efficitur augue sit amet massa ornare commodo. Phasellus justo erat, vulputate vitae tempus vel, tristique a turpis. Vestibulum egestas velit a leo bibendum aliquet. Etiam sit amet purus nunc. Fusce dictum libero dolor, sed finibus arcu rutrum eu.
-
-Etiam cursus libero turpis, sed dignissim erat fermentum eget. Phasellus eget ante fringilla augue eleifend vestibulum. Mauris est nisl, viverra id sapien non, aliquam tristique enim. Mauris vel metus et velit pellentesque blandit eu at lacus. Aenean gravida augue in elit volutpat fermentum. Nulla id pellentesque neque. Donec vitae tempus leo. Fusce mollis dui a nunc aliquet, in dictum felis consectetur. Ut placerat elementum ante eget tempus.
-
-Nullam eget scelerisque sapien. In hac habitasse platea dictumst. Vivamus luctus tempus augue, eu euismod ex. Phasellus efficitur lobortis felis, ac ultrices tellus viverra vitae. Duis fermentum, enim nec suscipit convallis, augue turpis accumsan nunc, at rhoncus felis augue gravida libero. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce maximus sem in est pulvinar, ut mattis urna efficitur. Nullam et consectetur sem. Nulla sollicitudin hendrerit arcu dapibus lobortis. Suspendisse potenti. Quisque euismod ut enim sed elementum.
-
-Sed laoreet vehicula sapien ac dignissim. Aenean tempus est sit amet scelerisque tincidunt. Mauris sit amet dignissim mi. Aliquam et dui est. Sed velit risus, mollis ultrices purus non, tincidunt fermentum sapien. Sed sollicitudin justo diam, ac porttitor purus fringilla eget. Maecenas sodales felis eros, ut condimentum nunc tristique non. Fusce nec faucibus dolor. Proin pretium mauris quis massa auctor, a placerat lorem convallis. Donec semper luctus purus, ac placerat quam luctus sit amet. Nunc et lacus purus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus hendrerit magna ut nisi bibendum aliquet.
-
-Vivamus lobortis pharetra lacus, vitae vehicula nisi malesuada sit amet. Proin in tincidunt odio. Ut sagittis eleifend dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed venenatis lacinia erat, vel feugiat leo. Fusce eget pretium enim. Duis pellentesque tempor ligula id tincidunt. Donec libero nibh, efficitur tincidunt tristique pulvinar, accumsan semper libero. Aenean mattis orci felis, eget aliquam turpis maximus eget. In et ultrices purus, sed pellentesque mauris. Aliquam sed accumsan ligula, et congue augue. Aliquam erat volutpat. Vivamus sagittis, erat non vulputate porta, erat turpis varius ex, vitae efficitur ligula massa id mauris. Proin laoreet at felis quis consequat.
-        `
+        modal: null
       }
     },
     computed: {
