@@ -22,6 +22,7 @@
         </q-item>
       </q-item-section>
     </q-item>
+    <q-scroll-area :style="scrollStyle" content-style="height: 0px;">
     <q-item>
       <q-item-section>
         <q-item-label class="description-text">
@@ -85,6 +86,7 @@
     <q-item class="content-start">
       <AvatarGroup :group="room.members" @click="goProfile" />
     </q-item>
+  </q-scroll-area>
     <ProfileListModal
       v-if="isMembersModal"
     
@@ -141,11 +143,20 @@ const MEMBERS = 'members'
       }
     },
     computed: {
+      mobile () {
+        return this.$q.screen.xs || this.$q.screen.sm
+      },
       cardStyle () {
         return {
-          width: this.$q?.screen?.xs
+          width: this.mobile
             ? `${this.$q?.screen.width-25}px`
-            : '535.89px'
+            : '535.89px',
+          // 'padding-top': '129px'
+        }
+      },
+      scrollStyle () {
+        return {
+          height: `calc(100vh - ${this.mobile ? '0px' : '300px'})`
         }
       },
       defaultRoomAvatar () {
@@ -189,6 +200,15 @@ const MEMBERS = 'members'
     /* background: linear-gradient(180deg, #3D2961 0%, #332251 60.72%); */
     /* box-shadow: 0px 4px 0px #2C1D45, 0px 4px 10px rgba(0, 0, 0, 0.25); */
     /* border-radius: 20px; */
+  }
+
+  .scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none.
+  }
+
+  .scroll::-webkit-scrollbar {
+    display: none;
   }
 
   .title {
