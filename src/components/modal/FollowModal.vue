@@ -1,11 +1,17 @@
 <template>
   <ModalContainer :open="open" @close="close" width="594px" height="896px">
-    <div class="q-ma-md">
+    <div :class="mobile ? 'q-ma-sm' : 'q-ma-md'" :style="mobile ? 'padding-bottom:100px;' : ''">
+      <q-item v-if="mobile" class="q-pa-sm">
+        <q-space/>
+        <q-btn right dense flat icon="close" v-close-popup></q-btn>
+      </q-item>
+      
       <q-item class="q-pt-md q-mx-md">
-        <q-item-label class="heading">
-          Follow in the app 📲
-        </q-item-label>
-
+        <q-item-section>
+          <q-item-label class="heading">
+            Follow in the app 📲
+          </q-item-label>
+        </q-item-section>
       </q-item>
       <q-item>
         <q-item-label class="sub-heading">
@@ -13,54 +19,58 @@
         </q-item-label>
       </q-item>
 
-    <div class="q-ma-sm q-pa-sm">
-      <div class="row">
-        <div class="col-4">
-          <q-avatar square size="150px">
-            <QRCode v-if="uri" :uri="uri" :image="image"/>
-          </q-avatar>
-        </div>
-        <div class="col-8 q-pt-sm">
-          <div class="row">
-            <div class="col-12 q-pl-sm">
-              <div class="row">
-              <div class="col-12 heading-2">
-                {{ title }}
-              </div>
-              <div class="col-12 sub-heading-2 q-my-sm">
-                This will open in your preferred SSB app, where you'll set up your alias like sarah@{{ activeRoom?.name }}
-              </div>
-              <a class="accent-text q-my-sm" href="https://scuttlebutt.nz">
-                What's an SSB app?
-              </a>
+      <q-item v-if="mobile" :class="sectionClass" class="q-py-md">
+        <a class="accent2" :href="uri">
+          {{ title }}
+        </a>
+      </q-item>
+      <div v-else class="q-ma-sm q-pa-sm">
+        <div class="row">
+          <div class="col-4">
+            <q-avatar square size="150px">
+              <QRCode v-if="uri" :uri="uri" :image="image"/>
+            </q-avatar>
+          </div>
+          <div class="col-8 q-pt-sm">
+            <div class="row">
+              <div class="col-12 q-pl-sm">
+                <div class="row">
+                <div class="col-12 heading-2">
+                  Scan to {{ title }}
+                </div>
+                <div class="col-12 sub-heading-2 q-my-sm">
+                  This will open in your preferred SSB app, where you'll set up your alias like sarah@{{ activeRoom?.name }}
+                </div>
+                <a class="accent-text q-my-sm" href="https://scuttlebutt.nz">
+                  What's an SSB app?
+                </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <q-item class="section-background q-ma-md q-pa-md">
-      <q-item-section avatar>
-        <a class="accent" @click.prevent="copy">
-          {{ copied ? 'COPIED' : 'COPY URL' }}
-          <q-icon v-if="copied" size="12px" name="done" />
-        </a>
-      </q-item-section>
-      <q-item-section>
-        <q-item-label class="sub-heading-2 text-overflow">{{ uri }}</q-item-label>
-      </q-item-section>
-      <!-- <q-item-se -->
-    </q-item>
+      <q-item :class="sectionClass" class="q-pa-sm">
+        <q-item-section avatar>
+          <a class="accent" @click.prevent="copy">
+            {{ copied ? 'COPIED' : 'COPY URL' }}
+            <q-icon v-if="copied" size="12px" name="done" />
+          </a>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="sub-heading-2 text-overflow">{{ uri }}</q-item-label>
+        </q-item-section>
+      </q-item>
 
-    <q-item class="q-ma-sm q-pa-sm">
-      <q-item-label class="heading-2">
-        Not on SSB yet? Download an app!
-      </q-item-label>
-    </q-item>
-      <!-- TODO:  copy URL-->
+      <q-item class="q-ma-sm q-pa-sm">
+        <q-item-label class="heading-2">
+          Not on SSB yet? Download an app!
+        </q-item-label>
+      </q-item>
+        <!-- TODO:  copy URL-->
 
-      <div class="section-background q-ma-md q-pa-md">
+      <div :class="sectionClass">
         <div class="row">
           <div class="col-2">
             <q-avatar square size="60px">
@@ -90,7 +100,7 @@
       </div>
 
 
-      <div class="section-background q-ma-md q-pa-md q-mt-lg q-pa-none-sm q-ma-none-sm">
+      <div :class="sectionClass">
         <div class="row">
           <div class="col-2">
             <q-avatar square size="60px">
@@ -164,7 +174,22 @@ export default {
     }
   },
   computed: {
-    ...mapState(useRoomStore, ['activeRoom'])
+    ...mapState(useRoomStore, ['activeRoom']),
+    mobile () {
+      return this.$q.screen.xs || this.$q.screen.sm
+    },
+    sectionClass () {
+      return {
+        'section-background': true,
+        'q-pa-none-sm': true,
+        'q-ma-none-sm': true,
+        'q-ma-md': !this.mobile,
+        'q-pa-md': !this.mobile,
+        'q-ma-xs': this.mobile,
+        'q-pa-xs': this.mobile,
+        'q-mt-lg': true
+      }
+    }
   },
   methods: {
     copy () {
@@ -270,6 +295,7 @@ color: #FFFFFF;
   cursor: pointer;
 
 
+
   /* Accent */
   background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -286,6 +312,33 @@ color: #FFFFFF;
 
   /* Primary--dark */
   color: #FFFFFF;
+}
+
+.accent2 {
+  /* background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  text-decoration: none; */
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: none;
+
+
+  /* Accent */
+  background: linear-gradient(90deg, #F08508 0%, #F43F75 100%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+
+  /* Bio */
+
+  /* font-family: 'SF Pro Text'; */
+  /* font-style: normal; */
+  font-weight: 600;
+  /* font-size: 20px; */
+  /* line-height: 120%; */
+  color: #FFFFFF;
+  display: block;
+  margin: auto;
 }
 
 .accent-text {

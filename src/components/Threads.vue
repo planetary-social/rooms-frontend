@@ -1,5 +1,5 @@
 <template>
-  <div class="q-ma-md">
+  <div>
     <div v-for="thread in threads" :key="thread.id">
       <thread :thread="thread"/>
     </div>
