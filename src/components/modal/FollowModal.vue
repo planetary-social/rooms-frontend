@@ -59,7 +59,7 @@
           </a>
         </q-item-section>
         <q-item-section>
-          <q-item-label class="sub-heading-2 text-overflow">{{ uri }}</q-item-label>
+          <q-item-label class="sub-heading-2 scrollContainer" lines="1">{{ uri }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -364,6 +364,21 @@ color: #FFFFFF;
   background: #2B1D44 !important;
   box-shadow: 0px 1px 0px #402B65, inset 0px 1px 0px #201633 !important;
   border-radius: 15px !important;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+  
+  /* overflow-x: auto; */
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollContainer {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  /* overflow: scroll; */
+  overflow-x: auto;
+  text-overflow: clip;
 }
 
 </style>
