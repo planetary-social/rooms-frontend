@@ -48,9 +48,14 @@
           return
         }
 
+        
+
         // firstly load the minimal profile by either the feedId or alias (depending on the route)
-        if (feedId) await this.loadMinimalProfile(feedId)
-        else if (alias && !feedId) {
+        if (feedId) {
+          feedId = this.formatFeedId(feedId)
+
+          await this.loadMinimalProfile(feedId)
+        } else if (alias && !feedId) {
           await this.loadMinimalProfileByAlias(alias)
         }
 
@@ -62,6 +67,16 @@
 
         // load the full profile
         await this.loadProfile(this.activeProfile.id)
+      },
+      formatFeedId (feedId) {
+        // check the feedId doesnt have a / on the end
+        // NOTE: this sometimes happens when someone routes to
+        // /profile/{feedId}/ which results in no profile being loaded
+        if (feedId.endsWith('/')) {
+          feedId = feedId.slice(0, -1)
+        }
+
+        return feedId
       }
     }
   }
