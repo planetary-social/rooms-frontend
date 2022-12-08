@@ -22,7 +22,7 @@
       </q-item-section>
     </q-item>
 
-    <q-scroll-area :style="scrollStyle" content-style="height: 0px;">
+    <div class="scrollContainer" :style="scrollStyle">
       <q-item v-if="profile?.description">
         <q-item-section>
           <q-item-label class="description-text">
@@ -44,7 +44,6 @@
           <q-item-label class="stats" caption>
             followers
           </q-item-label>
-          
         </div>
         <div v-if="profile?.following?.length" class="q-ml-lg" style="cursor: pointer;" @click="openFollowing">
           <q-item-section class="q-ml-sm">
@@ -57,24 +56,24 @@
             following
           </q-item-label>
         </div>
-        <!-- <q-item-section>
-          <q-item-label class="stats-header" caption>
-            N/A
-          </q-item-label>
-          <q-item-label class="stats" caption>
-            ignored by
-          </q-item-label>
-        </q-item-section> -->
-        <!-- <q-item-section>
-          <q-item-label class="stats-header" caption>
-            N/A
-          </q-item-label>
-          <q-item-label class="stats" caption>
-            rooms
-          </q-item-label>
-        </q-item-section> -->
+      <!-- <q-item-section>
+        <q-item-label class="stats-header" caption>
+          N/A
+        </q-item-label>
+        <q-item-label class="stats" caption>
+          ignored by
+        </q-item-label>
+      </q-item-section> -->
+      <!-- <q-item-section>
+        <q-item-label class="stats-header" caption>
+          N/A
+        </q-item-label>
+        <q-item-label class="stats" caption>
+          rooms
+        </q-item-label>
+      </q-item-section> -->
       </div>
-    </q-scroll-area>
+    </div>
     <!-- <q-item class="column">
       <div class="col-12">
         Active On: TODO
@@ -149,7 +148,8 @@ const FOLLOWING = 'following'
       },
       scrollStyle () {
         return {
-          height: `calc(100vh - ${this.mobile ? '0px' : '300px'})`
+          height: this.mobile ? 'auto' : '70vh',
+          overflow: 'auto'
         }
       },
       isFollowModalOpen () {
@@ -314,5 +314,14 @@ const FOLLOWING = 'following'
     height: 120px;
   }
 
+  .scrollContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollContainer {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 
 </style>

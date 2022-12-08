@@ -22,7 +22,7 @@
         </q-item>
       </q-item-section>
     </q-item>
-    <q-scroll-area :style="scrollStyle" content-style="height: 0px;">
+    <div class="scrollContainer" :style="scrollStyle">
       <q-item>
         <q-item-section>
           <q-item-label class="description-text">
@@ -86,7 +86,7 @@
       <q-item class="content-start">
         <AvatarGroup :group="room.members" @click="goProfile" />
       </q-item>
-    </q-scroll-area>
+    </div>
     <ProfileListModal
       v-if="isMembersModal"
     
@@ -155,7 +155,8 @@ const MEMBERS = 'members'
       },
       scrollStyle () {
         return {
-          height: `calc(100vh - ${this.mobile ? '0px' : '300px'})`
+          height: this.mobile ? 'auto' : '70vh',
+          overflow: 'auto'
         }
       },
       defaultRoomAvatar () {
@@ -201,13 +202,14 @@ const MEMBERS = 'members'
     /* border-radius: 20px; */
   }
 
-  .scroll {
-    -ms-overflow-style: none;
-    scrollbar-width: none.
+  .scrollContainer::-webkit-scrollbar {
+    display: none;
   }
 
-  .scroll::-webkit-scrollbar {
-    display: none;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scrollContainer {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 
   .title {
