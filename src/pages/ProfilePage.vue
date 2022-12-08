@@ -60,7 +60,7 @@
         }
 
         if (!this.activeProfile) {
-          alert('Couldnt find the profile')
+          alert('Couldnt load the profile')
           this.$router.push('/')
           return
         }
