@@ -89,7 +89,7 @@ export default {
           // check their is a profile before attempting to load it
           const profile = await this.getMinimalProfile(feedId)
           if (!profile) {
-            alert('Couldnt find the profile mentioned')
+            alert('Couldnt load the profile mentioned')
             return
           }
 

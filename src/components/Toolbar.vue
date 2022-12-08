@@ -1,10 +1,10 @@
 <template>
   <q-header class="header">
     <q-toolbar class="toolbar q-mx-auto">
-      <q-avatar square>
+      <q-avatar square @click.prevent="goHome" class="logo">
         <PlanetaryIcon style="width: 35px; height: 35px;"/>
       </q-avatar>
-      <PlanetaryTextIcon v-if="!mobile"/>
+      <PlanetaryTextIcon v-if="!mobile" @click.prevent="goHome" class="logo"/>
       <q-space/>
   
       <q-btn v-if="!mobile" flat no-caps :ripple="false" class="label" href="https://www.planetary.social/">Planetary.social</q-btn>
@@ -68,6 +68,11 @@ export default {
     ...mapState(useProfileStore, ['activeProfile']),
     mobile () {
       return this.$q.screen.xs || this.$q.screen.sm
+    }
+  },
+  methods: {
+    goHome () {
+      this.$router.push('/')
     }
   }
 }
@@ -144,6 +149,10 @@ export default {
   margin-top: 10px;
 
   // padding: 0;
+}
+
+.logo {
+  cursor: pointer;
 }
 
 </style>
