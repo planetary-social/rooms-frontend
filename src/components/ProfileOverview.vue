@@ -23,10 +23,10 @@
     </q-item>
 
     <div class="scrollContainer" :style="scrollStyle">
-      <q-item v-if="profile?.description">
+      <q-item>
         <q-item-section>
           <q-item-label class="description-text">
-            <Markdown :text="profile?.description"/>
+            <Markdown v-if="profile?.description" :text="profile?.description"/>
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -115,7 +115,7 @@ import ProfileListModal from '@/components/modal/ProfileListModal.vue'
 
 import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 import Markdown from '@/components/Markdown.vue'
-import defaultAvatar from '@/assets/avatar.png'
+import defaultAvatar from '@/assets/avatar.svg'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import { mapState } from 'pinia'
 import { useRoomStore } from '../stores/room'

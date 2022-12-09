@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="thread in threads" :key="thread.id">
+    <div v-for="thread in threads" :key="thread.id" style="margin-bottom: 46px;">
       <thread :thread="thread"/>
     </div>
   </div>

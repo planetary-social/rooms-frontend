@@ -1,41 +1,42 @@
 <template>
-  <q-card :class="cardClasses" dark :flat="flat">
+  <q-card :class="cardClasses" :style="cardStyle" dark :flat="flat">
     <q-item class="card-header">
       <q-item-section avatar @click="goProfile" style="cursor: pointer;">
-        <q-avatar size="30px" class="avatar">
-          <q-img :src="image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain width="30px" height="30px" />
+        <q-avatar size="37.28px" class="avatar">
+          <q-img :src="image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain width="37.28px" height="37.28px" />
         </q-avatar>
       </q-item-section>
 
       <q-item-section no-wrap>
         <q-item-label class="card-header-text">
-          <span class="q-pr-xs" style="cursor: pointer;" @click="goProfile">{{ author?.name || 'Hidden User' }}</span>
-          <span class="comment-action">{{ action }}</span>
+          <span class="q-pr-xs" style="cursor: pointer;" @click="goProfile">{{ author?.name || randomFeedId() }}</span>
+          <span class="comment-action">{{ action }} {{ isHiddenContent ? 'posted (hidden)' : '' }}</span>
         </q-item-label>
-        <q-item-label class="light-text" style="left: -10px;" caption>
+        <!-- <q-item-label class="light-text" style="left: -10px;" caption>
           {{ timestamp }}
-        </q-item-label>
+        </q-item-label> -->
       </q-item-section>
 
-      <q-item-section side class="comment-action">
+      <!-- <q-item-section side class="comment-action">
         <q-icon size="40px" name="more_horiz" />
-      </q-item-section>
+      </q-item-section> -->
     </q-item>
 
     <q-separator class="top-divider" />
 
-    <q-card-section v-if="isHiddenContent" class="light-text text-center">
-      The contents of this message <br/>
-      are hidden from you
+    <q-card-section v-if="isHiddenContent" class="light-text text-center hidden-text">
+      This message is hidden because the <br/>
+      user's profile and information are private
     </q-card-section>
-    <q-card-section v-else-if="comment?.text" class="text q-py-none">
-      <Markdown :text="comment.text"/>
+    <q-card-section v-else-if="comment?.text" class="text q-py-none" :class="{ 'comment-action': preview, 'light-text': !preview }">
+      <Markdown :text="comment.text" :preview="preview"/>
     </q-card-section>
 
-    <q-separator v-if="!flat && reactions?.length" class="bottom-divider" />
 
-    <q-card-section v-if="reactions?.length" :class="{ 'q-py-none': flat }">
-      <Reactions :reactions="reactions"/>
+    <q-separator v-if="!preview && !flat" class="bottom-divider"/>
+
+    <q-card-section :class="{ 'q-py-none': flat }" style="height: 77.67px;">
+      <Reactions  v-if="!preview && reactions?.length" :reactions="reactions"/>
     </q-card-section>
   </q-card>
 </template>
@@ -43,13 +44,14 @@
 
 
 <script>
+import ref from 'ssb-ref'
 import { mapState, mapActions } from 'pinia'
 
 import Markdown from './Markdown.vue'
 import Reactions from './Reactions.vue'
 import { useProfileStore } from '@/stores/profile'
 
-import defaultAvatar from '@/assets/avatar.png'
+import defaultAvatar from '@/assets/avatar.svg'
 
   export default {
     name: "Comment",
@@ -60,10 +62,17 @@ import defaultAvatar from '@/assets/avatar.png'
     props: {
         comment: Object,
         flat: Boolean,
-        action: String
+        action: String,
+        width: String,
+        preview: Boolean,
+        height: String,
+        topShadow: Boolean
     },
     computed: {
         ...mapState(useProfileStore, ['activeProfile']),
+        linesLimit () {
+          return this.preview ? 2 : null
+        },
         cardClasses () {
           return {
             'q-ma-md': !this.flat,
@@ -71,11 +80,23 @@ import defaultAvatar from '@/assets/avatar.png'
             'flat-comment-card': this.flat
           }
         },
+        cardStyle () {
+          return {
+            width: this.width,
+            height: this.height,
+            margin: 'auto',
+            background: '#3D2961',
+            'box-shadow': this.topShadow ? '0px -20px 30px -15px #2C1D45' : null,
+            '-webkit-box-shadow': this.topShadow ? '0px -20px 30px -15px #2C1D45' : null
+            // 'box-shadow': '0px 6.21326px 0px #2C1D45, 0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25)',
+            // 'border-radius': '31.0663px'
+          }
+        },
         reactions () {
           return this.comment?.votes
         },
         isHiddenContent() {
-          return this.comment.id === null
+          return this.comment?.id === null
         },
         showBottomSection () {
           return this.comment?.votes?.length
@@ -123,6 +144,14 @@ import defaultAvatar from '@/assets/avatar.png'
         
         // go to their profile
         this.$router.push({ name: 'profile', params: { feedId: this.author.id }})
+      },
+      randomFeedId () {
+        var randomChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
+        var result = '';
+        for ( var i = 0; i < 8; i++ ) {
+            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+        }
+        return '@' + result
       }
     }
     
@@ -154,27 +183,38 @@ import defaultAvatar from '@/assets/avatar.png'
 
     background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.07) 100%);
     background-blend-mode: overlay;
+    background: #3D2961;
   }
 
   .card-header-text {
-    height: 16px;
+    // height: 16px;
     left: -10px;
 
     font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
-    line-height: 120%;
-    letter-spacing: -0.1px;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.15533140301704407px;
+    text-align: left;
 
     color: #FFFFFF;
   }
 
   .comment-card {
-    /* Cell--dark */
-    background: linear-gradient(180deg, #3D2961 0%, #332251 60.72%);
-    box-shadow: 0px 4px 0px #2C1D45, 0px 4px 10px rgba(0, 0, 0, 0.25);
-    border-radius: 20px;
+    box-shadow:
+      0px 6.21326px 0px #2C1D45,
+      0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+
+    -webkit-box-shadow:
+      0px 6.21326px 0px #2C1D45,
+      0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+
+    border-radius: 31.0663px;
+
+
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.07) 100%);
+    background-blend-mode: overlay;
   }
 
   // background styling in parent component
@@ -191,20 +231,32 @@ import defaultAvatar from '@/assets/avatar.png'
   .top-divider {
     height: 0px;
 
-    border: 0.5px solid #271A3D;
-    box-shadow: 0px 2px 0px #4A3275;
+    border: 0.97px solid #271A3D;
+    background-color: #271A3D;
+    box-shadow: 0px 1.55331px 0px #4A3275;
+    -webkit-box-shadow: 0px 1.55331px 0px #4A3275;
+    // color: white;
   }
 
   .bottom-divider {
     height: 0px;
 
-    border: 0.5px solid #201633;
-    box-shadow: 0px 2px 0px #402B65;
-
+    border: 0.97px solid #271A3D;
+    background-color: #271A3D;
+    box-shadow: 0px 1.55331px 0px #4A3275;
+    -webkit-box-shadow: 0px 1.55331px 0px #4A3275;
   }
 
   .avatar {
-    width: 30px;
-    height: 30px;
+    width: 37.28px;
+    height: 37.28px;
+  }
+
+  .hidden-text {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 31px;
+    letter-spacing: 0px;
+    font-family: 'SF Pro Text';
   }
 </style>

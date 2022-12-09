@@ -1,29 +1,37 @@
 <template>
-  <q-card class="thread-card q-my-md" dark :style="cardStyle">
+  <div class="q-my-md">
     <!-- the root message in the thread -->
-    <comment :comment="rootMessage" flat action="posted" />
+
+    <!--
+      If the author of the rootMessage is not the author,
+      then we display it differently and display the first message
+      from the activeProfile (if there is one...) or the first message from a member
+    -->
+    <comment :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember" />
+    <comment v-if="(!isFromMember)" :comment="latestMemberMessage" action="replied" :style="{'margin-top': '-18px' }" top-shadow/>
     
   
     <!-- comments on the thread -->
-    <q-card-section class="q-px-none">
+    <!-- <q-card-section class="q-px-none">
       <comment
         v-for="comment in viewableComments"
         :key="comment.id"
         :comment="comment"
         action="replied"
       />
-    </q-card-section>
+    </q-card-section> -->
     
     <!-- TODO: how to display hidden comments -->
-    <q-card-section v-if="hiddenComments.length"  class="light-text text-center">
+    <!-- <q-card-section v-if="hiddenComments.length"  class="light-text text-center">
       {{ hiddenComments?.length }} hidden replies
-    </q-card-section>
-  </q-card>
+    </q-card-section> -->
+  </div>
 </template>
 <script>
   import Comment from '@/components/Comment.vue'
   import { mapState } from 'pinia'
   import { useProfileStore } from '@/stores/profile'
+import { useRoomStore } from '../stores/room'
 
   export default {
     props: {
@@ -34,27 +42,52 @@
     },
     computed: { 
       ...mapState(useProfileStore, ['activeProfile']),
+      ...mapState(useRoomStore, ['activeRoom']),
       cardStyle () {
         return {
-          width: this.$q?.screen?.xs
-            ? `${this.$q?.screen.width-25}px`
-            : '535.89px'
+          // width: this.$q?.screen?.xs
+          //   ? `${this.$q?.screen.width-25}px`
+          //   : this.isFromMember ? '535.89px' : '481.8px',
+          // margin: 'auto'
         }
+      },
+      mobile () {
+        return this.$q?.screen?.xs || this.$q?.screen.sm
+      },
+      rootMessageWidth () {
+        return this.mobile
+          ? `${this.$q?.screen.width-(this.isFromMember ? 25 : 60)}px`
+          : this.isFromMember ? '535.89px' : '481.8px'
+      },
+      rootMessageHeight () {
+        if (this.isFromMember) return
+
+        return '175px'
       },
       rootMessage () {
         return this.thread?.messages[0]
       },
-      startedThread () {
-        return this.rootMessage.author
-      },
-      shownMessage () {
-        // if there is an author for the first message
-        // i.e. we can see it
-        if (this.rootMessage.author) return this.rootMessage
+      // the first reply from the activeProfile or a member
+      latestMemberMessage () {
+        if (this.isFromMember) return
 
-        return this.thread?.messages.find(comment => {
-            return comment?.author?.id === this.activeProfile?.id
+        if (this.$route.name === 'profile') {
+          return this.thread?.messages.find(message => message?.author?.id === this.activeProfile?.id)
+        }
+
+        const reverted = [...this.thread?.messages].reverse();
+
+        return reverted.find(message => {
+          return this.activeRoom?.members.find(member => {
+            return member?.id && member?.id === message?.author?.id
           })
+        })
+      },
+      isFromMember () {
+        if (!this.rootMessage?.author?.id) return false
+        if (this.activeProfile) return this.rootMessage?.author?.id === this.activeProfile?.id
+
+        return this.activeRoom?.members?.some(member => member?.id === this.rootMessage?.author?.id)
       },
       // the are all of the messages in the thread, except for the first one
       viewableComments () {

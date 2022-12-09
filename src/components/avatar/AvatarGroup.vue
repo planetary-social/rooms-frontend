@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import defaultAvatar from '@/assets/avatar.png'
+  import defaultAvatar from '@/assets/avatar.svg'
 
   export default {
     name: 'AvatarGroup',

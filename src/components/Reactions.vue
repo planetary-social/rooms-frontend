@@ -18,12 +18,19 @@ export default {
   computed: {
     groupedReactions () {
       return Object.entries(
-        groupBy(this.reactions, 'expression')
+        groupBy(
+          this.reactions
+            .map(reaction => {
+              var r = Object.assign({}, reaction)
+              if (r.expression === 'Like') r.expression = '💜'
+              return r
+            }),
+            'expression'
+          )
       )
         .map(([expression, reactions]) => {
           // TODO: fix this in the backend... why is the expression null?
           if (expression === null || expression === 'null') return null
-          if (expression === 'Like') expression = '💜'
 
           return {
             expression,
