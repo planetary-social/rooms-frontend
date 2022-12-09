@@ -215,7 +215,7 @@ const MEMBERS = 'members'
   .title {
     /* Name */
 
-    /* font-family: 'SF Pro Text'; */
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 600;
     font-size: 30px;
@@ -226,7 +226,7 @@ const MEMBERS = 'members'
   }
 
   .description-text {
-    /* font-family: 'SF Pro Text'; */
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -239,7 +239,7 @@ const MEMBERS = 'members'
   }
 
   .subtext {
-    /* font-family: SF Pro Text; */
+    font-family: 'SF Pro Text';
     font-size: 20px;
     font-weight: 400;
     line-height: 20px;
@@ -248,7 +248,7 @@ const MEMBERS = 'members'
   }
 
   .stats-header {
-    /* font-family: SF Pro Text; */
+    font-family: 'SF Pro Text';
     font-size: 39px;
     font-weight: 400;
     line-height: 62px;
@@ -258,7 +258,7 @@ const MEMBERS = 'members'
   }
 
   .stats {
-    /* font-family: SF Pro Text; */
+    font-family: 'SF Pro Text';
     font-size: 18px;
     font-weight: 400;
     line-height: 29px;
@@ -278,7 +278,7 @@ const MEMBERS = 'members'
   .button-text {
     height: 23px;
 
-    /* font-family: 'SF Pro Text'; */
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 500;
     font-size: 19.3243px;
@@ -319,7 +319,7 @@ const MEMBERS = 'members'
 
     height: 24px;
 
-    /* font-family: 'SF Pro Text'; */
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 500;
     font-size: 20px;
