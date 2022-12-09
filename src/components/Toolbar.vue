@@ -96,7 +96,7 @@ export default {
 
 
 .label {
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -110,7 +110,7 @@ export default {
 }
 
 .menu-item {
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;

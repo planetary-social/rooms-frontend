@@ -215,7 +215,7 @@ const FOLLOWING = 'following'
   .title {
     /* Name */
 
-    /* font-family: 'SF Pro Text'; */
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 600;
     font-size: 30px;
@@ -226,7 +226,7 @@ const FOLLOWING = 'following'
   }
 
   .description-text {
-    /* font-family: 'SF Pro Text'; */
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -241,7 +241,7 @@ const FOLLOWING = 'following'
   .button-text {
     height: 23px;
 
-    /* font-family: 'SF Pro Text'; */
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 500;
     font-size: 19.3243px;
@@ -253,7 +253,7 @@ const FOLLOWING = 'following'
   }
   
   .subtext {
-    /* font-family: SF Pro Text; */
+    font-family: 'SF Pro Text';
     font-size: 20px;
     font-weight: 400;
     line-height: 20px;
@@ -262,7 +262,7 @@ const FOLLOWING = 'following'
   }
 
   .stats-header {
-    /* font-family: SF Pro Text; */
+    font-family: 'SF Pro Text';
     font-size: 39px;
     font-weight: 400;
     line-height: 62px;
@@ -272,7 +272,7 @@ const FOLLOWING = 'following'
   }
 
   .stats {
-    /* font-family: SF Pro Text; */
+    font-family: 'SF Pro Text';
     font-size: 18px;
     font-weight: 400;
     line-height: 29px;

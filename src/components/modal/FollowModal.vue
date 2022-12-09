@@ -218,7 +218,7 @@ export default {
 }
 
 .heading {
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 600;
   font-size: 30px;
@@ -229,7 +229,7 @@ export default {
 }
 
 .heading-2 {
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 600;
   font-size: 26px;
@@ -248,7 +248,7 @@ export default {
 }
 
 .sub-heading {
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -261,7 +261,7 @@ export default {
 }
 
 .sub-heading-2 {
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -274,16 +274,16 @@ export default {
 }
 
 .text {
-/* font-family: 'SF Pro Text'; */
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 120%;
-/* identical to box height, or 17px */
-letter-spacing: -0.174603px;
+  font-family: 'SF Pro Text';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 120%;
+  /* identical to box height, or 17px */
+  letter-spacing: -0.174603px;
 
-/* Primary--dark */
-color: #FFFFFF;
+  /* Primary--dark */
+  color: #FFFFFF;
 }
 
 .accent {
@@ -303,7 +303,7 @@ color: #FFFFFF;
 
   /* Bio */
 
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 600;
   font-size: 9px;
@@ -331,7 +331,7 @@ color: #FFFFFF;
 
   /* Bio */
 
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   /* font-style: normal; */
   font-weight: 600;
   /* font-size: 20px; */
@@ -343,7 +343,7 @@ color: #FFFFFF;
 
 .accent-text {
   /* Bio */
-  /* font-family: 'SF Pro Text'; */
+  font-family: 'SF Pro Text';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;

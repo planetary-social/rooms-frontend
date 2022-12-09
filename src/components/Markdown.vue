@@ -119,7 +119,7 @@ export default {
     overflow: hidden;
 
     h1, h2, h3, h4, h5, h6 {
-        font-family: sans-serif;
+        font-family: 'SF Pro Text';
         font-weight: 400;
         line-height: 2rem;
     }
@@ -146,6 +146,7 @@ export default {
         color: $pText;
         word-wrap: break-word;
         overflow: hidden;
+        font-family: 'SF Pro Text';
 
         img {
             // margin: 0.5rem 0;
@@ -199,7 +200,7 @@ export default {
         &::before {
             content: '“';
             color: #D64082;
-            font-family: serif;
+            font-family: 'SF Pro Text';
             font-size: 3rem;
             position: absolute;
             top: 1rem;

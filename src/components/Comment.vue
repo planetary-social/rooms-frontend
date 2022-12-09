@@ -138,7 +138,7 @@ import defaultAvatar from '@/assets/avatar.png'
 
   .text {
     /* Post text */
-    // font-family: 'SF Pro Text';
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -160,7 +160,7 @@ import defaultAvatar from '@/assets/avatar.png'
     height: 16px;
     left: -10px;
 
-    // font-family: 'SF Pro Text';
+    font-family: 'SF Pro Text';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
