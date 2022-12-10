@@ -34,6 +34,12 @@ npm run build:production
 - To add to the `go-ssb-room` repo:
   - Copy the `index.html` and all `assets` from the `dist/` folder to `go-ssb-room/web/assets`
 
+### Building a Docker image
+
+Another option for prepping for production is to build a new docker image, then push this to your docker repository.
+There is a minimal Dockerfile in this repo to help.  At the moment, the flow is to build the app first, and then
+run the docker build to create an image with your static compiled files served up from an nginx container.
+
 ### Staging
 
 ```sh
