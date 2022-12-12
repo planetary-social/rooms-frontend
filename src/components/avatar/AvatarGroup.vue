@@ -1,5 +1,5 @@
 <template>
-  <div :class="overlapping ? 'container' : ''" :style="`width: ${overlapping ? '57px' : ''}`">
+  <div :class="overlapping && !noBackground ? 'container' : ''" :style="`width: ${overlappingWidth}`">
     <q-avatar
       v-for="(profile, i) in profiles" :key="profile?.id" 
       @click.stop="$emit('click', profile)"
@@ -25,13 +25,20 @@
         type: Number,
         default: 60
       },
-      limit: Number
+      limit: Number,
+      noBackground: Boolean
     },
     computed: {
       profiles () {
-        if (!this.limit) return this.group
+        if (!this.updatedLimit) return this.group
 
-        return this.group?.slice(0, this.limit)
+        return this.group?.slice(0, this.updatedLimit)
+      },
+      overlappingWidth () {
+        if (!this.overlapping) return
+        if (this.group?.length === 1) return '30px'
+
+        return '57px'
       },
       avatarSize () {
         return {
@@ -48,6 +55,9 @@
       },
       defaultAvatar () {
         return defaultAvatar
+      },
+      updatedLimit () {
+        return (this.limit && this.limit > this.group?.length) ? this.group?.length : this.limit
       }
     },
     methods: {

@@ -10,7 +10,7 @@
       <q-item-section no-wrap>
         <q-item-label class="card-header-text">
           <span class="q-pr-xs" style="cursor: pointer;" @click="goProfile">{{ author?.name || randomFeedId() }}</span>
-          <span class="comment-action">{{ action }} {{ isHiddenContent ? 'posted (hidden)' : '' }}</span>
+          <span class="comment-action">{{ action }} {{ isHiddenContent ? 'posted' : '' }}</span>
         </q-item-label>
         <!-- <q-item-label class="light-text" style="left: -10px;" caption>
           {{ timestamp }}
@@ -25,8 +25,13 @@
     <q-separator class="top-divider" />
 
     <q-card-section v-if="isHiddenContent" class="light-text text-center hidden-text">
-      This message is hidden because the <br/>
-      user's profile and information are private
+      <span v-if="mobile">
+        This message is hidden...
+      </span>
+      <span v-else>
+        This message is hidden because the <br/>
+        user's profile and information are private
+      </span>
     </q-card-section>
     <q-card-section v-else-if="comment?.text" class="text q-py-none" :class="{ 'comment-action': preview, 'light-text': !preview }">
       <Markdown :text="comment.text" :preview="preview"/>
@@ -35,8 +40,16 @@
 
     <q-separator v-if="!preview && !flat" class="bottom-divider"/>
 
-    <q-card-section :class="{ 'q-py-none': flat }" style="height: 77.67px;">
+    <q-card-section v-if="!preview" :class="{ 'q-py-none': flat }" :style="`height: ${comments?.length ? '' : '77.67px'}; margin-left: 7px;`">
       <Reactions  v-if="!preview && reactions?.length" :reactions="reactions"/>
+    </q-card-section>
+  
+    <q-card-section v-if="(!preview && comments?.length)" class="q-pt-none">
+      <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;">
+        <AvatarGroup v-if="commenters?.length" :group="commenters" :limit="2" overlapping :size="20" no-background />
+        <span class="q-pr-xs">{{ comments?.length }}</span>
+        <span class="comment-action" style="padding-left:5px;">{{ comments.length === 1 ? 'reply' : 'replies' }}</span>
+      </span>
     </q-card-section>
   </q-card>
 </template>
@@ -44,11 +57,12 @@
 
 
 <script>
-import ref from 'ssb-ref'
+import uniqBy from 'lodash.uniqby'
 import { mapState, mapActions } from 'pinia'
 
 import Markdown from './Markdown.vue'
 import Reactions from './Reactions.vue'
+import AvatarGroup from './avatar/AvatarGroup.vue'
 import { useProfileStore } from '@/stores/profile'
 
 import defaultAvatar from '@/assets/avatar.svg'
@@ -57,7 +71,8 @@ import defaultAvatar from '@/assets/avatar.svg'
     name: "Comment",
     components: {
       Markdown,
-      Reactions
+      Reactions,
+      AvatarGroup
     },
     props: {
         comment: Object,
@@ -66,10 +81,14 @@ import defaultAvatar from '@/assets/avatar.svg'
         width: String,
         preview: Boolean,
         height: String,
-        topShadow: Boolean
+        topShadow: Boolean,
+        comments: Array
     },
     computed: {
         ...mapState(useProfileStore, ['activeProfile']),
+        mobile () {
+          return this.$q?.screen.xs || this.$q?.screen.sm
+        },
         linesLimit () {
           return this.preview ? 2 : null
         },
@@ -91,6 +110,10 @@ import defaultAvatar from '@/assets/avatar.svg'
             // 'box-shadow': '0px 6.21326px 0px #2C1D45, 0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25)',
             // 'border-radius': '31.0663px'
           }
+        },
+        commenters () {
+          return uniqBy(this.comments?.map(message => message?.author), 'id')
+            .filter(Boolean)
         },
         reactions () {
           return this.comment?.votes

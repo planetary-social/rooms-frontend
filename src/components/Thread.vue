@@ -7,7 +7,7 @@
       then we display it differently and display the first message
       from the activeProfile (if there is one...) or the first message from a member
     -->
-    <comment :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember" />
+    <comment :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember" :comments="comments"/>
     <comment v-if="(!isFromMember)" :comment="latestMemberMessage" action="replied" :style="{'margin-top': '-18px' }" top-shadow/>
     
   
@@ -18,6 +18,7 @@
         :key="comment.id"
         :comment="comment"
         action="replied"
+        class="q-py-md"
       />
     </q-card-section> -->
     
@@ -89,13 +90,22 @@ import { useRoomStore } from '../stores/room'
 
         return this.activeRoom?.members?.some(member => member?.id === this.rootMessage?.author?.id)
       },
+      comments () {
+        // remove the root message
+        return this.thread?.messages?.slice(1)
+          .filter(message => {
+            if (!this.latestMemberMessage) return true
+            if (!message?.id) return true 
+            return message?.id === this.latestMemberMessage?.id
+        })
+      },
       // the are all of the messages in the thread, except for the first one
       viewableComments () {
-        return this.thread?.messages?.slice(1)
+        return this.comments
           .filter(comment => comment.author)
       },
       hiddenComments () {
-        return this.thread?.messages?.slice(1)
+        return this.comments
           .filter(comment => !comment.author)
       }
     }
