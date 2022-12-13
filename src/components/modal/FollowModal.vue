@@ -20,15 +20,15 @@
       </q-item>
 
       <q-item v-if="mobile" :class="sectionClass" class="q-py-md">
-        <a class="accent2" :href="uri">
+        <a class="accent2" :href="backupBtnLink">
           {{ title }}
         </a>
       </q-item>
       <div v-else class="q-ma-sm q-pa-sm">
         <div class="row">
           <div class="col-4">
-            <q-avatar square size="150px">
-              <QRCode v-if="uri" :uri="uri" :image="image"/>
+            <q-avatar square size="160px">
+              <QRCode v-if="httpInviteLink" :uri="httpInviteLink" :image="image"/>
             </q-avatar>
           </div>
           <div class="col-8 q-pt-sm">
@@ -59,7 +59,7 @@
           </a>
         </q-item-section>
         <q-item-section>
-          <q-item-label class="sub-heading-2 scrollContainer" lines="1">{{ uri }}</q-item-label>
+          <q-item-label class="sub-heading-2 scrollContainer" lines="1">{{ httpInviteLink }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -156,7 +156,8 @@ export default {
   props: {
     open: Boolean,
     title: String,
-    uri: String,
+    httpInviteLink: String,
+    backupBtnLink: String,
     image: String
   },
   components: {
@@ -193,7 +194,7 @@ export default {
   },
   methods: {
     copy () {
-      copyToClipboard(this.uri)
+      copyToClipboard(this.httpInviteLink)
         .then(() => {
           this.copied = true
         })

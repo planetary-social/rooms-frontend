@@ -14,7 +14,7 @@
           <!-- <span>dev</span>
           <span style="color: #8575A3;">@{{ room?.name }}</span>
         </q-item-label> -->
-        <q-item class="q-px-none" v-if="room?.inviteCode">
+        <q-item class="q-px-none" v-if="httpInviteLink">
           <a class="accent q-pa-sm q-px-md" @click.prevent="openJoinModal">
             <PersonAddIcon/>
             <span class="button-text">Join in app</span>
@@ -99,7 +99,9 @@
     <JoinRoomModal
       v-if="isJoinModal"
       
-      :uri="room?.inviteCode" 
+      :httpInviteLink="httpInviteLink"
+      :backupBtnLink="backupBtnLink"
+
       :open="isJoinModal"
       title="join this room"
       @close="closeModal"
@@ -113,6 +115,7 @@
 import { mapActions } from 'pinia'
 
 import { useProfileStore } from '@/stores/profile'
+import { useRoomStore } from '@/stores/room'
 
 import ProfileListModal from '@/components/modal/ProfileListModal.vue'
 import Markdown from '@/components/Markdown.vue'
@@ -139,8 +142,12 @@ const MEMBERS = 'members'
     },
     data () {
       return {
-        modal: null
+        modal: null,
+        httpInviteLink: null
       }
+    },
+    async mounted () {
+      this.httpInviteLink = await this.getInviteCode()
     },
     computed: {
       mobile () {
@@ -170,11 +177,33 @@ const MEMBERS = 'members'
       },
       isMembersModal () {
         return this.modal === MEMBERS
+      },
+      token () {
+        if (!this.httpInviteLink) return
+
+        // get the token from the invite code
+        const url = new URL(this.httpInviteLink)
+        const searchParams = url.searchParams
+
+        return searchParams.get('token')
+      },
+      backupBtnLink () {
+        if (!this.token) return
+  
+        const url = new URL('ssb:experimental')
+        const searchParams = url.searchParams
+
+        searchParams.set('action', 'claim-http-invite')
+        searchParams.set('invite', this.token)
+        searchParams.set('postTo', this.room?.url + '/invite/consume')
+
+        return url.href
       }
     },
 
     methods: {
       ...mapActions(useProfileStore, ['setActiveProfile']),
+      ...mapActions(useRoomStore, ['getInviteCode']),
       goProfile (member) {
         window.scrollTo(0, 0)
         this.setActiveProfile(member)
