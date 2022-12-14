@@ -22,8 +22,10 @@
   font-weight: normal;
 }
 
+html { height: 100%; overflow:auto; }
+
 body {
-  min-height: 100vh;
+  height: 100%;
   /* color: var(--color-text); */
   background: var(--color-background);
   line-height: 1.6;

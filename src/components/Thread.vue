@@ -1,5 +1,5 @@
 <template>
-  <div class="q-my-md">
+  <div class="q-my-md" :class="{ 'thread-card': showComments }">
     <!-- the root message in the thread -->
 
     <!--
@@ -7,25 +7,33 @@
       then we display it differently and display the first message
       from the activeProfile (if there is one...) or the first message from a member
     -->
-    <comment :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember" :comments="comments"/>
-    <comment v-if="(!isFromMember)" :comment="latestMemberMessage" action="replied" :style="{'margin-top': '-18px' }" top-shadow/>
+    <comment :flat="showComments" :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember" :comments="comments" @open="$emit('open')"/>
+    <comment v-if="(!isFromMember)" :comment="latestMemberMessage" action="replied" :style="{'margin-top': '-18px' }" top-shadow @open="$emit('open')"/>
     
   
     <!-- comments on the thread -->
-    <!-- <q-card-section class="q-px-none">
+    <q-card-section class="q-px-none" v-if="showComments" style="background: #2B1D44;">
       <comment
         v-for="comment in viewableComments"
         :key="comment.id"
         :comment="comment"
         action="replied"
         class="q-py-md"
+        margin-top="20px"
+        :width="commentsWidth"
       />
-    </q-card-section> -->
+    </q-card-section>
     
-    <!-- TODO: how to display hidden comments -->
-    <!-- <q-card-section v-if="hiddenComments.length"  class="light-text text-center">
-      {{ hiddenComments?.length }} hidden replies
-    </q-card-section> -->
+    <q-card-section v-if="showComments && hiddenComments.length" style="background: #2B1D44;">
+      <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;" @click="$emit('open')">
+        <span class="q-pr-xs">{{ hiddenComments?.length }}</span>
+        <span class="comment-action" style="padding-left:5px;">hidden {{ comments.length === 1 ? 'reply' : 'replies' }}</span>
+      </span>
+    </q-card-section>
+
+    <q-card-section>
+      
+    </q-card-section>
   </div>
 </template>
 <script>
@@ -36,7 +44,8 @@ import { useRoomStore } from '../stores/room'
 
   export default {
     props: {
-      thread: Object
+      thread: Object,
+      showComments: Boolean
     },
     components: {
       Comment
@@ -59,6 +68,11 @@ import { useRoomStore } from '../stores/room'
         return this.mobile
           ? `${this.$q?.screen.width-(this.isFromMember ? 25 : 60)}px`
           : this.isFromMember ? '535.89px' : '481.8px'
+      },
+      commentsWidth () {
+        return this.mobile
+          ? `${this.$q?.screen.width-60}px`
+          : '481.8px'
       },
       rootMessageHeight () {
         if (this.isFromMember) return
@@ -126,4 +140,40 @@ import { useRoomStore } from '../stores/room'
   .light-text {
     color: $lightText;
   }
+
+  // .comment-card {
+  //   box-shadow:
+  //     0px 6.21326px 0px #2C1D45,
+  //     0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+
+  //   -webkit-box-shadow:
+  //     0px 6.21326px 0px #2C1D45,
+  //     0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+
+  //   border-radius: 31.0663px;
+
+
+  //   background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.07) 100%);
+  //   background-blend-mode: overlay;
+  // }
+
+  .card-header-text {
+    // height: 16px;
+    left: -10px;
+
+    font-family: 'SF Pro Text';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.15533140301704407px;
+    text-align: left;
+
+    color: #FFFFFF;
+  }
+
+  .comment-action {
+    color: #8575A3;
+  }
+
 </style>

@@ -38,14 +38,14 @@
     </q-card-section>
 
 
-    <q-separator v-if="!preview && !flat" class="bottom-divider"/>
+    <q-separator v-if="!preview && !flat && (reactions?.length || comments?.length)" class="bottom-divider"/>
 
-    <q-card-section v-if="!preview" :class="{ 'q-py-none': flat }" :style="`height: ${comments?.length ? '' : '77.67px'}; margin-left: 7px;`">
+    <q-card-section v-if="!preview && reactions?.length" :style="`height: ${comments?.length ? '' : '77.67px'}; margin-left: 7px;`">
       <Reactions  v-if="!preview && reactions?.length" :reactions="reactions"/>
     </q-card-section>
   
-    <q-card-section v-if="(!preview && comments?.length)" class="q-pt-none">
-      <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;">
+    <q-card-section v-if="(!preview && comments?.length)" class="q-pt-none" :style="flat ? flatStyle : null">
+      <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;" @click="$emit('open')">
         <AvatarGroup v-if="commenters?.length" :group="commenters" :limit="2" overlapping :size="20" no-background />
         <span class="q-pr-xs">{{ comments?.length }}</span>
         <span class="comment-action" style="padding-left:5px;">{{ comments.length === 1 ? 'reply' : 'replies' }}</span>
@@ -82,7 +82,8 @@ import defaultAvatar from '@/assets/avatar.svg'
         preview: Boolean,
         height: String,
         topShadow: Boolean,
-        comments: Array
+        comments: Array,
+        marginTop: String
     },
     computed: {
         ...mapState(useProfileStore, ['activeProfile']),
@@ -99,6 +100,12 @@ import defaultAvatar from '@/assets/avatar.svg'
             'flat-comment-card': this.flat
           }
         },
+        flatStyle () {
+          return {
+            background: '#2B1D44',
+            'padding-top': '10px'
+          }
+        },
         cardStyle () {
           return {
             width: this.width,
@@ -106,9 +113,13 @@ import defaultAvatar from '@/assets/avatar.svg'
             margin: 'auto',
             background: '#3D2961',
             'box-shadow': this.topShadow ? '0px -20px 30px -15px #2C1D45' : null,
-            '-webkit-box-shadow': this.topShadow ? '0px -20px 30px -15px #2C1D45' : null
+            '-webkit-box-shadow': this.topShadow ? '0px -20px 30px -15px #2C1D45' : null,
             // 'box-shadow': '0px 6.21326px 0px #2C1D45, 0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25)',
             // 'border-radius': '31.0663px'
+
+            'border-top-left-radius': this.flat ? '25px' : null,
+            'border-top-right-radius': this.flat ? '25px' : null,
+            'margin-top': this.marginTop
           }
         },
         commenters () {
