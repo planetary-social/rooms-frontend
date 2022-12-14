@@ -112,10 +112,16 @@ import defaultAvatar from '@/assets/avatar.svg'
             height: this.height,
             margin: 'auto',
             background: '#3D2961',
-            'box-shadow': this.topShadow ? '0px -20px 30px -15px #2C1D45' : null,
-            '-webkit-box-shadow': this.topShadow ? '0px -20px 30px -15px #2C1D45' : null,
-            // 'box-shadow': '0px 6.21326px 0px #2C1D45, 0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25)',
-            // 'border-radius': '31.0663px'
+            'box-shadow': `
+              ${this.topShadow ? '0px -20px 30px -15px #2C1D45' : null},
+              0px 6.21326px 0px #2C1D45,
+              0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+            `,
+            '-webkit-box-shadow': `
+              ${this.topShadow ? '0px -20px 30px -15px #2C1D45' : null},
+              0px 6.21326px 0px #2C1D45,
+              0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+            `,
 
             'border-top-left-radius': this.flat ? '25px' : null,
             'border-top-right-radius': this.flat ? '25px' : null,
