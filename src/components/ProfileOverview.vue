@@ -98,7 +98,10 @@
       
       :open="isFollowModalOpen"
       title="follow this user"
-      :uri="profile?.ssbURI" 
+
+      :httpInviteLink="profile?.ssbURI"
+      :backupBtnLink="profile?.ssbURI"
+
       :image="profile?.image" 
       
       @close="closeModal"
@@ -184,6 +187,9 @@ const FOLLOWING = 'following'
       },
       image () {
         return this.profile?.image || this.defaultAvatar
+      },
+      httpInviteLink () {
+        return `${this.activeRoom.url}/profile/${this.profile?.id}?follow=true`
       }
     },
     methods: {

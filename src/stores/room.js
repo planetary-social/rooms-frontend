@@ -8,7 +8,7 @@ const GET_MY_ROOM = gql`
       name
       description
       multiaddress
-      inviteCode
+      url
 
       members {
         id
@@ -18,6 +18,12 @@ const GET_MY_ROOM = gql`
         ssbURI
       }
     }
+  }
+`
+
+const GET_ROOM_INVITE_CODE = gql`
+  query {
+    inviteCode: getInviteCode
   }
 `
 
@@ -41,6 +47,15 @@ export const useRoomStore = defineStore({
       this.activeRoom = res.data.room
 
       return this.activeRoom
+    },
+    /**
+     * Fetchs an invite code for them
+     */
+    async getInviteCode () {
+      const res = await apolloClient.query({ query: GET_ROOM_INVITE_CODE })
+      if (res.errors) throw res.errors
+
+      return res.data.inviteCode
     }
   }
 })
