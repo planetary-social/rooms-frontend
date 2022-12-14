@@ -1,5 +1,5 @@
 <template>
-  <div class="q-my-md" :class="{ 'thread-card': showComments }">
+  <div v-if="rootMessage?.author?.id || latestMemberMessage" :class="{ 'thread-card': showComments }">
     <!-- the root message in the thread -->
 
     <!--
@@ -7,8 +7,16 @@
       then we display it differently and display the first message
       from the activeProfile (if there is one...) or the first message from a member
     -->
-    <comment :flat="showComments" :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember" :comments="comments" @open="$emit('open')"/>
-    <comment v-if="(!isFromMember)" :comment="latestMemberMessage" action="replied" :style="{'margin-top': '-18px' }" top-shadow @open="$emit('open')"/>
+    <comment :flat="showComments" :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember && !showComments" :comments="comments" @open="$emit('open')"/>
+    <comment v-if="(!isFromMember && !showComments) && latestMemberMessage" :comment="latestMemberMessage" action="replied" :style="{'margin-top': '-18px' }" top-shadow @open="$emit('open')" />
+
+    <q-card-section v-if="showComments && comments?.length" style="background: #2B1D44;">
+      <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;" @click="$emit('open')">
+        <AvatarGroup v-if="commenters?.length" :group="commenters" :limit="2" overlapping :size="20" no-background />
+        <span class="q-pr-xs">{{ comments?.length }}</span>
+        <span class="comment-action" style="padding-left:5px;">{{ comments.length === 1 ? 'reply' : 'replies' }}</span>
+      </span>
+    </q-card-section>
     
   
     <!-- comments on the thread -->
@@ -27,20 +35,18 @@
     <q-card-section v-if="showComments && hiddenComments.length" style="background: #2B1D44;">
       <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;" @click="$emit('open')">
         <span class="q-pr-xs">{{ hiddenComments?.length }}</span>
-        <span class="comment-action" style="padding-left:5px;">hidden {{ comments.length === 1 ? 'reply' : 'replies' }}</span>
+        <span class="comment-action" style="padding-left:5px;">hidden {{ hiddenComments?.length === 1 ? 'reply' : 'replies' }}</span>
       </span>
     </q-card-section>
-
-    <q-card-section>
-      
-    </q-card-section>
+    <q-card-section style="height: 60px;" v-if="showComments" />
   </div>
 </template>
 <script>
   import Comment from '@/components/Comment.vue'
+  import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
   import { mapState } from 'pinia'
   import { useProfileStore } from '@/stores/profile'
-import { useRoomStore } from '../stores/room'
+  import { useRoomStore } from '../stores/room'
 
   export default {
     props: {
@@ -48,26 +54,26 @@ import { useRoomStore } from '../stores/room'
       showComments: Boolean
     },
     components: {
-      Comment
+      Comment,
+      AvatarGroup
     },
     computed: { 
       ...mapState(useProfileStore, ['activeProfile']),
       ...mapState(useRoomStore, ['activeRoom']),
-      cardStyle () {
-        return {
-          // width: this.$q?.screen?.xs
-          //   ? `${this.$q?.screen.width-25}px`
-          //   : this.isFromMember ? '535.89px' : '481.8px',
-          // margin: 'auto'
-        }
-      },
       mobile () {
         return this.$q?.screen?.xs || this.$q?.screen.sm
       },
       rootMessageWidth () {
-        return this.mobile
-          ? `${this.$q?.screen.width-(this.isFromMember ? 25 : 60)}px`
-          : this.isFromMember ? '535.89px' : '481.8px'
+        const maxWidth = this.isFromMember ? 535.89 : 481.8
+
+        if (this.mobile) {
+          const screenWidth = this.$q.screen.width
+          const maxMobileWidth = screenWidth > maxWidth ? maxWidth : screenWidth
+
+          return `${maxMobileWidth-(this.isFromMember ? 25 : 60)}px`
+        }
+
+        return this.isFromMember || this.showComments ? '535.89px' : '481.8px'
       },
       commentsWidth () {
         return this.mobile
@@ -76,6 +82,7 @@ import { useRoomStore } from '../stores/room'
       },
       rootMessageHeight () {
         if (this.isFromMember) return
+        if (this.showComments) return
 
         return '175px'
       },

@@ -65,15 +65,15 @@ export default {
   .toolbar {
     top: 0px;
     padding-top: 130px;
-    padding-bottom: 70px;
+    padding-bottom: 55px;
     width: 100%;
     margin-left: -50px;
-    background: linear-gradient(180deg, #1A1229 70%, rgba(33, 23, 52, 0) 100%);
+    background: linear-gradient(180deg, #1A1229 70%, rgba(33, 23, 52, 0) 90%);
   }
 
   .mobile-toolbar {
     width: 100%;
     margin-left: -50px;
-    background: linear-gradient(180deg, #1A1229 70%, rgba(33, 23, 52, 0) 100%);
+    background: linear-gradient(180deg, #1A1229 70%, rgba(33, 23, 52, 0) 90%);
   }
 </style>

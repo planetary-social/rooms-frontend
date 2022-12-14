@@ -1,5 +1,5 @@
 <template>
-  <q-card :class="cardClasses" :style="cardStyle" dark :flat="flat">
+  <q-card :class="cardClasses" :style="cardStyle" dark :flat="flat" @click="$emit('open')" style="cursor: pointer;">
     <q-item class="card-header">
       <q-item-section avatar @click="goProfile" style="cursor: pointer;">
         <q-avatar size="37.28px" class="avatar">
@@ -44,7 +44,7 @@
       <Reactions  v-if="!preview && reactions?.length" :reactions="reactions"/>
     </q-card-section>
   
-    <q-card-section v-if="(!preview && comments?.length)" class="q-pt-none" :style="flat ? flatStyle : null">
+    <q-card-section v-if="(!preview && !flat && comments?.length)" class="q-pt-md">
       <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;" @click="$emit('open')">
         <AvatarGroup v-if="commenters?.length" :group="commenters" :limit="2" overlapping :size="20" no-background />
         <span class="q-pr-xs">{{ comments?.length }}</span>
@@ -236,6 +236,8 @@ import defaultAvatar from '@/assets/avatar.svg'
   }
 
   .comment-card {
+    
+
     box-shadow:
       0px 6.21326px 0px #2C1D45,
       0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
@@ -244,11 +246,10 @@ import defaultAvatar from '@/assets/avatar.svg'
       0px 6.21326px 0px #2C1D45,
       0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
 
-    border-radius: 31.0663px;
-
 
     background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.07) 100%);
     background-blend-mode: overlay;
+    border-radius: 31.0663px;
   }
 
   // background styling in parent component
