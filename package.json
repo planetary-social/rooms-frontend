@@ -21,6 +21,7 @@
     "generate-avatar": "^1.4.10",
     "lodash.groupby": "^4.6.0",
     "lodash.isempty": "^4.4.0",
+    "lodash.uniqby": "^4.7.0",
     "pinia": "^2.0.21",
     "quasar": "^2.8.4",
     "querystring": "^0.2.1",

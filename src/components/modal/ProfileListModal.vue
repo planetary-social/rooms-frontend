@@ -54,7 +54,7 @@ import FollowPersonModal from '@/components/modal/FollowModal.vue'
 
 import ModalContainer from '@/components/modal/ModalContainer.vue'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
-import defaultAvatar from '@/assets/avatar.png'
+import defaultAvatar from '@/assets/avatar.svg'
 
 import { useProfileStore } from '@/stores/profile'
 

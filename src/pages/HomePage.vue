@@ -28,6 +28,9 @@
         tempThreads: []
       }
     },
+    mounted () {
+      this.setActiveProfile(null)
+    },
     
     computed: {
       ...mapState(useRoomStore, ['activeRoom']),
@@ -66,7 +69,7 @@
       }
     },
     methods: {
-      ...mapActions(useProfileStore, ['getProfile'])
+      ...mapActions(useProfileStore, ['getProfile', 'setActiveProfile'])
     }
   }
 </script>

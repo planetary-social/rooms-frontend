@@ -12,7 +12,8 @@ import { useProfileStore } from '../stores/profile'
 export default {
   name: 'Markdown',
   props: {
-    text: String
+    text: String,
+    preview: Boolean
   },
   data () {
     return {
@@ -24,12 +25,26 @@ export default {
 
     setTimeout(() => this.replaceAnchors())
   },
+  computed: {
+    lines () {
+      if (!this.preview) return this.text
+
+      // this reduces the number of lines when preview is true
+      // it needs to be done before the text is passed to the renderer
+      // because for some reason, updating the css didnt work...
+      return this.text
+        .split('\n')
+        .slice(0, 2)
+        .map(line => line === '' ? '\n' : line + '\n')
+        .join('')
+    }
+  },
   methods: {
     ...mapActions(useProfileStore, ['getMinimalProfile']),
     async getRawHtmlMarkdown () {
       const typeLookup = {}
 
-      return renderer.block(this.text, {
+      return renderer.block(this.lines, {
         toUrl: (id) => {
           const link = ref.parseLink(id)
           if (link && ref.isBlob(link.link)) {
@@ -115,8 +130,10 @@ export default {
 
 .markup {
     align-self: stretch;
-    padding: 1.5rem;
+    padding-left: 23.3px;
+    padding-right: 23.3px;
     overflow: hidden;
+    font-family: 'SF Pro Text';
 
     h1, h2, h3, h4, h5, h6 {
         font-family: 'SF Pro Text';
@@ -127,6 +144,7 @@ export default {
     a {
         text-decoration: none;
         color: $accent;
+        font-family: 'SF Pro Text';
 
         &:hover {
             text-decoration: underline;
@@ -139,13 +157,14 @@ export default {
     h4 {font-size: 1.2rem;}
 
     p {
-        line-height: 1.4rem;
-        margin: 0;
-        margin-bottom: 0.6em;
-        text-align: left;
-        color: $pText;
         word-wrap: break-word;
         overflow: hidden;
+
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 31px;
+        letter-spacing: 0px;
+        text-align: left;
         font-family: 'SF Pro Text';
 
         img {
@@ -184,7 +203,14 @@ export default {
         // margin: 1rem 0;
 
         li {
-            margin: 1rem 0;
+            margin: 5px;
+
+            font-family: 'SF Pro Text';
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 31px;
+            letter-spacing: 0px;
+            text-align: left;
 
             strong {color: $pText;}
         }
