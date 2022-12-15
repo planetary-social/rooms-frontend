@@ -28,24 +28,6 @@ export default {
       logoData: this.image || logo,
       suffix: 'myqr'
     })
-
-    // setTimeout(() => {
-    //   console.log(document.getElementById('logo-mask-myqr'))
-    // }, 1000)
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-// .avatar {
-//   border-radius: 139.358px;
-//   background: 
-//     linear-gradient(var(--color-background), var(--color-background)) padding-box,
-//     linear-gradient(to right, #F08508, #F43F75) border-box;
-//   border: 2px solid transparent;
-//   width: 40px;
-//   height: 40px;
-// }
-
-</style>

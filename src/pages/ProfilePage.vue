@@ -1,7 +1,8 @@
 <template>
   <q-page class="full-width row justify-center">
-    <div class="column" v-if="activeProfile" :style="columnStyle">
-      <ProfileOverview class="sticky" :profile="activeProfile" />
+    <div class="column" :style="columnStyle">
+      <ProfileOverview v-if="activeProfile" class="sticky" :profile="activeProfile" />
+      <OverviewSkeleton v-else class="sticky" />
     </div>
     <div class="justify-start items-start" :style="columnStyle">
       <threads v-if="threads" :threads="threads"/>
@@ -22,13 +23,15 @@
   // components
   import Threads from '@/components/Threads.vue'
   import ProfileOverview from '@/components/ProfileOverview.vue'
-  import CommentSkeleton from '../components/CommentSkeleton.vue'
+  import CommentSkeleton from '@/components/CommentSkeleton.vue'
+  import OverviewSkeleton from '@/components/ProfileOverviewSkeleton.vue'
 
   export default {
     components: {
       Threads,
       ProfileOverview,
-      CommentSkeleton
+      CommentSkeleton,
+      OverviewSkeleton
     },
     computed: {
       ...mapState(useProfileStore, ['activeProfile']),
