@@ -4,7 +4,11 @@
       <RoomOverview class="sticky" :room="tempRoom" />
     </div>
     <div class="justify-start items-start" :style="columnStyle">
-      <threads :threads="tempThreads"/>
+      <threads v-if="tempThreads" :threads="tempThreads"/>
+      <div v-else>
+        <!-- skeleton threads -->
+        <CommentSkeleton  v-for="i in 5" :key="i" class="q-my-xl"/>
+      </div>
     </div>
   </q-page>
 </template>
@@ -13,6 +17,7 @@
   import { mapState, mapActions } from 'pinia'
   import { useRoomStore } from '@/stores/room'
   import { useProfileStore } from '@/stores/profile'
+  import CommentSkeleton from '@/components/CommentSkeleton.vue'
 
   // components
   import Threads from '@/components/Threads.vue'
@@ -21,11 +26,12 @@
   export default {
     components: {
       Threads,
-      RoomOverview
+      RoomOverview,
+      CommentSkeleton
     },
     data () {
       return {
-        tempThreads: []
+        tempThreads: null
       }
     },
     mounted () {
