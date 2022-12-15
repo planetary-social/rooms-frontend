@@ -10,7 +10,7 @@
 <script>
 import Toolbar from '@/components/Toolbar.vue'
 import { mapActions } from 'pinia'
-import { useRoomStore } from './stores/room'
+import { useRoomStore } from './store/room'
 
 export default {
   name: "LayoutDefault",

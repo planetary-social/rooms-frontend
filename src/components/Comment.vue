@@ -63,7 +63,7 @@ import { mapState, mapActions } from 'pinia'
 import Markdown from './Markdown.vue'
 import Reactions from './Reactions.vue'
 import AvatarGroup from './avatar/AvatarGroup.vue'
-import { useProfileStore } from '@/stores/profile'
+import { useProfileStore } from '@/store/profile'
 
 import defaultAvatar from '@/assets/avatar.svg'
 

@@ -15,8 +15,8 @@
 
 <script>
   import { mapState, mapActions } from 'pinia'
-  import { useRoomStore } from '@/stores/room'
-  import { useProfileStore } from '@/stores/profile'
+  import { useRoomStore } from '@/store/room'
+  import { useProfileStore } from '@/store/profile'
   import CommentSkeleton from '@/components/CommentSkeleton.vue'
 
   // components

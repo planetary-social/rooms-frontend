@@ -114,8 +114,8 @@
 <script>
 import { mapActions } from 'pinia'
 
-import { useProfileStore } from '@/stores/profile'
-import { useRoomStore } from '@/stores/room'
+import { useProfileStore } from '@/store/profile'
+import { useRoomStore } from '@/store/room'
 
 import ProfileListModal from '@/components/modal/ProfileListModal.vue'
 import Markdown from '@/components/Markdown.vue'
