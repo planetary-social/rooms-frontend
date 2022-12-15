@@ -19,7 +19,7 @@ export default {
   },
   async mounted () {
     this.qrSvg = vkQr.createQR(this.uri, {
-      qrSize: 160,
+      qrSize: 150,
       isShowLogo: true,
       backgroundColor: 'white',
       isShowBackground: true,

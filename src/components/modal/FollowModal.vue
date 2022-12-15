@@ -26,8 +26,8 @@
       </q-item>
       <div v-else class="q-ma-sm q-pa-sm">
         <div class="row">
-          <div class="col-4">
-            <q-avatar square size="160px">
+          <div class="col-4 qr">
+            <q-avatar square size="150px">
               <QRCode v-if="httpInviteLink" :uri="httpInviteLink" :image="image"/>
             </q-avatar>
           </div>
@@ -138,7 +138,7 @@
 <script>
 
 import { mapState } from 'pinia'
-import { useRoomStore } from '@/stores/room'
+import { useRoomStore } from '@/store/room'
 
 import ModalContainer from '@/components/modal/ModalContainer.vue'
 import QRCode from '@/components/QRCode.vue'
@@ -212,6 +212,20 @@ export default {
 
 <style scoped>
 /* Name */
+.qr {
+
+  /* -webkit-transition: padding 2s; */
+  /* transition: width 3s, height 2s, transform 2s; */
+  transition: padding 2s ease-in-out, transform 2s;
+  z-index: 1;
+}
+
+.qr:hover {
+  padding-left: 50px;
+  transform: scale(2);
+  position: relative;
+  z-index: 1;
+}
 
 .text-overflow {
   white-space:nowrap;

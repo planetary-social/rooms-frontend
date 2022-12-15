@@ -47,8 +47,8 @@
   import Comment from '@/components/Comment.vue'
   import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
   import { mapState } from 'pinia'
-  import { useProfileStore } from '@/stores/profile'
-  import { useRoomStore } from '../stores/room'
+  import { useProfileStore } from '@/store/profile'
+  import { useRoomStore } from '../store/room'
 
   export default {
     props: {

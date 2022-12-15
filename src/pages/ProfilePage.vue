@@ -16,7 +16,7 @@
 <script>
   import isEmpty from 'lodash.isempty'
   import { mapActions, mapState } from 'pinia'
-  import { useProfileStore } from '@/stores/profile'
+  import { useProfileStore } from '@/store/profile'
 
 
   // components

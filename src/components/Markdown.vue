@@ -7,7 +7,7 @@ import ref from 'ssb-ref'
 import renderer from 'ssb-markdown'
 import querystring from 'querystring'
 import { mapActions } from 'pinia'
-import { useProfileStore } from '../stores/profile'
+import { useProfileStore } from '../store/profile'
 
 export default {
   name: 'Markdown',

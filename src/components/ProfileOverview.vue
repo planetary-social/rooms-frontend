@@ -13,7 +13,7 @@
           <span>{{ profile.aliases[0] }}</span>
           <span style="color: #8575A3;">@{{ activeRoom?.name }}</span>
         </q-item-label>
-        <q-item v-if="profile.ssbURI" class="q-px-none">
+        <q-item v-if="httpLink" class="q-px-none">
           <a class="accent q-pa-sm q-px-md" @click.prevent="openFollowModal">
             <PersonAddIcon/>
             <span class="button-text">Follow</span>
@@ -99,7 +99,7 @@
       :open="isFollowModalOpen"
       title="follow this user"
 
-      :httpInviteLink="profile?.ssbURI"
+      :httpInviteLink="httpLink"
       :backupBtnLink="profile?.ssbURI"
 
       :image="profile?.image" 
@@ -121,7 +121,7 @@ import Markdown from '@/components/Markdown.vue'
 import defaultAvatar from '@/assets/avatar.svg'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
 import { mapState } from 'pinia'
-import { useRoomStore } from '../stores/room'
+import { useRoomStore } from '../store/room'
 
 const FOLLOW = 'follow'
 const FOLLOWERS = 'followers'
@@ -148,6 +148,9 @@ const FOLLOWING = 'following'
       ...mapState(useRoomStore, ['activeRoom']),
       mobile () {
         return this.$q.screen.xs || this.$q.screen.sm
+      },
+      httpLink () {
+        return `${window.location.origin}/follow/${this.profile?.id}`
       },
       scrollStyle () {
         return {

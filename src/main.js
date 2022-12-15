@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import pinia from '@/store'
 
 // apollo
 import { DefaultApolloClient } from '@vue/apollo-composable'
@@ -17,11 +17,12 @@ import quasarUserOptions from './quasar-user-options'
 import "quasar/dist/quasar.sass"
 
 const app = createApp(App)
-
-app.use(Quasar, quasarUserOptions)
-app.use(createPinia())
-
-app.use(router)
 app.provide(DefaultApolloClient, apolloClient)
 
-app.mount('#app')
+app.use(pinia)
+app.use(Quasar, quasarUserOptions)
+app.use(router)
+
+router.isReady().then(() => {
+  app.mount('#app')
+})

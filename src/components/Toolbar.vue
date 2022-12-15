@@ -56,7 +56,7 @@ import { mapState } from 'pinia'
 import AppStoreBtn from '@/components/icon/AppStoreBtn.vue'
 import PlanetaryTextIcon from '@/components/icon/PlanetaryTextIcon.vue'
 import PlanetaryIcon from '@/components/icon/PlanetaryIcon.vue'
-import { useProfileStore } from '../stores/profile';
+import { useProfileStore } from '../store/profile';
 
 export default {
   components: {
