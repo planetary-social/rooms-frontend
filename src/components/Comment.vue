@@ -12,9 +12,9 @@
           <span class="q-pr-xs" style="cursor: pointer;" @click="goProfile">{{ author?.name || randomFeedId() }}</span>
           <span class="comment-action">{{ action }} {{ isHiddenContent ? 'posted' : '' }}</span>
         </q-item-label>
-        <!-- <q-item-label class="light-text" style="left: -10px;" caption>
+        <q-item-label class="light-text" style="left: -10px;" caption>
           {{ timestamp }}
-        </q-item-label> -->
+        </q-item-label>
       </q-item-section>
 
       <!-- <q-item-section side class="comment-action">
@@ -202,6 +202,7 @@ import defaultAvatar from '@/assets/avatar.svg'
   @import '../styles/quasar.variables.scss';
 
   .light-text {
+    font-family: 'SF Pro Text';
     color: $lightText;
   }
 
@@ -271,6 +272,7 @@ import defaultAvatar from '@/assets/avatar.svg'
 
   .top-divider {
     height: 0px;
+    opacity: 0.3;
 
     border: 0.97px solid #271A3D;
     background-color: #271A3D;
@@ -281,6 +283,7 @@ import defaultAvatar from '@/assets/avatar.svg'
 
   .bottom-divider {
     height: 0px;
+    opacity: 0.3;
 
     border: 0.97px solid #271A3D;
     background-color: #271A3D;
