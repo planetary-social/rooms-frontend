@@ -1,5 +1,5 @@
 <template>
-  <div ref="threads">
+  <div>
     <div v-if="displayedThread" :class="{ fixed: !mobile, toolbar: !mobile, 'mobile-toolbar': mobile }" style="z-index: 3"> 
       <q-toolbar style="margin-left:40px; cursor: pointer;" @click="displayThread(null)" class="q-py-lg">
         <svg width="22" height="15" viewBox="0 0 22 15" fill="none" xmlns="http://www.w3.org/2000/svg">

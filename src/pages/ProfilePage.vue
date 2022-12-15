@@ -4,7 +4,11 @@
       <ProfileOverview class="sticky" :profile="activeProfile" />
     </div>
     <div class="justify-start items-start" :style="columnStyle">
-      <threads :threads="activeProfile?.threads || []"/>
+      <threads v-if="threads" :threads="threads"/>
+      <div v-else>
+        <!-- skeleton threads -->
+        <CommentSkeleton  v-for="i in 5" :key="i" class="q-my-xl"/>
+      </div>
     </div>
   </q-page>
 </template>
@@ -18,14 +22,19 @@
   // components
   import Threads from '@/components/Threads.vue'
   import ProfileOverview from '@/components/ProfileOverview.vue'
-  
+  import CommentSkeleton from '../components/CommentSkeleton.vue'
+
   export default {
     components: {
       Threads,
-      ProfileOverview
+      ProfileOverview,
+      CommentSkeleton
     },
     computed: {
       ...mapState(useProfileStore, ['activeProfile']),
+      threads () {
+        return this.activeProfile?.threads
+      },
       columnStyle () {
         return {
           width: this.$q?.screen?.xs
