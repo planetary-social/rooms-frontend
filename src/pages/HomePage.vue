@@ -1,7 +1,8 @@
 <template>
   <q-page class="full-width row justify-center" :style="columnStyle">
-    <div v-if="activeRoom" class="justify-end">
-      <RoomOverview class="sticky" :room="tempRoom" />
+    <div class="justify-end">
+      <RoomOverview v-if="activeRoom" class="sticky" :room="tempRoom" />
+      <OverviewSkeleton v-else  class="sticky" />
     </div>
     <div class="justify-start items-start" :style="columnStyle">
       <threads v-if="tempThreads" :threads="tempThreads"/>
@@ -22,12 +23,14 @@
   // components
   import Threads from '@/components/Threads.vue'
   import RoomOverview from '@/components/RoomOverview.vue'
+  import OverviewSkeleton from '@/components/RoomOverviewSkeleton.vue'
   
   export default {
     components: {
       Threads,
       RoomOverview,
-      CommentSkeleton
+      CommentSkeleton,
+      OverviewSkeleton
     },
     data () {
       return {
