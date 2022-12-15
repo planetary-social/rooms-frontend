@@ -8,7 +8,7 @@
       :style="`margin-right:${isLastItem(i) ? '' : overlap};`"
       contain
     >
-      <q-img :src="profile?.image" :placeholder-src="defaultAvatar" no-spinner :style="avatarSize"/>
+      <q-img :src="profile?.image || defaultAvatar" :placeholder-src="defaultAvatar" no-spinner :style="avatarSize"/>
     </q-avatar>
   </div>
 </template>
