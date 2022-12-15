@@ -42,6 +42,8 @@
   </div>
 </template>
 <script>
+
+  import uniqBy from 'lodash.uniqby'
   import Comment from '@/components/Comment.vue'
   import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
   import { mapState } from 'pinia'
@@ -63,6 +65,10 @@
       mobile () {
         return this.$q?.screen?.xs || this.$q?.screen.sm
       },
+      commenters () {
+          return uniqBy(this.comments?.map(message => message?.author), 'id')
+            .filter(Boolean)
+        },
       rootMessageWidth () {
         const maxWidth = this.isFromMember ? 535.89 : 481.8
 

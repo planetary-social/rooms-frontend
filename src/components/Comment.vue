@@ -109,7 +109,6 @@ import defaultAvatar from '@/assets/avatar.svg'
         cardStyle () {
           return {
             width: this.width,
-            height: this.height,
             margin: 'auto',
             background: '#3D2961',
             'box-shadow': `
@@ -243,8 +242,6 @@ import defaultAvatar from '@/assets/avatar.svg'
   }
 
   .comment-card {
-    
-
     box-shadow:
       0px 6.21326px 0px #2C1D45,
       0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
