@@ -23,6 +23,7 @@
     "lodash.isempty": "^4.4.0",
     "lodash.uniqby": "^4.7.0",
     "pinia": "^2.0.21",
+    "posthog-js": "^1.42.3",
     "quasar": "^2.8.4",
     "querystring": "^0.2.1",
     "remark-with-images": "^0.0.4",
