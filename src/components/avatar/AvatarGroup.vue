@@ -1,14 +1,14 @@
 <template>
-  <div :class="overlapping && !noBackground ? 'container' : ''" :style="`width: ${overlappingWidth}`">
+  <div :class="overlapping && !noBackground ? 'container' : ''" :style="`width: ${overlappingWidth};`">
     <q-avatar
       v-for="(profile, i) in profiles" :key="profile?.id" 
       @click.stop="$emit('click', profile)"
       :text="profile?.name"
       :size="size + 'px'"
-      :style="`margin-right:${isLastItem(i) ? '' : overlap};`"
+      :style="`margin-right:${isLastItem(i) ? '' : avatarMargins}; margin-bottom: ${overlapping ? null : avatarMargins};`"
       contain
     >
-      <q-img :src="profile?.image || defaultAvatar" :placeholder-src="defaultAvatar" no-spinner :style="avatarSize"/>
+      <q-img :src="profile?.image || defaultAvatar" :placeholder-src="defaultAvatar" no-spinner :style="avatarStyle"/>
     </q-avatar>
   </div>
 </template>
@@ -40,14 +40,14 @@
 
         return '57px'
       },
-      avatarSize () {
+      avatarStyle () {
         return {
           width: this.size + 'px',
           height: this.size + 'px',
           cursor: this.overlapping ? '' : 'pointer'
         }
       },
-      overlap () {
+      avatarMargins () {
         if (!this.overlapping) return '15px'
         
 
