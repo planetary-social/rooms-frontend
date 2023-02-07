@@ -1,11 +1,11 @@
 <template>
   <q-page class="full-width row justify-center" :style="columnStyle">
     <div class="justify-end">
-      <RoomOverview v-if="activeRoom" class="sticky" :room="tempRoom" />
+      <RoomOverview v-if="activeRoom" class="sticky" :room="activeRoom" />
       <OverviewSkeleton v-else  class="sticky" />
     </div>
     <div class="justify-start items-start" :style="columnStyle">
-      <threads v-if="tempThreads" :threads="tempThreads"/>
+      <threads v-if="activeRoom?.threads" :threads="activeRoom?.threads"/>
       <div v-else>
         <!-- skeleton threads -->
         <CommentSkeleton  v-for="i in 5" :key="i" class="q-my-xl"/>
@@ -32,11 +32,6 @@
       CommentSkeleton,
       OverviewSkeleton
     },
-    data () {
-      return {
-        tempThreads: null
-      }
-    },
     mounted () {
       this.setActiveProfile(null)
     },
@@ -48,32 +43,6 @@
           width: this.$q?.screen?.xs
             ? `${this.$q?.screen.width-25}px`
             : '535.89px'
-        }
-      },
-      tempRoom () {
-        return {
-          ...(this.activeRoom || {}),
-          threads: this.tempThreads || []
-        }
-      }
-    },
-    watch: {
-      // NOTE: this is a temp solution to show threads by all members
-      // until the backend piece is written.
-      // I have done it here so it doesnt prevent members from showing up.
-      // because loading members and threads in the getMyRoom query
-      // may take a while
-      'activeRoom.members': {
-        immediate: true,
-        async handler (members) {
-          if (!members || !members.length) return
-
-          // load the members full profile which includes threads
-          const memberThreads = await Promise.all(members.map(async member => this.getProfile(member.id)))
-
-          this.tempThreads = memberThreads
-            .reduce((acc, member) => [...acc, ...(member.threads || [])], [])
-            .sort((a, b) => b.messages[0].timestamp - a.messages[0].timestamp)
         }
       }
     },
