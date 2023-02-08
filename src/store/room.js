@@ -27,13 +27,39 @@ const GET_ROOM_INVITE_CODE = gql`
   }
 `
 
+const GET_ROOM_THREADS = gql`
+  query {
+    getThreads(limit: 50) {
+      id
+      messages {
+        id
+        text
+        timestamp
+        author {
+          id
+          image
+          name
+        }
+        votes {
+          expression
+          author {
+            id
+            image
+            name
+          }
+        }
+      }
+    }
+  }
+`
+
 export const useRoomStore = defineStore({
   id: 'room',
   state: () => ({
     activeRoom: null
   }),
-  getters: {
-  },
+  // getters: {
+  // },
   actions: {
     /**
      * Fetches the room from the graphql server
@@ -46,7 +72,22 @@ export const useRoomStore = defineStore({
 
       this.activeRoom = res.data.room
 
+      // NOTE: we do this separately so it doesnt hold
+      // up displaying information about the room
+      await this.loadRoomThreads()
+
       return this.activeRoom
+    },
+    /**
+     * Fetches the threads from the members of the room and puts them
+     * into the activeRoom state
+     */
+    async loadRoomThreads () {
+      const res = await apolloClient.query({ query: GET_ROOM_THREADS })
+      if (res.errors) throw res.errors
+
+      const updatedRoom = Object.assign({ threads: res.data.getThreads }, this.activeRoom)
+      this.activeRoom = updatedRoom
     },
     /**
      * Fetchs an invite code for them
