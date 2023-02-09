@@ -5,7 +5,7 @@
       <OverviewSkeleton v-else class="sticky" />
     </div>
     <div class="justify-start items-start" :style="columnStyle">
-      <threads v-if="threads" :threads="threads"/>
+      <threads v-if="threads" :threads="threads" @onLoad="onLoad"/>
       <div v-else>
         <!-- skeleton threads -->
         <CommentSkeleton  v-for="i in 5" :key="i" class="q-my-xl"/>
@@ -34,10 +34,7 @@
       OverviewSkeleton
     },
     computed: {
-      ...mapState(useProfileStore, ['activeProfile']),
-      threads () {
-        return this.activeProfile?.threads
-      },
+      ...mapState(useProfileStore, ['activeProfile', 'threads']),
       columnStyle () {
         return {
           width: this.$q?.screen?.xs
@@ -50,7 +47,7 @@
       await this.loadProfileForPage()
     },
     methods: {
-      ...mapActions(useProfileStore, ['loadMinimalProfile', 'loadMinimalProfileByAlias', 'loadProfile']),
+      ...mapActions(useProfileStore, ['loadMinimalProfile', 'loadMinimalProfileByAlias', 'loadProfile', 'loadMoreProfileThreads']),
       async loadProfileForPage () {
         var { alias, feedId } = this.$route.params
 
@@ -89,6 +86,10 @@
         }
 
         return feedId
+      },
+      async onLoad (done) {
+        await this.loadMoreProfileThreads()
+        done()
       }
     }
   }

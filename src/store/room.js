@@ -29,7 +29,7 @@ const GET_ROOM_INVITE_CODE = gql`
 
 const GET_ROOM_THREADS = gql`
   query($cursor: String) {
-    getThreads(limit: 3, cursor: $cursor) {
+    getThreads(limit: 10, cursor: $cursor) {
       id
       messages {
         id
@@ -92,25 +92,25 @@ export const useRoomStore = defineStore({
      * Fetches the threads from the members of the room and puts them
      * into the activeRoom state
      */
-      async loadRoomThreads () {
-        const res = await apolloClient.query({ query: GET_ROOM_THREADS, variables: { cursor: null } })
-        if (res.errors) throw res.errors
+    async loadRoomThreads () {
+      const res = await apolloClient.query({ query: GET_ROOM_THREADS, variables: { cursor: null } })
+      if (res.errors) throw res.errors
 
-        this.$patch((state) => {
-          state.threads = res.data.getThreads
-        })
-      },
-      async loadMoreRoomThreads () {
-        // use the last item as the cursor
-        const cursor = (this.threads.slice(-1)[0])?.id
-        const res = await apolloClient.query({ query: GET_ROOM_THREADS, variables: { cursor }})
-        if (res.errors) throw res.errors
+      this.$patch((state) => {
+        state.threads = res.data.getThreads
+      })
+    },
+    async loadMoreRoomThreads () {
+      // use the last item as the cursor
+      const cursor = (this.threads.slice(-1)[0])?.id
+      const res = await apolloClient.query({ query: GET_ROOM_THREADS, variables: { cursor }})
+      if (res.errors) throw res.errors
 
-        // add them to the set
-        this.$patch((state) => {
-          state.threads = [...state.threads, ...res.data.getThreads]
-        })
-      },
+      // add them to the set
+      this.$patch((state) => {
+        state.threads = [...state.threads, ...res.data.getThreads]
+      })
+    },
   }
 })
 

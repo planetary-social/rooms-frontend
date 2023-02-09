@@ -16,7 +16,7 @@
     <div v-if="displayedThread" :style="{ 'z-index': 2, 'margin-top': mobile ? '' : '100px' }">
       <thread :thread="displayedThread" show-comments />
     </div>
-    <template v-slot:loading>
+    <template v-if="!displayedThread" v-slot:loading>
       <div class="row justify-center q-my-md">
         <q-spinner-dots color="primary" size="40px" />
       </div>
@@ -50,6 +50,7 @@ export default {
       this.displayedThread = thread
     },
     onLoad (index, done) {
+      if (this.displayedThread) return
       this.$emit('onLoad', done)
     }
   }

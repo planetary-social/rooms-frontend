@@ -54,30 +54,36 @@ const GET_PROFILE = gql`
         description
         ssbURI
       }
-      threads {
+    }
+  }
+`
+
+const GET_PROFILE_THREADS = gql`
+  query($id: ID, $cursor: String) {
+    getThreads(id: $id, limit: 10, cursor: $cursor) {
+      id
+      messages {
         id
-        messages {
+        text
+        timestamp
+        author {
           id
-          text
-          timestamp
+          image
+          name
+        }
+        votes {
+          expression
           author {
             id
             image
             name
-          }
-          votes {
-            expression
-            author {
-              id
-              image
-              name
-            }
           }
         }
       }
     }
   }
 `
+
 
 async function getProfileQuery (query, variables) {
   const res = await apolloClient.query({ query, variables })
@@ -90,7 +96,8 @@ async function getProfileQuery (query, variables) {
 export const useProfileStore = defineStore({
   id: 'profile',
   state: () => ({
-    activeProfile: null
+    activeProfile: null,
+    threads: null
   }),
   getters: {
     /**
@@ -102,6 +109,7 @@ export const useProfileStore = defineStore({
     // helpers for mutating state
     setActiveProfile (profile) {
       this.activeProfile = profile
+      this.threads = null
     },
   
     // helpers for getting profiles from graphql
@@ -137,8 +145,31 @@ export const useProfileStore = defineStore({
 
       const profile = await this.getProfile(id)
       this.setActiveProfile(profile)
+      await this.loadProfileThreads()
 
       return profile
+    },
+    /**
+     * Fetches the threads from user with a particular feedId
+     */
+    async loadProfileThreads () {
+      const res = await apolloClient.query({ query: GET_PROFILE_THREADS, variables: { id: this.activeProfile.id, cursor: null } })
+      if (res.errors) throw res.errors
+
+      this.$patch((state) => {
+        state.threads = res.data.getThreads
+      })
+    },
+    async loadMoreProfileThreads () {
+      // use the last item as the cursor
+      const cursor = (this.threads.slice(-1)[0])?.id
+      const res = await apolloClient.query({ query: GET_PROFILE_THREADS, variables: { id: this.activeProfile.id, cursor }})
+      if (res.errors) throw res.errors
+
+      // add them to the set
+      this.$patch((state) => {
+        state.threads = [...state.threads, ...res.data.getThreads]
+      })
     }
   }
 })
