@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-infinite-scroll @load="onLoad" :offset="1000">
     <div v-if="displayedThread" :class="{ fixed: !mobile, toolbar: !mobile, 'mobile-toolbar': mobile }" style="z-index: 3"> 
       <q-toolbar style="margin-left:40px; cursor: pointer;" @click="displayThread(null)" class="q-py-lg">
         <svg width="22" height="15" viewBox="0 0 22 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -16,7 +16,12 @@
     <div v-if="displayedThread" :style="{ 'z-index': 2, 'margin-top': mobile ? '' : '100px' }">
       <thread :thread="displayedThread" show-comments />
     </div>
-  </div>
+    <template v-slot:loading>
+      <div class="row justify-center q-my-md">
+        <q-spinner-dots color="primary" size="40px" />
+      </div>
+    </template>
+  </q-infinite-scroll>
 </template>
 
 <script>
@@ -43,6 +48,9 @@ export default {
     displayThread (thread) {
       window.scrollTo(0, 0)
       this.displayedThread = thread
+    },
+    onLoad (index, done) {
+      this.$emit('onLoad', done)
     }
   }
 }

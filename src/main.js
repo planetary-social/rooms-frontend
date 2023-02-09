@@ -24,7 +24,7 @@ app.provide(DefaultApolloClient, apolloClient)
 app.use(pinia)
 app.use(Quasar, quasarUserOptions)
 app.use(router)
-app.use(posthogPlugin)
+if (process.env.NODE_ENV !== 'development') app.use(posthogPlugin)
 
 
 router.isReady().then(() => {
