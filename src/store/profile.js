@@ -59,8 +59,8 @@ const GET_PROFILE = gql`
 `
 
 const GET_PROFILE_THREADS = gql`
-  query($id: ID, $cursor: String) {
-    getThreads(id: $id, limit: 10, cursor: $cursor) {
+  query($feedId: ID, $limit: Int, $cursor: String) {
+    getThreads(feedId: $feedId, limit: $limit, cursor: $cursor) {
       id
       messages {
         id
@@ -153,7 +153,15 @@ export const useProfileStore = defineStore({
      * Fetches the threads from user with a particular feedId
      */
     async loadProfileThreads () {
-      const res = await apolloClient.query({ query: GET_PROFILE_THREADS, variables: { id: this.activeProfile.id, cursor: null } })
+      const res = await apolloClient.query({
+        query: GET_PROFILE_THREADS,
+        variables: {
+          feedId: this.activeProfile.id,
+          cursor: null,
+          limit: 10
+        }
+      })
+
       if (res.errors) throw res.errors
 
       this.$patch((state) => {
@@ -163,7 +171,15 @@ export const useProfileStore = defineStore({
     async loadMoreProfileThreads () {
       // use the last item as the cursor
       const cursor = (this.threads.slice(-1)[0])?.id
-      const res = await apolloClient.query({ query: GET_PROFILE_THREADS, variables: { id: this.activeProfile.id, cursor }})
+      const res = await apolloClient.query({
+        query: GET_PROFILE_THREADS,
+        variables: {
+          feedId: this.activeProfile.id,
+          cursor,
+          limit: 10
+        }
+      })
+
       if (res.errors) throw res.errors
 
       // add them to the set
