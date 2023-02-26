@@ -5,7 +5,7 @@
       <OverviewSkeleton v-else  class="sticky" />
     </div>
     <div class="justify-start items-start" :style="columnStyle">
-      <threads v-if="activeRoom?.threads" :threads="activeRoom?.threads"/>
+      <threads v-if="threads" :threads="threads" @onLoad="onLoad"/>
       <div v-else>
         <!-- skeleton threads -->
         <CommentSkeleton  v-for="i in 5" :key="i" class="q-my-xl"/>
@@ -33,11 +33,12 @@
       OverviewSkeleton
     },
     mounted () {
+      window.scrollTo(0, 0)
       this.setActiveProfile(null)
     },
     
     computed: {
-      ...mapState(useRoomStore, ['activeRoom']),
+      ...mapState(useRoomStore, ['activeRoom', 'threads']),
       columnStyle () {
         return {
           width: this.$q?.screen?.xs
@@ -47,7 +48,12 @@
       }
     },
     methods: {
-      ...mapActions(useProfileStore, ['getProfile', 'setActiveProfile'])
+      ...mapActions(useProfileStore, ['getProfile', 'setActiveProfile']),
+      ...mapActions(useRoomStore, ['loadMoreRoomThreads']),
+      async onLoad (done) {
+        await this.loadMoreRoomThreads()
+        done()
+      }
     }
   }
 </script>
