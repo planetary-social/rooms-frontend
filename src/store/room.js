@@ -31,7 +31,73 @@ const GET_ROOM_THREADS = gql`
   query($cursor: String, $limit: Int) {
     getThreads(limit: $limit, cursor: $cursor) {
       id
-      messages {
+      text
+      timestamp
+      author {
+        id
+        image
+        name
+      }
+      votes {
+        expression
+        author {
+          id
+          image
+          name
+        }
+      }
+
+      root {
+        id
+      }
+
+      replies {
+        id
+        text
+        timestamp
+        author {
+          id
+          image
+          name
+        }
+        votes {
+          expression
+          author {
+            id
+            image
+            name
+          }
+        }
+      }
+    }
+  }
+`
+
+const GET_THREAD = gql`
+  query($msgId: ID!) {
+    getThread(msgId: $msgId) {
+      id
+      text
+      timestamp
+      author {
+        id
+        image
+        name
+      }
+      votes {
+        expression
+        author {
+          id
+          image
+          name
+        }
+      }
+
+      root {
+        id
+      }
+
+      replies {
         id
         text
         timestamp
@@ -87,6 +153,18 @@ export const useRoomStore = defineStore({
       if (res.errors) throw res.errors
 
       return res.data.inviteCode
+    },
+    /**
+     * Fetches a single thread from a messageId
+     */
+    async loadThread (msgId) {
+      console.log(msgId)
+      const res = await apolloClient.query({ query: GET_THREAD, variables: { msgId } })
+      if (res.errors) throw res.errors
+
+      console.log(res.data.getThread)
+
+      return res.data.getThread
     },
     /**
      * Fetches the threads from the members of the room and puts them

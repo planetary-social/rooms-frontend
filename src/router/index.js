@@ -3,6 +3,7 @@ import pinia from "@/store"
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/pages/HomePage.vue'
 import ProfilePage from '@/pages/ProfilePage.vue'
+import ThreadPage from '@/pages/ThreadPage.vue'
 import ModalContainer from '@/components/modal/ModalContainer.vue'
 import { useProfileStore } from "../store/profile"
 // import NotFoundPage from '@/pages/NotFoundPage.vue'
@@ -27,10 +28,10 @@ const router = createRouter({
       component: ProfilePage
     },
     {
+      // TODO: find why this * is needed and document it
       path: '/profile/:feedId(.*)?',
       name: 'profile',
-      component: ProfilePage,
-
+      component: ProfilePage
     },
     {
       path: '/follow/:feedId(.*)?',
@@ -55,6 +56,11 @@ const router = createRouter({
 
         next()
       },
+    },
+    {
+      path: '/thread/:msgId(.*)?',
+      name: 'thread',
+      component: ThreadPage
     },
     { path: '/:catchAll(.*)', redirect: '/' }
   ]

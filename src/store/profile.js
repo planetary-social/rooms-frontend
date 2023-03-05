@@ -62,7 +62,27 @@ const GET_PROFILE_THREADS = gql`
   query($feedId: ID, $limit: Int, $cursor: String) {
     getThreads(feedId: $feedId, limit: $limit, cursor: $cursor) {
       id
-      messages {
+      text
+      timestamp
+      author {
+        id
+        image
+        name
+      }
+      votes {
+        expression
+        author {
+          id
+          image
+          name
+        }
+      }
+
+      root {
+        id
+      }
+
+      replies {
         id
         text
         timestamp

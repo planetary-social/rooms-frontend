@@ -93,17 +93,17 @@
         return '175px'
       },
       rootMessage () {
-        return this.thread?.messages[0]
+        return this.thread
       },
       // the first reply from the activeProfile or a member
       latestMemberMessage () {
         if (this.isFromMember) return
 
         if (this.$route.name === 'profile') {
-          return this.thread?.messages.find(message => message?.author?.id === this.activeProfile?.id)
+          return this.thread?.replies.find(message => message?.author?.id === this.activeProfile?.id)
         }
 
-        const reverted = [...this.thread?.messages].reverse();
+        const reverted = [...this.thread?.replies].reverse();
 
         return reverted.find(message => {
           return this.activeRoom?.members.find(member => {
@@ -118,8 +118,7 @@
         return this.activeRoom?.members?.some(member => member?.id === this.rootMessage?.author?.id)
       },
       comments () {
-        // remove the root message
-        return this.thread?.messages?.slice(1)
+        return this.thread?.replies
           .filter(message => {
             if (!this.latestMemberMessage) return true
             if (!message?.id) return true 
