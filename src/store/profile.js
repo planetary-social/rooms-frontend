@@ -145,7 +145,6 @@ export const useProfileStore = defineStore({
 
       const profile = await this.getProfile(id)
       this.setActiveProfile(profile)
-      await this.loadProfileThreads()
 
       return profile
     },

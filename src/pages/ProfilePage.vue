@@ -43,11 +43,16 @@
         }
       }
     },
+    data () {
+      return {
+        isLoadingInitialThreads: false
+      }
+    },
     async mounted () {
       await this.loadProfileForPage()
     },
     methods: {
-      ...mapActions(useProfileStore, ['loadMinimalProfile', 'loadMinimalProfileByAlias', 'loadProfile', 'loadMoreProfileThreads']),
+      ...mapActions(useProfileStore, ['loadMinimalProfile', 'loadMinimalProfileByAlias', 'loadProfile', 'loadMoreProfileThreads', 'loadProfileThreads']),
       async loadProfileForPage () {
         var { alias, feedId } = this.$route.params
 
@@ -57,7 +62,7 @@
           return
         }
 
-        
+        this.isLoadingInitialThreads = true
 
         // firstly load the minimal profile by either the feedId or alias (depending on the route)
         if (feedId) {
@@ -76,6 +81,12 @@
 
         // load the full profile
         await this.loadProfile(this.activeProfile.id)
+
+        
+        await this.loadProfileThreads()
+          .finally(() => {
+            this.isLoadingInitialThreads = false
+          })
       },
       formatFeedId (feedId) {
         // check the feedId doesnt have a / on the end
@@ -88,6 +99,11 @@
         return feedId
       },
       async onLoad (done) {
+        if (this.isLoadingInitialThreads) {
+          done()
+          return
+        }
+
         await this.loadMoreProfileThreads()
         done()
       }

@@ -50,6 +50,7 @@ export default {
       this.displayedThread = thread
     },
     onLoad (index, done) {
+      console.log('load')
       if (this.displayedThread) return
       this.$emit('onLoad', done)
     }
