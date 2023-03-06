@@ -1,49 +1,91 @@
 <template>
-  <ModalContainer :open="open" @close="$emit('close')" :max-height="mobile ? '100%' : '896px'">
-    <q-item>
-      <q-item-label class="header q-mt-lg">
-        <span class="count-header">{{ profiles.length }}</span> <span>{{ title }}</span>
-      </q-item-label>
-      <q-space v-if="mobile"/>
-      <q-item-section v-if="mobile" side top right class="q-pa-none q-mt-sm">
-        <q-btn right class="q-pa-none" dense flat icon="close" v-close-popup></q-btn>
-      </q-item-section>
-    </q-item>
-    <q-separator spaced class="divider" />
-    <q-list>
-      <div v-for="(profile, i) in profiles" :key="profile.id">
-        <q-item class="q-pa-md">
-          <q-item-section avatar @click="goProfile(profile)" style="cursor: pointer;">
-            <q-avatar size="90px">
-              <q-img :src="profile.image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain class="avatar"/>
-            </q-avatar>
+  <ModalContainer
+    :open="open" @close="$emit('close')"
+      :min-height="mobile ? '100%' : '600px'"
+      :max-height="mobile ? '100%' : '896px'"
+      :min-width="modalWidth"
+    >
+    <!-- LOADING STATE -->
+    <template v-if="isLoading">
+      <!-- title -->
+      <q-item>
+        <q-item-label class="header q-mt-lg">
+          <q-skeleton type="text" animation="fade" width="249px" height="100px" class="skeleton"/>
+        </q-item-label>
+      </q-item>
+      <q-separator spaced class="divider"/>
+
+      <!-- rows -->
+      <div v-for="i in 6" :key="i">
+        <q-item>
+          <q-item-section avatar>
+            <q-skeleton type="QAvatar" animation="fade" width="90px" height="90px" class="skeleton"/>
           </q-item-section>
 
-          <q-item-section top>
-            <q-item-label lines="1" class="profile-header" @click="goProfile(profile)" style="cursor: pointer;">{{ profile.name }}</q-item-label>
-            <q-item-label lines="2" class="profile-description">{{ profile.description }}</q-item-label>
+          <q-item-section>
+            <q-item-label top>
+              <q-skeleton type="text" animation="fade" width="60%" height="40px" class="skeleton"/>
+            </q-item-label>
+            <q-item-label>
+              <q-skeleton type="text" animation="fade" width="100%" height="20px" class="skeleton"/>
+              <q-skeleton type="text" animation="fade" width="100%" height="20px" class="skeleton"/>
+            </q-item-label>
           </q-item-section>
-
-          <q-item-section side top>
-            <a class="accent q-pa-sm q-px-md" @click.prevent="openFollowModal(profile)">
-              <PersonAddIcon/>
-              <span class="button-text">Follow</span>
-            </a>
+          <q-item-section avatar>
+            <q-skeleton type="QChip" animation="fade" class="skeleton" width="130px" height="40px"/>
           </q-item-section>
         </q-item>
-        <q-separator v-if="!isLastItem(i)" class="divider"/>
+        <q-separator spaced class="divider" />
       </div>
-    </q-list>
-    <FollowPersonModal
-      v-if="isFollowModalOpen"
-      
-      :open="isFollowModalOpen"
-      title="follow this user"
-      :uri="profile?.ssbURI" 
-      :image="profile?.image" 
-      
-      @close="closeModal"
-    />
+    </template>
+
+    <!-- ACTUAL DATA -->
+    <template v-else>
+      <q-item>
+        <q-item-label class="header q-mt-lg">
+          <span class="count-header">{{ profiles.length }}</span> <span>{{ title }}</span>
+        </q-item-label>
+        <q-space v-if="mobile"/>
+        <q-item-section v-if="mobile" side top right class="q-pa-none q-mt-sm">
+          <q-btn right class="q-pa-none" dense flat icon="close" v-close-popup></q-btn>
+        </q-item-section>
+      </q-item>
+      <q-separator spaced class="divider" />
+      <q-list>
+        <div v-for="(profile, i) in profiles" :key="profile.id">
+          <q-item class="q-pa-md">
+            <q-item-section avatar @click="goProfile(profile)" style="cursor: pointer;">
+              <q-avatar size="90px">
+                <q-img :src="profile.image" loading="eager" no-spinner :placeholder-src="defaultAvatar" contain class="avatar"/>
+              </q-avatar>
+            </q-item-section>
+
+            <q-item-section top>
+              <q-item-label lines="1" class="profile-header" @click="goProfile(profile)" style="cursor: pointer;">{{ profile.name }}</q-item-label>
+              <q-item-label lines="2" class="profile-description">{{ profile.description }}</q-item-label>
+            </q-item-section>
+
+            <q-item-section side top>
+              <a class="accent q-pa-sm q-px-md" @click.prevent="openFollowModal(profile)">
+                <PersonAddIcon/>
+                <span class="button-text">Follow</span>
+              </a>
+            </q-item-section>
+          </q-item>
+          <q-separator v-if="!isLastItem(i)" class="divider"/>
+        </div>
+      </q-list>
+      <FollowPersonModal
+        v-if="isFollowModalOpen"
+        
+        :open="isFollowModalOpen"
+        title="follow this user"
+        :uri="profile?.ssbURI" 
+        :image="profile?.image" 
+        
+        @close="closeModal"
+      />
+    </template>
   </ModalContainer>
 </template>
 
@@ -64,7 +106,10 @@ export default {
   name: 'ProfileListModal',
   props: {
     open: Boolean,
-    profiles: Array,
+    getProfiles: {
+      type: Function,
+      required: true,
+    },
     title: String
   },
   components: {
@@ -75,8 +120,17 @@ export default {
   data () {
     return {
       modal: null,
-      profile: null
+      profile: null,
+      profiles: [],
+      isLoading: false
     }
+  },
+  async mounted () {
+    this.isLoading = true
+    this.profiles = await this.getProfiles()
+      .finally(() => {
+        this.isLoading = false
+      })
   },
   computed: {
     defaultAvatar () {
@@ -87,6 +141,11 @@ export default {
     },
     mobile () {
       return this.$q.screen.xs || this.$q.screen.sm
+    },
+    modalWidth () {
+      return this.mobile
+        ? '100%'
+        : '560px'
     }
   },
   methods: {

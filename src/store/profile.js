@@ -41,18 +41,12 @@ const GET_PROFILE = gql`
       followersCount
       followingCount
       followers {
-        id
         name
         image
-        description
-        ssbURI
       }
       following {
-        id
         name
         image
-        description
-        ssbURI
       }
     }
   }
@@ -73,17 +67,44 @@ const GET_PROFILE_THREADS = gql`
         }
         votes {
           expression
-          author {
-            id
-            image
-            name
-          }
+          # author {
+          #   id
+          #   image
+          #   name
+          # }
         }
       }
     }
   }
 `
 
+const GET_FOLLOWERS = gql`
+  query($feedId: ID!) {
+    getProfile(id: $feedId) {
+      followers {
+        id
+        name
+        image
+        description
+        ssbURI
+      }
+    }
+  }
+`
+
+const GET_FOLLOWING = gql`
+  query($feedId: ID!) {
+    getProfile(id: $feedId) {
+      following {
+        id
+        name
+        image
+        description
+        ssbURI
+      }
+    }
+  }
+`
 
 async function getProfileQuery (query, variables) {
   const res = await apolloClient.query({ query, variables })
@@ -185,6 +206,30 @@ export const useProfileStore = defineStore({
       this.$patch((state) => {
         state.threads = [...state.threads, ...res.data.getThreads]
       })
+    },
+    async getFollowers (id) {
+      const res = await apolloClient.query({
+        query: GET_FOLLOWERS,
+        variables: {
+          feedId: id
+        }
+      })
+
+      if (res.errors) throw res.errors
+
+      return res.data.getProfile.followers
+    },
+    async getFollowing (id) {
+      const res = await apolloClient.query({
+        query: GET_FOLLOWING,
+        variables: {
+          feedId: id
+        }
+      })
+
+      if (res.errors) throw res.errors
+
+      return res.data.getProfile.following
     }
   }
 })

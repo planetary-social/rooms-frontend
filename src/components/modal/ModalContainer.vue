@@ -1,6 +1,6 @@
 <template>
   <q-dialog v-model="open" @hide="close" :maximized="mobile">
-    <CardContainer :width="width" :height="height" :max-height="maxHeight">
+    <CardContainer v-bind="customProps">
       <slot/>
     </CardContainer>
   </q-dialog>
@@ -13,8 +13,12 @@ export default {
   name: 'ModalContainer',
   props: {
     open: Boolean,
+
     width: String,
+    minWidth: String,
+
     height: String,
+    minHeight: String,
     maxHeight: String
   },
   components: {
@@ -23,6 +27,16 @@ export default {
   computed: {
     mobile () {
       return this.$q.screen.xs || this.$q.screen.sm
+    },
+    customProps () {
+      return {
+        width: this.width,
+        minWidth: this.minWidth,
+
+        height: this.height,
+        minHeight: this.minHeight,
+        maxHeight: this.maxHeight
+      }
     }
   },
   methods: {

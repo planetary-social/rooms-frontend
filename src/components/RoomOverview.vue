@@ -91,7 +91,7 @@
       v-if="isMembersModal"
     
       :open="isMembersModal"
-      :profiles="room.members"
+      :getProfiles="getProfiles"
       title="members"
       
       @close="closeModal"
@@ -217,6 +217,9 @@ const MEMBERS = 'members'
       },
       openJoinModal () {
         this.modal = JOIN
+      },
+      getProfiles () {
+        return new Promise((resolve) => resolve(this.room?.members))
       }
     }
   }
