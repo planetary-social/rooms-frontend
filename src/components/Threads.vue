@@ -10,7 +10,7 @@
     </div>
     <div v-show="!displayedThread" style="z-index: 1">
       <div v-for="thread in threads" :key="thread.id" style="margin-bottom: 46px;">
-        <thread :thread="thread" @open="displayThread(thread)" />
+        <thread :thread="thread" @open="displayThread(thread)" :show-comments="disableScroll && Boolean(thread?.replies?.length)"/>
       </div>
     </div>
     <div v-if="displayedThread" :style="{ 'z-index': 2, 'margin-top': mobile ? '' : '100px' }">

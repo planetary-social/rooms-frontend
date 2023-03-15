@@ -10,7 +10,7 @@
     <comment :flat="showComments" :comment="rootMessage" :action="isFromMember ? 'posted' : ''" :width="rootMessageWidth" :height="rootMessageHeight" :preview="!isFromMember && !showComments" :comments="comments" @open="$emit('open')"/>
     <comment v-if="(!isFromMember && !showComments) && latestMemberMessage" :comment="latestMemberMessage" action="replied" :style="{'margin-top': '-18px' }" top-shadow @open="$emit('open')" />
 
-    <q-card-section v-if="showComments && comments?.length" style="background: #2B1D44;">
+    <q-card-section v-if="showComments && comments?.length && viewableComments?.length" style="background: #2B1D44;">
       <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;" @click="$emit('open')">
         <AvatarGroup v-if="commenters?.length" :group="commenters" :limit="2" overlapping :size="20" no-background />
         <span class="q-pr-xs">{{ comments?.length }}</span>
