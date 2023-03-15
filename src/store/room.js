@@ -158,11 +158,12 @@ export const useRoomStore = defineStore({
      * Fetches a single thread from a messageId
      */
     async loadThread (msgId) {
-      console.log(msgId)
       const res = await apolloClient.query({ query: GET_THREAD, variables: { msgId } })
-      if (res.errors) throw res.errors
-
-      console.log(res.data.getThread)
+      if (res.errors) {
+        console.error('Error loading a thread', res.errors)
+        // TODO: graceful error handling
+        return null
+      }
 
       return res.data.getThread
     },

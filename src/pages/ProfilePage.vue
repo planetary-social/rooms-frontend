@@ -52,12 +52,9 @@
         var { alias, feedId } = this.$route.params
 
         if (isEmpty(alias) && isEmpty(feedId)) {
-          alert('No alias or feedId found to load the profile')
-          this.$router.push('/')
+          this.goToHome('No alias or feedId found to load the profile')
           return
         }
-
-        
 
         // firstly load the minimal profile by either the feedId or alias (depending on the route)
         if (feedId) {
@@ -69,8 +66,7 @@
         }
 
         if (!this.activeProfile) {
-          alert('Couldnt load the profile')
-          this.$router.push('/')
+          this.goToHome("Couldn't load the profile")
           return
         }
 
@@ -90,6 +86,12 @@
       async onLoad (done) {
         await this.loadMoreProfileThreads()
         done()
+      },
+      goToHome (msg) {
+        this.$router.push('/')
+          .then(() => {
+            setTimeout(() => alert(msg), 500)
+          })
       }
     }
   }
