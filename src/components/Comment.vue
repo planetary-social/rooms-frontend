@@ -17,9 +17,29 @@
         </q-item-label>
       </q-item-section>
 
-      <!-- <q-item-section side class="comment-action">
-        <q-icon size="40px" name="more_horiz" />
-      </q-item-section> -->
+      <q-item-section side class="comment-action" @click.stop>
+          <q-icon size="40px" name="more_horiz">
+            <q-menu auto-close :style="menuStyle" class="comment-menu">
+              <q-list style="min-width: 100px">
+                <q-item clickable @click="copy(comment.id)">
+                  <q-item-section>Copy message ID</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable @click="copy(author.id)">
+                  <q-item-section>Copy author ID</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable @click="copy(authorHttpLink)">
+                  <q-item-section>Copy link to author</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable @click="copy(threadHttpLink)">
+                  <q-item-section>Copy link to message</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-icon>
+      </q-item-section>
     </q-item>
 
     <q-separator class="top-divider" />
@@ -67,6 +87,8 @@ import { useProfileStore } from '@/store/profile'
 
 import defaultAvatar from '@/assets/avatar.svg'
 
+import { copyToClipboard, Notify } from 'quasar'
+
   export default {
     name: "Comment",
     components: {
@@ -75,96 +97,114 @@ import defaultAvatar from '@/assets/avatar.svg'
       AvatarGroup
     },
     props: {
-        comment: Object,
-        flat: Boolean,
-        action: String,
-        width: String,
-        preview: Boolean,
-        height: String,
-        topShadow: Boolean,
-        comments: Array,
-        marginTop: String
+      comment: Object,
+      flat: Boolean,
+      action: String,
+      width: String,
+      preview: Boolean,
+      height: String,
+      topShadow: Boolean,
+      comments: Array,
+      marginTop: String
     },
     computed: {
-        ...mapState(useProfileStore, ['activeProfile']),
-        mobile () {
-          return this.$q?.screen.xs || this.$q?.screen.sm
-        },
-        linesLimit () {
-          return this.preview ? 2 : null
-        },
-        cardClasses () {
-          return {
-            'q-ma-md': !this.flat,
-            'comment-card': !this.flat,
-            'flat-comment-card': this.flat
-          }
-        },
-        flatStyle () {
-          return {
-            background: '#2B1D44',
-            'padding-top': '10px'
-          }
-        },
-        cardStyle () {
-          return {
-            width: this.width,
-            margin: 'auto',
-            background: '#3D2961',
-            'box-shadow': `
-              ${this.topShadow ? '0px -20px 30px -15px #2C1D45' : ''},
-              0px 6.21326px 0px #2C1D45,
-              0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
-            `,
-            '-webkit-box-shadow': `
-              ${this.topShadow ? '0px -20px 30px -15px #2C1D45' : ''},
-              0px 6.21326px 0px #2C1D45,
-              0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
-            `,
-
-            'border-top-left-radius': this.flat ? '25px' : null,
-            'border-top-right-radius': this.flat ? '25px' : null,
-            'margin-top': this.marginTop
-          }
-        },
-        commenters () {
-          return uniqBy(this.comments?.map(message => message?.author), 'id')
-            .filter(Boolean)
-        },
-        reactions () {
-          return this.comment?.votes
-        },
-        isHiddenContent() {
-          return this.comment?.id === null
-        },
-        showBottomSection () {
-          return this.comment?.votes?.length
-        },
-        author () {
-          return this.comment?.author
-        },
-        defaultAvatar () {
-          return defaultAvatar
-        },
-        image () {
-          return this.author?.image || this.defaultAvatar
-        },
-        date () {
-          return new Date(this.comment?.timestamp)
-        },
-        dateMinutes () {
-          return 
-        },
-        timestamp () {
-          const d = new Date(this.comment?.timestamp)
-
-          const minutes = ('0'+ this.date.getUTCMinutes()).slice(-2)
-          const hours = d.getUTCHours()
-
-          const ampm = hours > 12 ? 'PM' : 'AM'
-
-          return `${d.toDateString()} ${hours}:${minutes} ${ampm}`
+      ...mapState(useProfileStore, ['activeProfile']),
+      isDevelopment () {
+        return process.env.NODE_ENV === 'development'
+      },
+      threadHttpLink () {
+        return `${window.location.origin}/thread/${encodeURI(this.comment?.id)}`
+          .concat(this.isDevelopment ? '/' : '')
+      },
+      authorHttpLink () {
+        return `${window.location.origin}/profile/${encodeURI(this.author?.id)}`
+          .concat(this.isDevelopment ? '/' : '')
+      },
+      mobile () {
+        return this.$q?.screen.xs || this.$q?.screen.sm
+      },
+      linesLimit () {
+        return this.preview ? 2 : null
+      },
+      cardClasses () {
+        return {
+          'q-ma-md': !this.flat,
+          'comment-card': !this.flat,
+          'flat-comment-card': this.flat
         }
+      },
+      flatStyle () {
+        return {
+          background: '#2B1D44',
+          'padding-top': '10px'
+        }
+      },
+      cardStyle () {
+        return {
+          width: this.width,
+          margin: 'auto',
+          background: '#3D2961',
+          'box-shadow': `
+            ${this.topShadow ? '0px -20px 30px -15px #2C1D45' : ''},
+            0px 6.21326px 0px #2C1D45,
+            0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+          `,
+          '-webkit-box-shadow': `
+            ${this.topShadow ? '0px -20px 30px -15px #2C1D45' : ''},
+            0px 6.21326px 0px #2C1D45,
+            0px 6.21326px 15.5331px rgba(0, 0, 0, 0.25);
+          `,
+
+          'border-top-left-radius': this.flat ? '25px' : null,
+          'border-top-right-radius': this.flat ? '25px' : null,
+          'margin-top': this.marginTop
+        }
+      },
+      menuStyle () {
+        return {
+          backgroundColor: '#2c1e45',
+          color: '#8276a0',
+          'border-radius': '10px'
+        }
+      },
+      commenters () {
+        return uniqBy(this.comments?.map(message => message?.author), 'id')
+          .filter(Boolean)
+      },
+      reactions () {
+        return this.comment?.votes
+      },
+      isHiddenContent() {
+        return this.comment?.id === null
+      },
+      showBottomSection () {
+        return this.comment?.votes?.length
+      },
+      author () {
+        return this.comment?.author
+      },
+      defaultAvatar () {
+        return defaultAvatar
+      },
+      image () {
+        return this.author?.image || this.defaultAvatar
+      },
+      date () {
+        return new Date(this.comment?.timestamp)
+      },
+      dateMinutes () {
+        return 
+      },
+      timestamp () {
+        const d = new Date(this.comment?.timestamp)
+
+        const minutes = ('0'+ this.date.getUTCMinutes()).slice(-2)
+        const hours = d.getUTCHours()
+
+        const ampm = hours > 12 ? 'PM' : 'AM'
+
+        return `${d.toDateString()} ${hours}:${minutes} ${ampm}`
+      }
     },
     methods: {
       ...mapActions(useProfileStore, ['setActiveProfile']),
@@ -191,6 +231,16 @@ import defaultAvatar from '@/assets/avatar.svg'
             result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
         }
         return '@' + result
+      },
+      copy (text) {
+        copyToClipboard(text)
+          .then(() => {
+            this.$q.notify({
+              message: 'Copied to clipboard',
+              color: 'info',
+              textColor: 'deep-purple-2'
+            })
+          })
       }
     }
     
@@ -299,5 +349,19 @@ import defaultAvatar from '@/assets/avatar.svg'
     line-height: 31px;
     letter-spacing: 0px;
     font-family: 'SF Pro Text';
+  }
+
+  .comment-menu {
+    /* Post text */
+    font-family: 'SF Pro Text';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    /* or 143% */
+    letter-spacing: -0.1px;
+
+    color: $lightText;
+    background-color: $primary;
   }
 </style>
