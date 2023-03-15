@@ -6,7 +6,7 @@
     "build:staging": "vite build --mode staging --base=/rooms-frontend/ && gh-pages -d dist",
     "build:production": "vite build --mode production --base=/",
     "lint": "standard --fix",
-    "dev": "vite",
+    "dev": "vite --host",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
