@@ -88,7 +88,7 @@
       v-if="isListModal"
     
       :open="isListModal"
-      :profiles="listModalProfiles"
+      :getProfiles="getProfiles"
       :title="listModalTitle"
       
       @close="closeModal"
@@ -120,8 +120,9 @@ import AvatarGroup from '@/components/avatar/AvatarGroup.vue'
 import Markdown from '@/components/Markdown.vue'
 import defaultAvatar from '@/assets/avatar.svg'
 import PersonAddIcon from '@/components/icon/PersonAddIcon.vue'
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { useRoomStore } from '../store/room'
+import { useProfileStore } from '../store/profile'
 
 const FOLLOW = 'follow'
 const FOLLOWERS = 'followers'
@@ -196,6 +197,12 @@ const FOLLOWING = 'following'
       }
     },
     methods: {
+      ...mapActions(useProfileStore, ['getFollowers', 'getFollowing']),
+      getProfiles () {
+        return (this.modal === FOLLOW)
+        ? this.getFollowers(this.profile?.id)
+        : this.getFollowing(this.profile?.id)
+      },
       openFollowModal () {
         this.modal = FOLLOW
       },

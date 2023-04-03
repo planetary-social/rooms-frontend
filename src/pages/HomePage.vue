@@ -35,8 +35,8 @@
     mounted () {
       window.scrollTo(0, 0)
       this.setActiveProfile(null)
+      this.loadRoom()
     },
-    
     computed: {
       ...mapState(useRoomStore, ['activeRoom', 'threads']),
       columnStyle () {
@@ -49,7 +49,7 @@
     },
     methods: {
       ...mapActions(useProfileStore, ['getProfile', 'setActiveProfile']),
-      ...mapActions(useRoomStore, ['loadMoreRoomThreads']),
+      ...mapActions(useRoomStore, ['loadMoreRoomThreads', 'loadRoom']),
       async onLoad (done) {
         await this.loadMoreRoomThreads()
         done()

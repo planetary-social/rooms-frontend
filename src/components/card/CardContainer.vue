@@ -11,14 +11,19 @@ export default {
     comment: Object,
     action: String,
     width: String,
+    minWidth: String,
+
     height: String,
+    minHeight: String,
     maxHeight: String
   },
   computed: {
     cardStyle () {
       return {
         width: this.width,
+        minWidth: this.minWidth,
         height: this.height,
+        minHeight: this.minHeight,
         maxHeight: this.maxHeight
       }
     }

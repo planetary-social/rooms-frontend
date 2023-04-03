@@ -13,24 +13,9 @@ import { mapActions } from 'pinia'
 import { useRoomStore } from '@/store/room'
 
 export default {
-  name: "LayoutDefault",
+  name: "App",
   components: {
     Toolbar
-  },
-  async mounted () {
-    await this.loadRoom()
-  },
-  methods: {
-    ...mapActions(useRoomStore, ['loadRoom'])
-  },
-  watch: {
-    '$route.name': {
-      deep: true,
-      immediate: true,
-      handler (name) {
-        console.log(name)
-      }
-    }
   }
 }
 </script>

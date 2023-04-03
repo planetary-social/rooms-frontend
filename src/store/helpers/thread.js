@@ -78,7 +78,6 @@ const GET_PROFILE_THREADS = gql`
   }
 `
 
-
 export {
   GET_ROOM_THREADS,
   GET_THREAD,
