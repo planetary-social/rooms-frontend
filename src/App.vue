@@ -10,7 +10,7 @@
 <script>
 import Toolbar from '@/components/Toolbar.vue'
 import { mapActions } from 'pinia'
-import { useRoomStore } from './store/room'
+import { useRoomStore } from '@/store/room'
 
 export default {
   name: "LayoutDefault",
@@ -22,6 +22,15 @@ export default {
   },
   methods: {
     ...mapActions(useRoomStore, ['loadRoom'])
+  },
+  watch: {
+    '$route.name': {
+      deep: true,
+      immediate: true,
+      handler (name) {
+        console.log(name)
+      }
+    }
   }
 }
 </script>
