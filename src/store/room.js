@@ -1,57 +1,8 @@
-import gql from 'graphql-tag'
 import apolloClient from "@/plugins/apollo"
 import { defineStore, acceptHMRUpdate } from 'pinia'
 
-const GET_MY_ROOM = gql`
-  query {
-    room: getMyRoom {
-      name
-      description
-      multiaddress
-      url
-
-      members {
-        id
-        name
-        image
-        description
-        ssbURI
-      }
-    }
-  }
-`
-
-const GET_ROOM_INVITE_CODE = gql`
-  query {
-    inviteCode: getInviteCode
-  }
-`
-
-const GET_ROOM_THREADS = gql`
-  query($cursor: String, $limit: Int) {
-    getThreads(limit: $limit, cursor: $cursor) {
-      id
-      messages {
-        id
-        text
-        timestamp
-        author {
-          id
-          image
-          name
-        }
-        votes {
-          expression
-          author {
-            id
-            image
-            name
-          }
-        }
-      }
-    }
-  }
-`
+import { GET_MY_ROOM, GET_ROOM_INVITE_CODE } from "@/store/helpers/room"
+import { GET_THREAD, GET_ROOM_THREADS } from '@/store/helpers/thread'
 
 export const useRoomStore = defineStore({
   id: 'room',
@@ -87,6 +38,19 @@ export const useRoomStore = defineStore({
       if (res.errors) throw res.errors
 
       return res.data.inviteCode
+    },
+    /**
+     * Fetches a single thread from a messageId
+     */
+    async loadThread (msgId) {
+      const res = await apolloClient.query({ query: GET_THREAD, variables: { msgId } })
+      if (res.errors) {
+        console.error('Error loading a thread', res.errors)
+        // TODO: graceful error handling
+        return null
+      }
+
+      return res.data.getThread
     },
     /**
      * Fetches the threads from the members of the room and puts them

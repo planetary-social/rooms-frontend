@@ -2,6 +2,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import apolloClient from "@/plugins/apollo"
 import gql from 'graphql-tag'
+import { GET_PROFILE_THREADS } from '@/store/helpers/thread'
 
 // TODO: extract these helpers into a lib
 // TODO: create a minimal profile fragment
@@ -47,32 +48,6 @@ const GET_PROFILE = gql`
       following {
         name
         image
-      }
-    }
-  }
-`
-
-const GET_PROFILE_THREADS = gql`
-  query($feedId: ID, $limit: Int, $cursor: String) {
-    getThreads(feedId: $feedId, limit: $limit, cursor: $cursor) {
-      id
-      messages {
-        id
-        text
-        timestamp
-        author {
-          id
-          image
-          name
-        }
-        votes {
-          expression
-          # author {
-          #   id
-          #   image
-          #   name
-          # }
-        }
       }
     }
   }

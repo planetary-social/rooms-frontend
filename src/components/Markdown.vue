@@ -37,6 +37,9 @@ export default {
         .slice(0, 2)
         .map(line => line === '' ? '\n' : line + '\n')
         .join('')
+    },
+    isDevelopment () {
+      return process.env.NODE_ENV === 'development'
     }
   },
   methods: {
@@ -55,7 +58,9 @@ export default {
             )
           } else if (link && ref.isFeedId(link.link)) { // handle URL for mentions
             return link.link
-          } else if (link || id.startsWith('#') || id.startsWith('?')) {
+          } else if (link && ref.isMsgId(link.link)) {
+            return this.replaceMsgIdWithUrl(link.link)
+          }else if (link || id.startsWith('#') || id.startsWith('?')) {
             // TODO: map to messages matching hashtag
             return id
           }
@@ -67,6 +72,12 @@ export default {
     },
     replaceBlobIdWithUrl (blobId) {
       return  import.meta.env.VITE_BLOB_URL + '/' + encodeURIComponent(blobId)
+    },
+    replaceMsgIdWithUrl (msgId) {
+      return this.formatUrl(`${window.location.origin}/thread/${encodeURI(msgId)}`)
+    },
+    formatUrl (url) {
+      return url.concat(this.isDevelopment ? '/' : '')
     },
     getQueryString (link, typeLookup) {
       const query = {}
