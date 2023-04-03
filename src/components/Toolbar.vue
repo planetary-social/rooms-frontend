@@ -7,6 +7,7 @@
       <PlanetaryTextIcon v-if="!mobile" @click.prevent="goHome" class="logo"/>
       <q-space/>
   
+      <q-btn v-if="!mobile" flat no-caps :ripple="false" class="label" href="/">Home</q-btn>
       <q-btn v-if="!mobile" flat no-caps :ripple="false" class="label" href="https://www.planetary.social/">Planetary.social</q-btn>
       <q-btn v-if="!mobile" flat no-caps :ripple="false" class="label" href="https://www.planetary.social/#home-community">Community</q-btn>
       <q-btn v-if="!mobile" flat no-caps :ripple="false" class="label" href="https://planetarysupport.zendesk.com/hc/en-us/categories/360002326834-Rules-Policies">Our Rules</q-btn>
@@ -22,6 +23,11 @@
         <q-btn-dropdown auto-close :ripple="false" dropdown-icon="menu" size="23px" content-style="background: none; width: 210px;">
           <!-- dropdown content goes here -->
           <q-list class="dropdown">
+            <q-item clickable ripple class="menu-item" href="/">
+              <q-item-section>
+                <q-item-label>Home</q-item-label>
+              </q-item-section>
+            </q-item>
             <q-item clickable ripple class="menu-item" href="/login">
               <q-item-section>
                 <q-item-label>Login</q-item-label>
