@@ -54,6 +54,8 @@ export default {
   },
   methods: {
     displayThread (thread) {
+      if (this.$route.name === 'thread') return
+
       window.scrollTo(0, 0)
       this.displayedThread = thread
     },

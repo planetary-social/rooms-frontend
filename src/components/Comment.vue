@@ -63,13 +63,10 @@
     <q-card-section v-if="!preview && reactions?.length" :style="`height: ${comments?.length ? '' : '77.67px'}; margin-left: 7px;`">
       <Reactions  v-if="!preview && reactions?.length" :reactions="reactions"/>
     </q-card-section>
-  
-    <q-card-section v-if="(!preview && !flat && comments?.length)" class="q-pt-md">
-      <span class="card-header-text row" style="cursor: pointer; padding-left: 20px;" @click="$emit('open')">
-        <AvatarGroup v-if="commenters?.length" :group="commenters" :limit="2" overlapping :size="20" no-background />
-        <span class="q-pr-xs">{{ comments?.length }}</span>
-        <span class="comment-action" style="padding-left:5px;">{{ comments.length === 1 ? 'reply' : 'replies' }}</span>
-      </span>
+
+    
+    <q-card-section v-if="$slots.content" class="q-pa-none">
+      <slot name="content"/>
     </q-card-section>
   </q-card>
 </template>
