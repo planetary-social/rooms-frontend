@@ -122,10 +122,7 @@
             </div>
             <div class="row">
               <div class="col-auto">
-                <AppStoreBtn href="https://apps.apple.com/app/manyverse/id1492321617"/>
-              </div>
-              <div class="col-auto q-mt-sm">
-                <GooglePlayBtn href="https://play.google.com/store/apps/details?id=se.manyver" />
+                <ManyverseBtn href="https://www.manyver.se/download/"/>
               </div>
             </div>
           </div>
@@ -147,7 +144,7 @@ import PlanetaryIcon from '@/components/icon/PlanetaryIconWithBackground.vue'
 import ManyverseIcon from '@/components/icon/ManyverseIcon.vue'
 
 import AppStoreBtn from '@/components/icon/AppStoreBtn.vue'
-import GooglePlayBtn from '@/components/icon/GooglePlayBtn.vue'
+import ManyverseBtn from '@/components/icon/ManyverseBtn.vue'
 
 import { copyToClipboard } from 'quasar'
 
@@ -165,7 +162,7 @@ export default {
     PlanetaryIcon,
     ManyverseIcon,
     AppStoreBtn,
-    GooglePlayBtn,
+    ManyverseBtn,
     QRCode
     
   },
